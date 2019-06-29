@@ -1,5 +1,9 @@
-{{ab}}
+{{this.ab}}
 
 {{#let (concat "a" "b") as |ab|}}
   {{ab}}
 {{/let}}
+
+{{#each this.records as |record|}}
+  {{record.property}}
+{{/each}}

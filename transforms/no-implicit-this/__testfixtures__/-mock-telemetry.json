@@ -1,0 +1,23 @@
+{
+  "runtime.input": {
+    "helpers": [
+      "a-helper"
+    ],
+    "components": {
+      "some-component": {},
+      "oneword": {},
+      "block-component": {},
+      "varisalsoacomponent": {},
+      "local-variables": {
+        "ab": {},
+        "records": []
+      },
+      "component-invocation": {
+        "varisalsoacomponent": {}
+      }
+    },
+    "controllers": {
+      "controller-property": {}
+    }
+  }
+}

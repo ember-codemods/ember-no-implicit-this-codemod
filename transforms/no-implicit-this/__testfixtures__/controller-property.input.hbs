@@ -1,0 +1,8 @@
+{{controllerProp}}
+
+{{#each model as |record|}}
+  {{record}}
+  {{record.property}}
+{{/each}}
+
+<button {{on 'click' actionName}}>Action</button>
