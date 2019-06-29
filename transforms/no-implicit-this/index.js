@@ -1,23 +1,27 @@
-const { getParser } = require('codemod-cli').jscodeshift;
+const path = require('path');
+
+// const { getParser } = require('codemod-cli').jscodeshift;
 const { parse: parseHbs, print: printHbs } = require('ember-template-recast');
-const fs = require('fs');
+
+const { determineThisUsage } = require('./helpers/determine-this-usage');
+
 // const { getOptions } = require('codemod-cli');
 
-module.exports = function transformer(file, api) {
-  const j = getParser(api);
-  // const options = getOptions();
+module.exports = function transformer(file /*, api */) {
+  let extension = path.extname(file.path);
 
-  const ast = parseHbs(file.source);
+  if (!['.hbs'].includes(extension.toLowerCase())) {
+    // do nothing on non-hbs files
+    return;
+  }
 
-  return printHbs(ast);
-  
-  // return j(file.source)
-    // .find(j.Identifier)
-    // .forEach(path => {
-    //   path.node.name = path.node.name
-    //     .split('')
-    //     .reverse()
-    //     .join('');
-    // })
-    // .toSource();
+  let root = parseHbs(file.source);
+
+  let replaced = determineThisUsage(root, file);
+
+  if (replaced) {
+    return printHbs(replaced);
+  }
+
+  return file.source;
 };
