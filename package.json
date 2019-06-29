@@ -1,0 +1,27 @@
+{
+  "name": "ember-no-implicit-this-codemod",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "codemod-cli test",
+    "test:coverage": "codemod-cli test --coverage",
+    "update-docs": "codemod-cli update-docs",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+  },
+  "bin": "./bin/cli.js",
+  "keywords": [
+    "codemod-cli"
+  ],
+  "dependencies": {
+    "codemod-cli": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "coveralls": "^3.0.4"
+  },
+  "engines": {
+    "node": "8.* || 10.* || >= 12"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
