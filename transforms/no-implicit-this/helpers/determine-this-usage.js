@@ -1,6 +1,12 @@
 const path = require('path');
-const { getTelemetryFor } = require('./util/get-telemetry-for');
+const { getTelemetryFor, telemetry } = require('./util/get-telemetry-for');
 const logger = require('./log-helper');
+
+const componentTelemetry = telemetry.filter(({ type }) => type === 'Component');
+const helperTelemetry = telemetry.filter(({ type }) => type === 'Helper');
+
+const components = Object.keys(componentTelemetry);
+const helpers = Object.keys(helperTelemetry);
 
 /**
  * Main entry point for parsing and inserting 'this' where appropriate
@@ -15,6 +21,48 @@ function determineThisUsage(ast, file) {
     logger.warn(`[${filePath}]: SKIPPED Could not find runtime data NO_RUNTIME_DATA`);
     return;
   }
+
+  return ast;
+}
+
+// Does the runtime data (for the current file)
+// contain a definition for the token?
+// - yes:
+//   - in-let: false
+//   - in-each: false
+//   - true
+// - no:
+//   - is-helper: false
+//   - is-component: false
+function doesTokenNeedThis(token, runtimeData) {
+  let { computedProperties, ownActions, ownProperties } = runtimeData;
+
+  let isComputed = computedProperties.includes(token);
+  let isAction = ownActions.includes(token);
+  let isProperty = ownProperties.includes(token);
+
+  let needsThis = isComputed || isAction || isProperty;
+
+  if (needsThis) {
+    return true;
+  }
+
+  // not found :(
+  // search the world.
+  let isComponent = components.includes(token);
+
+  if (isComponent) {
+    return false;
+  }
+
+  let isHelper = helpers.includes(token);
+
+  if (isHelper) {
+    return false;
+  }
+
+  // Hopefully local-scoped variable
+  return false;
 }
 
 module.exports = {

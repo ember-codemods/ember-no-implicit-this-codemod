@@ -113,4 +113,5 @@ function getTelemetryFor(filePath) {
 module.exports = {
   getTelemetryFor,
   getModulePathFor,
+  telemetry,
 };
