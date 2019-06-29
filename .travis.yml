@@ -19,3 +19,4 @@ install:
 script:
   - yarn lint:js
   - yarn test
+  - yarn test:integration
