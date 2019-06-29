@@ -15,9 +15,9 @@
   "scripts": {
     "release": "release-it",
     "test": "codemod-cli test",
-    "test:coverage": "codemod-cli test --coverage",
     "update-docs": "codemod-cli update-docs",
-    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
+    "lint:js": "eslint ."
   },
   "bin": {
     "ember-no-implicit-this-codemod": "./bin/cli.js"
@@ -43,6 +43,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "execa": "^2.0.1",
     "jest": "^24.8.0",
+    "prettier": "^1.18.2",
     "release-it": "^12.3.0",
     "release-it-lerna-changelog": "^1.0.3"
   },
@@ -70,5 +71,5 @@
     "github": {
       "release": true
     }
-}
+  }
 }

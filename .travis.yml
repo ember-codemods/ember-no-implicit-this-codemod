@@ -17,7 +17,5 @@ install:
   - yarn install
 
 script:
-  - yarn test:coverage
-
-after_success:
-  - yarn coveralls
+  - yarn lint:js
+  - yarn test
