@@ -18,7 +18,9 @@
     "test:integration": "node ./test/run-test.js",
     "update-docs": "codemod-cli update-docs",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
-    "lint:js": "eslint ."
+    "lint:js": "eslint .",
+    "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
+    "debug:codemod": "node --inspect-brk ./bin/cli"
   },
   "bin": {
     "ember-no-implicit-this-codemod": "./bin/cli.js"

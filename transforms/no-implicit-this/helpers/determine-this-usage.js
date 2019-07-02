@@ -17,6 +17,7 @@ function determineThisUsage(ast, file) {
   let { path: filePath } = file;
   let runtimeData = getTelemetryFor(path.resolve(filePath));
 
+  console.log('getting runtime data for', filePath);
   if (!runtimeData) {
     logger.warn(`[${filePath}]: SKIPPED Could not find runtime data NO_RUNTIME_DATA`);
     return;
