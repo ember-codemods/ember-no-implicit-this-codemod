@@ -22,6 +22,8 @@ function determineThisUsage(ast, file) {
     return;
   }
 
+  debugger;
+
   return ast;
 }
 
