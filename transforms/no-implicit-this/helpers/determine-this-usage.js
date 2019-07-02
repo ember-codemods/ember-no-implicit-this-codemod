@@ -1,5 +1,5 @@
 const path = require('path');
-const { getTelemetryFor, telemetry } = require('./util/get-telemetry-for');
+const { getTelemetryFor, telemetry } = require('./utils/get-telemetry-for');
 const logger = require('./log-helper');
 
 const componentTelemetry = telemetry.filter(({ type }) => type === 'Component');

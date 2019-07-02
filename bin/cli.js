@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-require('codemod-cli').runTransform(
-  __dirname,
-  process.argv[2] /* transform name */,
-  process.argv.slice(3) /* paths or globs */
-);
+const transformName = process.argv[2];
+const args = process.argv.slice(3);
+
+console.log(transformName, args);
+
+require('codemod-cli').runTransform(__dirname, transformName, args);

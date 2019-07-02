@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const walkSync = require('walk-sync');
-const cache = require('../../../lib/cache');
+const cache = require('../../../../lib/cache');
 
 const telemetry = cache.has('telemetry') ? JSON.parse(cache.get('telemetry').value) : {};
 const ADDON_PATHS = {};

@@ -20,7 +20,8 @@
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint:js": "eslint .",
     "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
-    "debug:codemod": "node --inspect-brk ./bin/cli"
+    "debug:codemod:not-working": "node --inspect-brk ./bin/cli",
+    "debug:codemod": "node --inspect-brk node_modules/jscodeshift/bin/jscodeshift.js -t ./transforms/no-implicit-this/index.js --extensions js,ts,hbs "
   },
   "bin": {
     "ember-no-implicit-this-codemod": "./bin/cli.js"
