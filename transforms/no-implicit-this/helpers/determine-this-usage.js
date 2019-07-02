@@ -25,7 +25,7 @@ function determineThisUsage(ast, file) {
     return;
   }
 
-  debugger;
+  console.log(runtimeData)
 
   return ast;
 }
