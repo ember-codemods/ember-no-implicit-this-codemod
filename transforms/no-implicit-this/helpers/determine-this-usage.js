@@ -2,8 +2,10 @@ const path = require('path');
 const { getTelemetryFor, telemetry } = require('./utils/get-telemetry-for');
 const logger = require('./log-helper');
 
-const componentTelemetry = telemetry.filter(({ type }) => type === 'Component');
-const helperTelemetry = telemetry.filter(({ type }) => type === 'Helper');
+const modulePaths = Object.keys(telemetry);
+const moduleTelemetrys = Object.values(telemetry);
+const componentTelemetry = moduleTelemetrys.filter(({ type }) => type === 'Component');
+const helperTelemetry = moduleTelemetrys.filter(({ type }) => type === 'Helper');
 
 const components = Object.keys(componentTelemetry);
 const helpers = Object.keys(helperTelemetry);
