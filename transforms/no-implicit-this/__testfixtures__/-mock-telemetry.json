@@ -10,7 +10,8 @@
   "glimmer-vm-sample.input": {
     "type": "Component",
     "computedProperties": [
-      "foo", "model", "color", "bar", "x", "active"
+      "foo", "model", "color", "bar", "x", "active",
+      "foos"
     ]
   },
   "component-invocation.input": {

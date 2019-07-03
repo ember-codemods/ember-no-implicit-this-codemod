@@ -2,6 +2,15 @@ const { telemetry } = require('./utils/get-telemetry-for');
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
+const ARGLESS_BUILTINS = [
+  'debugger',
+  'has-block',
+  'hasBlock',
+  'input',
+  'outlet',
+  'textarea',
+  'yield',
+];
 
 /**
  * plugin entrypoint
@@ -14,20 +23,23 @@ function transformPlugin(env, runtimeData) {
 
   let nonThises = { scopedParams, components, helpers };
 
-  return {
-    Program: {
-      enter(node) {
-        node.blockParams.forEach(param => {
-          scopedParams.push(param);
-        });
-      },
-
-      exit(node) {
-        node.blockParams.forEach(() => {
-          scopedParams.pop();
-        });
-      },
+  let paramTracker = {
+    enter(node) {
+      node.blockParams.forEach(param => {
+        scopedParams.push(param);
+      });
     },
+
+    exit(node) {
+      node.blockParams.forEach(() => {
+        scopedParams.pop();
+      });
+    },
+  };
+
+  return {
+    Program: paramTracker,
+    ElementNode: paramTracker,
     PathExpression(ast) {
       let token = ast.parts[0];
 
@@ -53,6 +65,10 @@ function transformPlugin(env, runtimeData) {
 //   - is-helper: false
 //   - is-component: false
 function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtimeData) {
+  if (ARGLESS_BUILTINS.includes(token)) {
+    return false;
+  }
+
   let isBlockParam = scopedParams.includes(token);
 
   if (isBlockParam) {
