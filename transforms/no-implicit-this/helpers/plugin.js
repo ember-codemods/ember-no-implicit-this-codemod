@@ -18,22 +18,25 @@ for (let name of Object.keys(telemetry)) {
   }
 }
 
+let scopedParams = [];
+
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, runtimeData = {}) {
+function transformPlugin(env, runtimeData = telemetry['component-invocation.input']) {
   return {
-    MustacheStatement(root) {
-      transformPlugin(root.path, runtimeData);
-      transformPlugin(root.params, runtimeData);
-      transformPlugin(root.hash.pairs, runtimeData);
-    },
-    ElementNode(root) {
-      transformPlugin(root.attributes, runtimeData);
-      transformPlugin(root.children, runtimeData);
-    },
-    AttrNode(root) {
-      transformPlugin(root.value, runtimeData);
+    Program: {
+      enter(node) {
+        node.blockParams.forEach(param => {
+          scopedParams.push(param);
+        });
+      },
+
+      exit(node) {
+        node.blockParams.forEach(() => {
+          scopedParams.pop();
+        });
+      },
     },
     PathExpression(root) {
       let token = root.original;
@@ -45,20 +48,6 @@ function transformPlugin(env, runtimeData = {}) {
         //root.loc.start.column += 5;
       }
     },
-    SubExpression(root) {
-      transformPlugin(root.path, runtimeData);
-      transformPlugin(root.params, runtimeData);
-      transformPlugin(root.hash.pairs, runtimeData);
-    },
-    BlockStatement(root) {
-      transformPlugin(root.path, runtimeData);
-      transformPlugin(root.params, runtimeData);
-      transformPlugin(root.hash.pairs, runtimeData);
-      transformPlugin(root.program.body, runtimeData);
-    },
-    HashPair(root) {
-      transformPlugin(root.value, runtimeData);
-    }
   };
 }
 
