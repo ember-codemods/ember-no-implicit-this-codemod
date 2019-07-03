@@ -23,65 +23,43 @@ for (let name of Object.keys(telemetry)) {
  */
 function transformPlugin(env, runtimeData = {}) {
   return {
-    Program(root) {
-      addThis(root.body, runtimeData);
+    MustacheStatement(root) {
+      transformPlugin(root.path, runtimeData);
+      transformPlugin(root.params, runtimeData);
+      transformPlugin(root.hash.pairs, runtimeData);
     },
-  };
-}
-
-
-function addThis(root, runtimeData) {
-  if (!root) {
-    return;
-  }
-
-  let isArray = Array.isArray(root);
-  if (isArray) {
-    return root.forEach(node => addThis(node, runtimeData));
-  }
-
-  switch (root.type) {
-    case "MustacheStatement":
-      addThis(root.path, runtimeData);
-      addThis(root.params, runtimeData);
-      addThis(root.hash.pairs, runtimeData);
-
-      return;
-    case "ElementNode":
-      addThis(root.attributes, runtimeData);
-      addThis(root.children, runtimeData);
-      return;
-    case "AttrNode":
-      addThis(root.value, runtimeData);
-      return;
-    case "PathExpression":
+    ElementNode(root) {
+      transformPlugin(root.attributes, runtimeData);
+      transformPlugin(root.children, runtimeData);
+    },
+    AttrNode(root) {
+      transformPlugin(root.value, runtimeData);
+    },
+    PathExpression(root) {
       let token = root.original;
       let isThisNeeded = doesTokenNeedThis(token, runtimeData);
 
       if (isThisNeeded) {
         root.original = `this.${token}`;
+        //root.this = true;
+        //root.loc.start.column += 5;
       }
-
-      return;
-    case "SubExpression":
-      addThis(root.path, runtimeData);
-      addThis(root.params, runtimeData);
-      addThis(root.hash.pairs, runtimeData);
-
-      return;
-    case "BlockStatement":
-      addThis(root.path, runtimeData);
-      addThis(root.params, runtimeData);
-      addThis(root.hash.pairs, runtimeData);
-      addThis(root.program.body, runtimeData);
-      return;
-    case "HashPair":
-      addThis(root.value, runtimeData);
-    case "TextNode":
-      return;
-    default:
-      console.log("unhandled", root.type);
-  }
+    },
+    SubExpression(root) {
+      transformPlugin(root.path, runtimeData);
+      transformPlugin(root.params, runtimeData);
+      transformPlugin(root.hash.pairs, runtimeData);
+    },
+    BlockStatement(root) {
+      transformPlugin(root.path, runtimeData);
+      transformPlugin(root.params, runtimeData);
+      transformPlugin(root.hash.pairs, runtimeData);
+      transformPlugin(root.program.body, runtimeData);
+    },
+    HashPair(root) {
+      transformPlugin(root.value, runtimeData);
+    }
+  };
 }
 
 // Does the runtime data (for the c
