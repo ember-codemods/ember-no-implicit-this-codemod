@@ -30,27 +30,27 @@ function transformPlugin(env, runtimeData = {}) {
 }
 
 function addThis(root, runtimeData) {
+  if (!root) {
+    return;
+  }
+
   let isArray = Array.isArray(root);
   if (isArray) {
     return root.forEach(node => addThis(node, runtimeData));
   }
 
-  if (root.type === "MustacheStatement") {
+  if (root.type === 'MustacheStatement') {
     if (root.path.type === 'PathExpression') {
-       return addThis(root.params, runtimeData);
+      addThis(root.path, runtimeData);
+      return addThis(root.params, runtimeData);
     }
 
-    let token = root.path.original;
-    let isThisNeeded = doesTokenNeedThis(token, runtimeData);
-
-    if (isThisNeeded) {
-      root.path.original = `this.${token}`;
-    }
+    console.log('what do we do here?');
 
     return;
-  } else if (root.type === "ElementNode") {
+  } else if (root.type === 'ElementNode') {
     return root.children.forEach(node => addThis(node, runtimeData));
-  } else if (root.type === "PathExpression") {
+  } else if (root.type === 'PathExpression') {
     let token = root.original;
     let isThisNeeded = doesTokenNeedThis(token, runtimeData);
 
@@ -61,7 +61,7 @@ function addThis(root, runtimeData) {
     return;
   }
 
-  console.log("what now", root);
+  console.log('what now', root);
 }
 
 // Does the runtime data (for the c
