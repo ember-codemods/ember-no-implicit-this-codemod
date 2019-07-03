@@ -1,23 +1,30 @@
 {
-  "runtime.input": {
-    "helpers": [
-      "a-helper"
-    ],
-    "components": {
-      "some-component": {},
-      "oneword": {},
-      "block-component": {},
-      "varisalsoacomponent": {},
-      "local-variables": {
-        "ab": {},
-        "records": []
-      },
-      "component-invocation": {
-        "varisalsoacomponent": {}
-      }
-    },
-    "controllers": {
-      "controller-property": {}
-    }
+  "some-component": {
+    "type": "Component"
+  },
+  "oneword": {
+    "type": "Component"
+  },
+  "block-component": {
+    "type": "Component"
+  },
+  "varisalsoacomponent": {
+    "type": "Component"
+  },
+  "local-variables.input": {
+    "computedProperties": ["ab", "records"],
+    "ownProperties": [],
+    "type": "Component"
+  },
+  "component-invocation.input": {
+    "computedProperties": ["varisalsoacomponent"],
+    "ownProperties": ["property"],
+    "type": "Component"
+  },
+  "helpers/a-helper": {
+    "type": "Helper"
+  },
+  "controller-property.input": {
+    "type": "Controller"
   }
 }

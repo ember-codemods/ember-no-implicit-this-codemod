@@ -21,7 +21,7 @@
     "lint:js": "eslint .",
     "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
     "debug:codemod:not-working": "node --inspect-brk ./bin/cli",
-    "codemod": "jscodeshift -t ./transforms/no-implicit-this/index.js --extensions js,ts,hbs --run-in-band ",
+    "codemod": "jscodeshift -t ./transforms/no-implicit-this/index.js --extensions js,ts,hbs --run-in-band",
     "debug:codemod": "node --inspect-brk node_modules/jscodeshift/bin/jscodeshift.js -t ./transforms/no-implicit-this/index.js --run-in-band --extensions js,ts,hbs "
   },
   "bin": {
@@ -31,7 +31,9 @@
     "codemod-cli"
   ],
   "dependencies": {
+    "babel-plugin-htmlbars-inline-precompile": "^1.0.0",
     "codemod-cli": "^1.0.0",
+    "ember-template-compiler": "^1.9.0-alpha",
     "ember-template-recast": "^2.0.0",
     "fs-extra": "^8.1.0",
     "git-repo-info": "^2.1.0",
