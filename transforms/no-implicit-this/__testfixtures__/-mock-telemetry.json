@@ -1,30 +1,31 @@
 {
-  "some-component": {
-    "type": "Component"
-  },
-  "oneword": {
-    "type": "Component"
-  },
-  "block-component": {
-    "type": "Component"
-  },
-  "varisalsoacomponent": {
-    "type": "Component"
-  },
-  "local-variables.input": {
-    "computedProperties": ["ab", "records"],
-    "ownProperties": [],
-    "type": "Component"
+  "some-component": { "type": "Component" },
+  "oneword": { "type": "Component" },
+  "block-component": { "type": "Component" },
+  "varisalsoacomponent": { "type": "Component" },
+  "foo": { "type": "Component" },
+  "namespace/foo": { "type": "Component" },
+  "panel": { "type": "Component" },
+  "glimmer-vm-sample.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "model", "color", "bar"]
   },
   "component-invocation.input": {
-    "computedProperties": ["varisalsoacomponent"],
-    "ownProperties": ["property"],
-    "type": "Component"
-  },
-  "helpers/a-helper": {
-    "type": "Helper"
+    "type": "Component",
+    "computedProperties": ["ab", "records", "varisalsoacomponent"],
+    "ownProperties": ["property"]
   },
   "controller-property.input": {
-    "type": "Controller"
-  }
+    "type": "Controller",
+    "computedProperties": ["modil", "controllerProp"],
+    "ownActions": ["actionName"]
+  },
+  "a-helper": { "type": "Helper" },
+  "unescaped": { "type": "Helper" },
+  "something": { "type": "Helper" },
+  "link-to": { "type": "Helper" },
+  "action": { "type": "Helper" },
+  "mut": { "type": "Helper" },
+  "if": { "type": "Helper" },
+  "fn": { "type": "Helper" }
 }

@@ -2,28 +2,18 @@ const { telemetry } = require('./utils/get-telemetry-for');
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
-let components = [];
-let helpers = [];
-
-for (let name of Object.keys(telemetry)) {
-  let entry = telemetry[name];
-
-  switch (entry.type) {
-    case 'Component':
-      components.push(name);
-      break;
-    case 'Helper':
-      helpers.push(name);
-      break;
-  }
-}
-
-let scopedParams = [];
 
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, runtimeData = telemetry['component-invocation.input']) {
+function transformPlugin(env) {
+  let { builders: b } = env.syntax;
+
+  let scopedParams = [];
+  let [components, helpers] = populateInvokeables();
+
+  let nonThises = { scopedParams, components, helpers };
+
   return {
     Program: {
       enter(node) {
@@ -38,14 +28,15 @@ function transformPlugin(env, runtimeData = telemetry['component-invocation.inpu
         });
       },
     },
-    PathExpression(root) {
-      let token = root.original;
-      let isThisNeeded = doesTokenNeedThis(token, runtimeData);
+    PathExpression(ast) {
+      let token = ast.parts[0];
 
-      if (isThisNeeded) {
-        root.original = `this.${token}`;
-        //root.this = true;
-        //root.loc.start.column += 5;
+      if (token !== 'this') {
+        let isThisNeeded = doesTokenNeedThis(token, nonThises);
+
+        if (isThisNeeded) {
+          return b.path(`this.${ast.original}`);
+        }
       }
     },
   };
@@ -61,21 +52,13 @@ function transformPlugin(env, runtimeData = telemetry['component-invocation.inpu
 // - no:
 //   - is-helper: false
 //   - is-component: false
-function doesTokenNeedThis(token, runtimeData) {
-  let { computedProperties, ownActions, ownProperties } = runtimeData;
+function doesTokenNeedThis(token, { components, helpers, scopedParams }) {
+  let isBlockParam = scopedParams.includes(token);
 
-  let isComputed = (computedProperties || []).includes(token);
-  let isAction = (ownActions || []).includes(token);
-  let isProperty = (ownProperties || []).includes(token);
-
-  let needsThis = isComputed || isAction || isProperty;
-
-  if (needsThis) {
-    return true;
+  if (isBlockParam) {
+    return false;
   }
 
-  // not found :(
-  // search the world.
   let isComponent = components.find(path => path.endsWith(token));
 
   if (isComponent) {
@@ -88,8 +71,27 @@ function doesTokenNeedThis(token, runtimeData) {
     return false;
   }
 
-  // Hopefully local-scoped variable
-  return false;
+  return true;
+}
+
+function populateInvokeables() {
+  let components = [];
+  let helpers = [];
+
+  for (let name of Object.keys(telemetry)) {
+    let entry = telemetry[name];
+
+    switch (entry.type) {
+      case 'Component':
+        components.push(name);
+        break;
+      case 'Helper':
+        helpers.push(name);
+        break;
+    }
+  }
+
+  return [components, helpers];
 }
 
 module.exports = transformPlugin;

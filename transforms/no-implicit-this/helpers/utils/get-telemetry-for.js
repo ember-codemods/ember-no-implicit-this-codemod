@@ -65,7 +65,7 @@ function getModulePathFor(filePath, addonPaths = ADDON_PATHS, appPaths = APP_PAT
     }
   }
 
-  if (!relativePath && process.cwd() === path.resolve(__dirname, '../../..')) {
+  if (!relativePath && process.cwd() === path.resolve(__dirname, '../../../..')) {
     // this is pretty odd, but our tests in
     // transforms/ember-object/__testfixtures__ don't actually live in an ember
     // app or addon, so the standard logic above doesn't work for them

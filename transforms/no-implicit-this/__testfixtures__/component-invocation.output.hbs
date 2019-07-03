@@ -8,3 +8,26 @@
 {{/block-component}}
 
 {{this.varisalsoacomponent}}
+
+
+{{this.ab}}
+
+{{#let (concat "a" "b") as |ab|}}
+  {{ab}}
+{{/let}}
+
+{{#each this.records as |record|}}
+  {{record.property}}
+{{/each}}
+
+<SomeComponent ...attributes />
+<Oneword @arg={{a-helper this.property}} />
+
+<button {{on 'click' (fn this.myAction this.property)}}>hi</button>
+
+{{#block-component this.property as |locallyOverridden|}}
+  body: {{locallyOverridden}}
+  {{a-helper this.property arg=this.property}}
+{{/block-component}}
+
+<Varisalsoacomponent @arg={{action (fn this.myAction)}} />
