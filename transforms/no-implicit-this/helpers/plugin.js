@@ -29,6 +29,7 @@ function transformPlugin(env, runtimeData = {}) {
   };
 }
 
+
 function addThis(root, runtimeData) {
   if (!root) {
     return;
@@ -39,29 +40,48 @@ function addThis(root, runtimeData) {
     return root.forEach(node => addThis(node, runtimeData));
   }
 
-  if (root.type === 'MustacheStatement') {
-    if (root.path.type === 'PathExpression') {
+  switch (root.type) {
+    case "MustacheStatement":
       addThis(root.path, runtimeData);
-      return addThis(root.params, runtimeData);
-    }
+      addThis(root.params, runtimeData);
+      addThis(root.hash.pairs, runtimeData);
 
-    console.log('what do we do here?');
+      return;
+    case "ElementNode":
+      addThis(root.attributes, runtimeData);
+      addThis(root.children, runtimeData);
+      return;
+    case "AttrNode":
+      addThis(root.value, runtimeData);
+      return;
+    case "PathExpression":
+      let token = root.original;
+      let isThisNeeded = doesTokenNeedThis(token, runtimeData);
 
-    return;
-  } else if (root.type === 'ElementNode') {
-    return root.children.forEach(node => addThis(node, runtimeData));
-  } else if (root.type === 'PathExpression') {
-    let token = root.original;
-    let isThisNeeded = doesTokenNeedThis(token, runtimeData);
+      if (isThisNeeded) {
+        root.original = `this.${token}`;
+      }
 
-    if (isThisNeeded) {
-      root.original = `this.${token}`;
-    }
+      return;
+    case "SubExpression":
+      addThis(root.path, runtimeData);
+      addThis(root.params, runtimeData);
+      addThis(root.hash.pairs, runtimeData);
 
-    return;
+      return;
+    case "BlockStatement":
+      addThis(root.path, runtimeData);
+      addThis(root.params, runtimeData);
+      addThis(root.hash.pairs, runtimeData);
+      addThis(root.program.body, runtimeData);
+      return;
+    case "HashPair":
+      addThis(root.value, runtimeData);
+    case "TextNode":
+      return;
+    default:
+      console.log("unhandled", root.type);
   }
-
-  console.log('what now', root);
 }
 
 // Does the runtime data (for the c
@@ -89,13 +109,13 @@ function doesTokenNeedThis(token, runtimeData) {
 
   // not found :(
   // search the world.
-  let isComponent = components.includes(token);
+  let isComponent = components.find(path => path.endsWith(token));
 
   if (isComponent) {
     return false;
   }
 
-  let isHelper = helpers.includes(token);
+  let isHelper = helpers.find(path => path.endsWith(token));
 
   if (isHelper) {
     return false;
