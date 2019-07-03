@@ -8,16 +8,17 @@
   "panel": { "type": "Component" },
   "glimmer-vm-sample.input": {
     "type": "Component",
-    "computedProperties": ["foo", "model", "color", "bar"]
+    "computedProperties": ["foo", "model", "color", "bar", "x"]
   },
   "component-invocation.input": {
     "type": "Component",
     "computedProperties": ["ab", "records", "varisalsoacomponent"],
-    "ownProperties": ["property"]
+    "ownProperties": ["property"],
+    "ownActions": ["myAction"]
   },
   "controller-property.input": {
     "type": "Controller",
-    "computedProperties": ["modil", "controllerProp"],
+    "computedProperties": ["model", "controllerProp"],
     "ownActions": ["actionName"]
   },
   "a-helper": { "type": "Helper" },

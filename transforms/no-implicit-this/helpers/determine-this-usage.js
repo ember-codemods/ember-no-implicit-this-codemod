@@ -18,7 +18,7 @@ function determineThisUsage(ast, file) {
     return;
   }
 
-  recast.transform(ast, transformPlugin);
+  recast.transform(ast, env => transformPlugin(env, runtimeData));
 
   return ast;
 }

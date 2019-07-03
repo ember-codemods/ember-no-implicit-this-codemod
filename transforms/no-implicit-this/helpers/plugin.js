@@ -6,7 +6,7 @@ const { telemetry } = require('./utils/get-telemetry-for');
 /**
  * plugin entrypoint
  */
-function transformPlugin(env) {
+function transformPlugin(env, runtimeData) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
@@ -32,10 +32,10 @@ function transformPlugin(env) {
       let token = ast.parts[0];
 
       if (token !== 'this') {
-        let isThisNeeded = doesTokenNeedThis(token, nonThises);
+        let isThisNeeded = doesTokenNeedThis(token, nonThises, runtimeData);
 
         if (isThisNeeded) {
-          return b.path(`this.${ast.original}`);
+          return b.path(`this.${ast.parts.join('.')}`);
         }
       }
     },
@@ -52,13 +52,48 @@ function transformPlugin(env) {
 // - no:
 //   - is-helper: false
 //   - is-component: false
-function doesTokenNeedThis(token, { components, helpers, scopedParams }) {
-  let isBlockParam = scopedParams.includes(token);
+function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtimeData) {
+  // let isBlockParam = scopedParams.includes(token);
+
+  // if (isBlockParam) {
+  //   return false;
+  // }
+
+  // let isComponent = components.find(path => path.endsWith(token));
+
+  // if (isComponent) {
+  //   return false;
+  // }
+
+  // let isHelper = helpers.find(path => path.endsWith(token));
+
+  // if (isHelper) {
+  //   return false;
+  // }
+
+  // return true;
+  //
+  //
+  let { computedProperties, ownActions, ownProperties } = runtimeData;
+
+  let isBlockParam = (scopedParams || []).includes(token);
 
   if (isBlockParam) {
     return false;
   }
 
+  let isComputed = (computedProperties || []).includes(token);
+  let isAction = (ownActions || []).includes(token);
+  let isProperty = (ownProperties || []).includes(token);
+
+  let needsThis = isComputed || isAction || isProperty;
+
+  if (needsThis) {
+    return true;
+  }
+
+  // not found :(
+  // search the world.
   let isComponent = components.find(path => path.endsWith(token));
 
   if (isComponent) {
@@ -71,7 +106,8 @@ function doesTokenNeedThis(token, { components, helpers, scopedParams }) {
     return false;
   }
 
-  return true;
+  // Hopefully local-scoped variable
+  return false;
 }
 
 function populateInvokeables() {
