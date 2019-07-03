@@ -5,7 +5,7 @@
   <h1>{{link-to "Foo" class="bar"}}</h1>
   <h1 class={{if this.foo "foo" "bar"}}>Test</h1>
   <h1 class={{this.color}}>Test</h1>
-  <h1 class="{{if active "active" "inactive"}} foo">Test</h1>
+  <h1 class="{{if this.active "active" "inactive"}} foo">Test</h1>
   <p {{action "activate"}} {{someting foo="bar"}}>Test</p>
   <p>{{my-component submit=(action (mut this.model.name) (full-name this.model.firstName "Smith"))}}</p>
   <ul>{{#each foos as |foo index|}}\n  <li>{{foo}}: {{index}}</li>\n{{/each}}</ul>

@@ -53,35 +53,13 @@ function transformPlugin(env, runtimeData) {
 //   - is-helper: false
 //   - is-component: false
 function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtimeData) {
-  // let isBlockParam = scopedParams.includes(token);
-
-  // if (isBlockParam) {
-  //   return false;
-  // }
-
-  // let isComponent = components.find(path => path.endsWith(token));
-
-  // if (isComponent) {
-  //   return false;
-  // }
-
-  // let isHelper = helpers.find(path => path.endsWith(token));
-
-  // if (isHelper) {
-  //   return false;
-  // }
-
-  // return true;
-  //
-  //
-  let { computedProperties, ownActions, ownProperties } = runtimeData;
-
-  let isBlockParam = (scopedParams || []).includes(token);
+  let isBlockParam = scopedParams.includes(token);
 
   if (isBlockParam) {
     return false;
   }
 
+  let { computedProperties, ownActions, ownProperties } = runtimeData;
   let isComputed = (computedProperties || []).includes(token);
   let isAction = (ownActions || []).includes(token);
   let isProperty = (ownProperties || []).includes(token);
@@ -92,8 +70,6 @@ function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtime
     return true;
   }
 
-  // not found :(
-  // search the world.
   let isComponent = components.find(path => path.endsWith(token));
 
   if (isComponent) {
@@ -106,8 +82,7 @@ function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtime
     return false;
   }
 
-  // Hopefully local-scoped variable
-  return false;
+  return true;
 }
 
 function populateInvokeables() {
