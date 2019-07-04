@@ -1,19 +1,9 @@
 {
   "some-component": { "type": "Component" },
   "my-component": { "type": "Component" },
-  "oneword": { "type": "Component" },
   "block-component": { "type": "Component" },
-  "varisalsoacomponent": { "type": "Component" },
   "foo": { "type": "Component" },
   "namespace/foo": { "type": "Component" },
-  "panel": { "type": "Component" },
-  "glimmer-vm-sample.input": {
-    "type": "Component",
-    "computedProperties": [
-      "foo", "model", "color", "bar", "x", "active",
-      "foos"
-    ]
-  },
   "built-in-helpers.input": {
     "type": "Component",
     "computedProperties": ["foo", "records"],
@@ -39,10 +29,7 @@
   },
   "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" },
-  "unescaped": { "type": "Helper" },
-  "someting": { "type": "Helper" },
   "link-to": { "type": "Helper" },
-  "full-name": { "type": "Helper" },
   "action": { "type": "Helper" },
   "concat": { "type": "Helper" },
   "each": { "type": "Helper" },
