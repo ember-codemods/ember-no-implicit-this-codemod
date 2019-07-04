@@ -1,0 +1,8 @@
+<a href='invalid-url' disabled></a>
+<input value="something">
+
+<SomeComponent @arg="value" />
+<SomeComponent @arg=1 />
+<SomeComponent @arg=foo />
+<SomeComponent @arg={{this.foo}} @bar={{this.property}} />
+<SomeComponent @arg={{this.foo}} @bar={{fn this.myAction}} />

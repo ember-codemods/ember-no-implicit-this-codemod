@@ -9,6 +9,20 @@
     "computedProperties": ["foo", "records"],
     "ownActions": ["myAction"]
   },
+  "angle-brackets-with-block-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property", "bar"],
+    "ownActions": ["myAction"]
+  },
+  "angle-brackets-with-hash-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
+  },
+  "angle-brackets-without-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo"]
+  },
   "handlebars-with-positional-params.input": {
     "type": "Component",
     "computedProperties": ["foo", "property"],
