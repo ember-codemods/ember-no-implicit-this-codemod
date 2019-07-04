@@ -1,0 +1,54 @@
+{
+  "some-component": { "type": "Component" },
+  "my-component": { "type": "Component" },
+  "block-component": { "type": "Component" },
+  "foo": { "type": "Component" },
+  "namespace/foo": { "type": "Component" },
+  "built-in-helpers.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "records"],
+    "ownActions": ["myAction"]
+  },
+  "angle-brackets-with-block-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property", "bar"],
+    "ownActions": ["myAction"]
+  },
+  "angle-brackets-with-hash-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
+  },
+  "angle-brackets-without-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo"]
+  },
+  "handlebars-with-positional-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
+  },
+  "handlebars-with-hash-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
+  },
+  "handlebars-with-block-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"]
+  },
+  "handlebars-without-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"]
+  },
+  "my-helper": { "type": "Helper" },
+  "a-helper": { "type": "Helper" },
+  "link-to": { "type": "Helper" },
+  "action": { "type": "Helper" },
+  "concat": { "type": "Helper" },
+  "each": { "type": "Helper" },
+  "mut": { "type": "Helper" },
+  "let": { "type": "Helper" },
+  "if": { "type": "Helper" },
+  "fn": { "type": "Helper" }
+}

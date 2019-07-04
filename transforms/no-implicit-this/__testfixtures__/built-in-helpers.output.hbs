@@ -1,0 +1,21 @@
+{{debugger}}
+{{has-block}}
+{{hasBlock}}
+{{input}}
+{{outlet}}
+{{textarea}}
+{{yield}}
+
+{{#let (concat "a" "b") as |ab|}}
+  {{ab}}
+{{/let}}
+
+{{#each this.records as |record|}}
+  {{record.property}}
+{{/each}}
+
+
+<button {{on 'click' this.myAction}}>Action</button>
+<button {{on 'click' (fn this.myAction this.foo)}}>Action</button>
+
+{{link-to 'name' 'route'}}
