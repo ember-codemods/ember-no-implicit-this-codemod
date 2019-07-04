@@ -14,17 +14,30 @@
       "foos"
     ]
   },
-  "component-invocation.input": {
+  "built-in-helpers.input": {
     "type": "Component",
-    "computedProperties": ["ab", "records", "varisalsoacomponent"],
-    "ownProperties": ["property"],
+    "computedProperties": ["foo", "records"],
     "ownActions": ["myAction"]
   },
-  "controller-property.input": {
-    "type": "Controller",
-    "computedProperties": ["model", "controllerProp"],
-    "ownActions": ["actionName"]
+  "handlebars-with-positional-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
   },
+  "handlebars-with-hash-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
+  },
+  "handlebars-with-block-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"]
+  },
+  "handlebars-without-params.input": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"]
+  },
+  "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" },
   "unescaped": { "type": "Helper" },
   "someting": { "type": "Helper" },
