@@ -30,7 +30,7 @@ const execOpts = { cwd: inputDir, stderr: 'inherit' };
 
   console.log('running codemod');
 
-  await execa('../../../bin/cli.js', ['http://localhost:4200', 'app'], execOpts);
+  await execa('../../../bin/cli.js', ['no-implicit-this', 'app'], execOpts);
 
   console.log('codemod complete, ending serve');
 

@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
-    modulePrefix: 'input',
+    modulePrefix: 'app',
     environment,
     rootURL: '/',
     locationType: 'auto',

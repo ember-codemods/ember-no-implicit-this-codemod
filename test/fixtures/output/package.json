@@ -1,8 +1,8 @@
 {
-  "name": "output",
+  "name": "app",
   "version": "0.0.0",
   "private": true,
-  "description": "Small description for output goes here",
+  "description": "Small description for app goes here",
   "repository": "",
   "license": "MIT",
   "author": "",
