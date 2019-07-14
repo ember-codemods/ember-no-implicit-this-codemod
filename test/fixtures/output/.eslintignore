@@ -2,7 +2,7 @@
 /blueprints/*/files/
 /vendor/
 
-# compiled output
+# compiled app
 /dist/
 /tmp/
 

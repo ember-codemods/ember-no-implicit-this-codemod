@@ -8,7 +8,7 @@ A collection of codemod's for ember-no-implicit-this-codemod.
 To run a specific codemod from this project, you would run the following:
 
 ```
-npx ember-no-implicit-this-codemod <TRANSFORM NAME> path/of/files/ or/some**/*glob.js
+npx ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.hbs
 
 # or
 

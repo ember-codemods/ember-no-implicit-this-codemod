@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
-    modulePrefix: 'output',
+    modulePrefix: 'app',
     environment,
     rootURL: '/',
     locationType: 'auto',
@@ -35,7 +35,7 @@ module.exports = function(environment) {
     // Testem prefers this...
     ENV.locationType = 'none';
 
-    // keep test console output quieter
+    // keep test console app quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 

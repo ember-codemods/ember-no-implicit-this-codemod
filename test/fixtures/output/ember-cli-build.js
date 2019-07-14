@@ -8,7 +8,7 @@ module.exports = function(defaults) {
   });
 
   // Use `app.import` to add additional libraries to the generated
-  // output files.
+  // app files.
   //
   // If you need to use different assets in different
   // environments, specify an object as the first parameter. That
