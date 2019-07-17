@@ -4,11 +4,13 @@
 const { gatherTelemetryForUrl } = require('ember-codemods-telemetry-helpers');
 
 (async () => {
-  await gatherTelemetryForUrl(process.argv[2]);
+  const appLocation = process.argv[2]
+  await gatherTelemetryForUrl(appLocation);
 
   require('codemod-cli').runTransform(
     __dirname,
     'no-implicit-this',
-    process.argv.slice(2) /* paths or globs */
+    process.argv.slice(3), /* paths or globs */
+    'hbs'
   );
 })();
