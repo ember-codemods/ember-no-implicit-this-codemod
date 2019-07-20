@@ -43,7 +43,8 @@
   },
   "handlebars-without-params.input": {
     "type": "Component",
-    "computedProperties": ["foo", "property"]
+    "computedProperties": ["foo", "property"],
+    "getters": ["someGetter"]
   },
   "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" },
