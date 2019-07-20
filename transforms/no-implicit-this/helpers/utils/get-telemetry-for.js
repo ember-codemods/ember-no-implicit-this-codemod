@@ -105,7 +105,8 @@ function getModulePathFor(filePath, addonPaths = ADDON_PATHS, appPaths = APP_PAT
  */
 function getTelemetryFor(filePath) {
   let modulePath = getModulePathFor(filePath);
-  let data = telemetry[modulePath];
+  let moduleKey = modulePath.replace('templates/components/', 'components/');
+  let data = telemetry[moduleKey];
 
   return data;
 }
