@@ -6,3 +6,9 @@
 <SomeComponent @arg=foo />
 <SomeComponent @arg={{this.foo}} @bar={{this.property}} />
 <SomeComponent @arg={{this.foo}} @bar={{fn this.myAction}} />
+<Select
+  data-test-select
+  @items={{this.foo}}
+  @onSelectItem={{action "setValue"}}
+  @selectedValue={{this.foo}}
+/>
