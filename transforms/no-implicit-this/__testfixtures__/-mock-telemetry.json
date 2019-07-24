@@ -46,6 +46,10 @@
     "computedProperties": ["foo", "property"],
     "getters": ["someGetter"]
   },
+  "void-elements.input": {
+    "type": "Component",
+    "computedProperties": ["previewImageUrl"]
+  },
   "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" },
   "link-to": { "type": "Helper" },
