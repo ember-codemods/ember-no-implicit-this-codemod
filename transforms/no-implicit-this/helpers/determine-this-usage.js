@@ -9,7 +9,7 @@ const transformPlugin = require('./plugin');
  *
  * @param {*} ast
  */
-function determineThisUsage(ast, file) {
+function determineThisUsage(ast, file, options) {
   let { path: filePath } = file;
   let runtimeData = getTelemetryFor(path.resolve(filePath));
 
@@ -18,7 +18,7 @@ function determineThisUsage(ast, file) {
     return;
   }
 
-  recast.transform(ast, env => transformPlugin(env, runtimeData));
+  recast.transform(ast, env => transformPlugin(env, runtimeData, options));
 
   return ast;
 }
