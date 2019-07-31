@@ -16,6 +16,12 @@ yarn global add ember-no-implicit-this-codemod
 ember-no-implicit-this-codemod <TRANSFORM NAME> path/of/files/ or/some**/*glob.js
 ```
 
+The codemod accepts the following options:
+
+| Option | Value | Default | Details |
+| --- | --- | ---| --- |
+| --dont-assume-this | boolean | false | The codemod won't prepend `this.` to `PathExpressions` names which don't appear in a component's telemetry data |
+
 ## Transforms
 
 <!--TRANSFORMS_START-->

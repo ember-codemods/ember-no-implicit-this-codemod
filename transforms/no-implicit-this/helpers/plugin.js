@@ -15,7 +15,7 @@ const ARGLESS_BUILTINS = [
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, runtimeData) {
+function transformPlugin(env, runtimeData, options) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
@@ -44,7 +44,7 @@ function transformPlugin(env, runtimeData) {
       let token = ast.parts[0];
 
       if (token !== 'this') {
-        let isThisNeeded = doesTokenNeedThis(token, nonThises, runtimeData);
+        let isThisNeeded = doesTokenNeedThis(token, nonThises, runtimeData, options);
 
         if (isThisNeeded) {
           return b.path(`this.${ast.parts.join('.')}`);
@@ -64,7 +64,12 @@ function transformPlugin(env, runtimeData) {
 // - no:
 //   - is-helper: false
 //   - is-component: false
-function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtimeData) {
+function doesTokenNeedThis(
+  token,
+  { components, helpers, scopedParams },
+  runtimeData,
+  { dontAssumeThis }
+) {
   if (ARGLESS_BUILTINS.includes(token)) {
     return false;
   }
@@ -98,7 +103,7 @@ function doesTokenNeedThis(token, { components, helpers, scopedParams }, runtime
     return false;
   }
 
-  return true;
+  return dontAssumeThis ? false : true;
 }
 
 function populateInvokeables() {
