@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 'use strict';
 
-const transformName = process.argv[2];
-const args = process.argv.slice(3);
+const { gatherTelemetryForUrl } = require('ember-codemods-telemetry-helpers');
 
-require('codemod-cli').runTransform(__dirname, transformName, args, 'hbs');
+(async () => {
+  await gatherTelemetryForUrl(process.argv[2]);
+
+  require('codemod-cli').runTransform(
+    __dirname,
+    'no-implicit-this',
+    process.argv.slice(2) /* paths or globs */
+  );
+})();

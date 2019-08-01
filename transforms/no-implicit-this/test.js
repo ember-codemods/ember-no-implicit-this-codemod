@@ -2,10 +2,9 @@
 
 const path = require('path');
 const { runTransformTest } = require('codemod-cli');
+const { setTelemetry } = require('ember-codemods-telemetry-helpers');
 
 const mockTelemetryData = require('./__testfixtures__/-mock-telemetry.json');
-
-const cache = require('../../lib/cache');
 
 let mockTelemetry = {};
 
@@ -16,7 +15,7 @@ Object.keys(mockTelemetryData).forEach(key => {
   mockTelemetry[mockPath] = value;
 });
 
-cache.set('telemetry', JSON.stringify(mockTelemetry));
+setTelemetry(mockTelemetry);
 
 runTransformTest({
   type: 'jscodeshift',
