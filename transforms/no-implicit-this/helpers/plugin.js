@@ -80,12 +80,13 @@ function doesTokenNeedThis(
     return false;
   }
 
-  let { computedProperties, ownActions, ownProperties } = runtimeData;
+  let { computedProperties, getters, ownActions, ownProperties } = runtimeData;
   let isComputed = (computedProperties || []).includes(token);
   let isAction = (ownActions || []).includes(token);
   let isProperty = (ownProperties || []).includes(token);
+  let isGetter = (getters || []).includes(token);
 
-  let needsThis = isComputed || isAction || isProperty;
+  let needsThis = isComputed || isAction || isProperty || isGetter;
 
   if (needsThis) {
     return true;
