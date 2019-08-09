@@ -25,6 +25,7 @@ The codemod accepts the following options:
 ## Transforms
 
 <!--TRANSFORMS_START-->
+* [no-implicit-this](transforms/no-implicit-this/README.md)
 <!--TRANSFORMS_END-->
 
 ## Contributing
