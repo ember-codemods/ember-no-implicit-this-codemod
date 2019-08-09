@@ -1,5 +1,9 @@
 # ember-no-implicit-this-codemod
 
+[![Build Status](https://travis-ci.org/ember-codemods/ember-no-implicit-this-codemod.svg?branch=master)](https://travis-ci.org/ember-codemods/ember-no-implicit-this-codemod)
+
+[![npm](https://img.shields.io/npm/v/ember-no-implicit-this-codemod.svg?label=App)](https://www.npmjs.com/package/ember-no-implicit-this-codemod)
+
 
 A collection of codemod's for ember-no-implicit-this-codemod.
 
