@@ -1,4 +1,4 @@
-const { telemetry } = require('./utils/get-telemetry-for');
+const { getTelemetry } = require('ember-codemods-telemetry-helpers');
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
@@ -109,6 +109,7 @@ function doesTokenNeedThis(
 function populateInvokeables() {
   let components = [];
   let helpers = [];
+  let telemetry = getTelemetry();
 
   for (let name of Object.keys(telemetry)) {
     let entry = telemetry[name];
