@@ -1,3 +1,5 @@
+* Add ES5 getters to telemetry data (#10) (26a181d)
+
 
 
 * update readme (cefef89)
