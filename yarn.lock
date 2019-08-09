@@ -2214,10 +2214,10 @@ electron-to-chromium@^1.3.191:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.191.tgz#c451b422cd8b2eab84dedabab5abcae1eaefb6f0"
   integrity sha512-jasjtY5RUy/TOyiUYM2fb4BDaPZfm6CXRFeJDMfFsXYADGxUN49RBqtgB7EL2RmJXeIRUk9lM1U6A5yk2YJMPQ==
 
-ember-codemods-telemetry-helpers@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/ember-codemods-telemetry-helpers/-/ember-codemods-telemetry-helpers-0.2.0.tgz#d415d0f80f8e51927f030ce2787d2f38e411bf85"
-  integrity sha512-wAUjLRQ/E+xgCxwyQ1tAECHLO80CWALdNN+cgBhFSIO1Xv0oSWIowjEIwQRtjgTVMxhTFtQxBzGeBivazf9+VQ==
+ember-codemods-telemetry-helpers@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/ember-codemods-telemetry-helpers/-/ember-codemods-telemetry-helpers-0.3.0.tgz#4ef3654d2fba138e50e559da33c2c9b94e40b332"
+  integrity sha512-sbBcb6MEYQMiVahtK3SZ3MJxvxMLx3STgxk6fLuS73kucYlnxI07I6jSIm2UX4E64jRvey9UbzejNqwpy1nJwg==
   dependencies:
     fs-extra "^8.1.0"
     git-repo-info "^2.1.0"
