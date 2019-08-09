@@ -314,6 +314,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{foo}}
 {{property}}
 {{namespace/foo}}
+{{someGetter}}
 
 ```
 
@@ -324,6 +325,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{this.foo}}
 {{this.property}}
 {{namespace/foo}}
+{{this.someGetter}}
 
 ```
 <!--FIXTURES_CONTENT_END-->
