@@ -1,3 +1,10 @@
+* Bump telemetry-helpers to 0.4.0 (#21) (16f9e80)
+* fix label on readme (9332a1d)
+* add badges (#20) (0aaa0ae)
+* update readme (3915484)
+* use travis.com instead of org (30abe60)
+* add badges (9fa0aee)
+
 * Add ES5 getters to telemetry data (#10) (26a181d)
 
 
