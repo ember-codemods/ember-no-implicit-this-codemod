@@ -1,3 +1,6 @@
+* Data attributes smoosh fix (#22) (03d9c79)
+* Fixes Void element bug (#23) (9b46cd6)
+
 * Bump telemetry-helpers to 0.4.0 (#21) (16f9e80)
 * fix label on readme (9332a1d)
 * add badges (#20) (0aaa0ae)
