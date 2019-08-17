@@ -50,6 +50,10 @@
     "type": "Component",
     "computedProperties": ["previewImageUrl"]
   },
+  "failing-elements.input": {
+    "type": "Component",
+    "computedProperties": ["value"]
+  },
   "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" },
   "link-to": { "type": "Helper" },
