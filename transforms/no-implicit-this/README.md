@@ -25,6 +25,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 * [handlebars-with-hash-params](#handlebars-with-hash-params)
 * [handlebars-with-positional-params](#handlebars-with-positional-params)
 * [handlebars-without-params](#handlebars-without-params)
+* [void-elements](#void-elements)
 <!--FIXTURES_TOC_END-->
 
 <!--FIXTURES_CONTENT_START-->
@@ -75,6 +76,12 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 <SomeComponent @arg=foo />
 <SomeComponent @arg={{foo}} @bar={{property}} />
 <SomeComponent @arg={{foo}} @bar={{fn myAction}} />
+<Select
+  data-test-select
+  @items={{foo}}
+  @onSelectItem={{action "setValue"}}
+  @selectedValue={{foo}}
+/>
 
 ```
 
@@ -88,6 +95,12 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 <SomeComponent @arg=foo />
 <SomeComponent @arg={{this.foo}} @bar={{this.property}} />
 <SomeComponent @arg={{this.foo}} @bar={{fn this.myAction}} />
+<Select
+  data-test-select
+  @items={{this.foo}}
+  @onSelectItem={{action "setValue"}}
+  @selectedValue={{this.foo}}
+/>
 
 ```
 ---
@@ -327,5 +340,37 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{namespace/foo}}
 {{this.someGetter}}
 
+```
+---
+<a id="void-elements">**void-elements**</a>
+
+**Input** (<small>[void-elements.input.hbs](transforms/no-implicit-this/__testfixtures__/void-elements.input.hbs)</small>):
+```hbs
+<img
+ id="Preview"
+ src="{{previewImageUrl}}"
+ class="image"
+>
+
+<img
+ id="Preview"
+ src="{{previewImageUrl}}"
+ class="image"
+/>
+```
+
+**Output** (<small>[void-elements.output.hbs](transforms/no-implicit-this/__testfixtures__/void-elements.output.hbs)</small>):
+```hbs
+<img
+ id="Preview"
+ src="{{this.previewImageUrl}}"
+ class="image"
+>
+
+<img
+ id="Preview"
+ src="{{this.previewImageUrl}}"
+ class="image"
+/>
 ```
 <!--FIXTURES_CONTENT_END-->
