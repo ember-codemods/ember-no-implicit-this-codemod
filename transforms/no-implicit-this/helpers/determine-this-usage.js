@@ -16,7 +16,6 @@ function determineThisUsage(ast, file, options) {
 
   if (!runtimeData) {
     let msg = `[${filePath}]: SKIPPED Could not find runtime data NO_RUNTIME_DATA`;
-    console.warn(msg);
     logger.warn(msg);
     return;
   }
