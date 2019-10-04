@@ -10,6 +10,13 @@ const ARGLESS_BUILTINS = [
   'outlet',
   'textarea',
   'yield',
+  'if',
+  'each',
+  'action',
+  'query-params',
+  'log',
+  'unless',
+  'link-to'
 ];
 
 /**
