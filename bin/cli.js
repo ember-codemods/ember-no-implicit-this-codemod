@@ -8,10 +8,5 @@ const args = process.argv.slice(3);
 (async () => {
   await gatherTelemetryForUrl(appLocation);
 
-  require('codemod-cli').runTransform(
-    __dirname,
-    'no-implicit-this',
-    args, /* paths or globs */
-    'hbs'
-  );
+  require('codemod-cli').runTransform(__dirname, 'no-implicit-this', args, 'hbs');
 })();
