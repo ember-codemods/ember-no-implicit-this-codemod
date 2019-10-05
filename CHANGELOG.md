@@ -1,3 +1,6 @@
+* add minimal docs + collect telemetry while running the codemod (#8) (27aad4e)
+* update readme (5b86872)
+
 * Data attributes smoosh fix (#22) (03d9c79)
 * Fixes Void element bug (#23) (9b46cd6)
 
