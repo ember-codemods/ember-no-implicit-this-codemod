@@ -1,6 +1,6 @@
 const path = require('path');
 const recast = require('ember-template-recast');
-const { getTelemetryFor, getTelemetry } = require('ember-codemods-telemetry-helpers');
+const { getTelemetryFor } = require('ember-codemods-telemetry-helpers');
 
 const logger = require('./log-helper');
 const transformPlugin = require('./plugin');

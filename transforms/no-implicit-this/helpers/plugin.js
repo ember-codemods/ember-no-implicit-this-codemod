@@ -1,5 +1,4 @@
 const { getTelemetry } = require('ember-codemods-telemetry-helpers');
-const logger = require('./log-helper');
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
