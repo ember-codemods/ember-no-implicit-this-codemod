@@ -4,60 +4,52 @@
   "block-component": { "type": "Component" },
   "foo": { "type": "Component" },
   "namespace/foo": { "type": "Component" },
-  "built-in-helpers.input": {
+  "built-in-helpers": {
     "type": "Component",
     "computedProperties": ["foo", "records"],
     "ownActions": ["myAction"]
   },
-  "angle-brackets-with-block-params.input": {
+  "angle-brackets-with-block-params": {
     "type": "Component",
     "computedProperties": ["foo", "property", "bar"],
     "ownActions": ["myAction"]
   },
-  "angle-brackets-with-hash-params.input": {
+  "angle-brackets-with-hash-params": {
     "type": "Component",
     "computedProperties": ["foo", "property"],
     "ownActions": ["myAction"]
   },
-  "angle-brackets-without-params.input": {
+  "angle-brackets-without-params": {
     "type": "Component",
     "computedProperties": ["foo"]
   },
-  "dont-assume-this.input": {
+  "dont-assume-this": {
     "type": "Component",
     "computedProperties": ["foo"]
   },
-  "handlebars-with-positional-params.input": {
+  "handlebars-with-positional-params": {
     "type": "Component",
     "computedProperties": ["foo", "property"],
     "ownActions": ["myAction"]
   },
-  "handlebars-with-hash-params.input": {
+  "handlebars-with-hash-params": {
     "type": "Component",
     "computedProperties": ["foo", "property"],
     "ownActions": ["myAction"]
   },
-  "handlebars-with-block-params.input": {
+  "handlebars-with-block-params": {
     "type": "Component",
     "computedProperties": ["foo", "property"]
   },
-  "handlebars-without-params.input": {
+  "handlebars-without-params": {
     "type": "Component",
     "computedProperties": ["foo", "property"],
     "getters": ["someGetter"]
   },
-  "void-elements.input": {
+  "void-elements": {
     "type": "Component",
     "computedProperties": ["previewImageUrl"]
   },
   "my-helper": { "type": "Helper" },
-  "a-helper": { "type": "Helper" },
-  "link-to": { "type": "Helper" },
-  "action": { "type": "Helper" },
-  "concat": { "type": "Helper" },
-  "each": { "type": "Helper" },
-  "mut": { "type": "Helper" },
-  "let": { "type": "Helper" },
-  "if": { "type": "Helper" },
-  "fn": { "type": "Helper" }
+  "a-helper": { "type": "Helper" }
 }

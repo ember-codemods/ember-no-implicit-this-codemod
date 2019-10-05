@@ -24,3 +24,7 @@
 ### Running tests
 
 * `yarn test`
+
+#### Running a single test
+
+* `yarn test --runInBand --testNamePattern=void-elements`

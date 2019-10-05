@@ -1,4 +1,5 @@
 const { getTelemetry } = require('ember-codemods-telemetry-helpers');
+const logger = require('./log-helper');
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
@@ -7,7 +8,7 @@ const KNOWN_HELPERS = require('./known-helpers');
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, runtimeData, options) {
+function transformPlugin(env, runtimeData, options = {}) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
