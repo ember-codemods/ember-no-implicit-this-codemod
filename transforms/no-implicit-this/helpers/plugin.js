@@ -2,20 +2,12 @@ const { getTelemetry } = require('ember-codemods-telemetry-helpers');
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
-const ARGLESS_BUILTINS = [
-  'debugger',
-  'has-block',
-  'hasBlock',
-  'input',
-  'outlet',
-  'textarea',
-  'yield',
-];
+const KNOWN_HELPERS = require('./known-helpers');
 
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, runtimeData, options) {
+function transformPlugin(env, runtimeData, options = {}) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
@@ -70,7 +62,7 @@ function doesTokenNeedThis(
   runtimeData,
   { dontAssumeThis }
 ) {
-  if (ARGLESS_BUILTINS.includes(token)) {
+  if (KNOWN_HELPERS.includes(token)) {
     return false;
   }
 

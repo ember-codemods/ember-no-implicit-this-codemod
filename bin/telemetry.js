@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-const { gatherTelemetry } = require('ember-codemods-telemetry-helpers');
+const { gatherTelemetryForUrl } = require('ember-codemods-telemetry-helpers');
 
-gatherTelemetry(process.argv[2]);
+gatherTelemetryForUrl(process.argv[2]);
