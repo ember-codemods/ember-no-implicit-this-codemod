@@ -35,7 +35,7 @@ async function runTestForVersion(version) {
 
   console.log('running codemod');
 
-  await execa('../../../bin/cli.js', ['http://localhost:4200', 'app'], execOpts);
+  await execa('../../../../bin/cli.js', ['http://localhost:4200', 'app'], execOpts);
 
   console.log('codemod complete, ending serve');
 
