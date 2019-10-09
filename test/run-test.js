@@ -1,14 +1,19 @@
 /* eslint-disable no-console */
+const versions = ['3.10', '3.13'];
 
 const { spawn } = require('child_process');
 const execa = require('execa');
 const path = require('path');
 
-// resolved from the root of the project
-const inputDir = path.resolve('./test/fixtures/input');
-const execOpts = { cwd: inputDir, stderr: 'inherit' };
+async function runTestForVersion(version) {
+  console.log(`
+    Running Integration Test for Ember ${version}
+  `);
 
-(async () => {
+  // resolved from the root of the project
+  const inputDir = path.resolve(`./test/fixtures/${version}/input`);
+  const execOpts = { cwd: inputDir, stderr: 'inherit' };
+
   console.log('installing deps');
 
   await execa('rm', ['-rf', 'node_modules'], execOpts);
@@ -48,5 +53,15 @@ const execOpts = { cwd: inputDir, stderr: 'inherit' };
   }
 
   console.log('codemod ran successfully! 🎉');
+}
+
+
+(async () => {
+  for (let version of versions) {
+    await runTestForVersion(version);
+  }
+
   process.exit(0);
 })();
+
+
