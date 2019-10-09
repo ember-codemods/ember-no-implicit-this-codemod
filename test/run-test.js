@@ -1,9 +1,24 @@
 /* eslint-disable no-console */
-const versions = ['3.10', '3.13'];
 
-const { spawn } = require('child_process');
+// const versions = [process.env.EMBER_VERSION]
+const allVersions = ['3.10', '3.13'];
+
 const execa = require('execa');
 const path = require('path');
+
+async function kill(subprocess) {
+  setTimeout(() => {
+    subprocess.cancel();
+    subprocess.kill('SIGTERM');
+  }, 1000);
+
+  console.log(`Requesting SIGTERM of ${subprocess.pid}`);
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+}
 
 async function runTestForVersion(version) {
   console.log(`
@@ -22,8 +37,7 @@ async function runTestForVersion(version) {
   console.log('starting serve');
 
   // We use spawn for this one so we can kill it later without throwing an error
-  const emberServe = spawn('yarn', ['start'], execOpts);
-  emberServe.stderr.pipe(process.stderr);
+  const emberServe = execa('yarn', ['start'], { cwd: inputDir });
 
   await new Promise(resolve => {
     emberServe.stdout.on('data', data => {
@@ -39,7 +53,7 @@ async function runTestForVersion(version) {
 
   console.log('codemod complete, ending serve');
 
-  emberServe.kill('SIGTERM');
+  await kill(emberServe);
 
   console.log('comparing results');
 
@@ -55,13 +69,19 @@ async function runTestForVersion(version) {
   console.log('codemod ran successfully! 🎉');
 }
 
-
 (async () => {
-  for (let version of versions) {
-    await runTestForVersion(version);
+  let emberVersion = process.env.EMBER_VERSION;
+  if (!emberVersion) {
+    console.error(`No EMBER_VERSION set. No scenarios to run.`);
+    process.exit(1);
   }
+
+  if (!allVersions.includes(`${emberVersion}`)) {
+    console.error(`EMBER_VERSION is not allowed. Available: ${allVersions.join(', ')}`);
+    process.exit(1);
+  }
+
+  await runTestForVersion(emberVersion);
 
   process.exit(0);
 })();
-
-
