@@ -1,0 +1,25 @@
+{{#each something as |obj|}}
+  {{#if obj.foo}}
+    111
+  {{else}}
+    222
+    <div>
+      {{#if obj.foo}}
+        {{#if (eq obj.bar "foo")}}
+          333
+        {{else}}
+          444
+        {{/if}}
+        <span>
+          {{#if obj.foo}}
+            555
+          {{/if}}
+        </span>
+      {{else if obj.bar}}
+        666
+      {{else}}
+        777
+      {{/if}}
+    </div>
+  {{/if}}
+{{/each}}

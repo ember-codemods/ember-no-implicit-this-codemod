@@ -50,6 +50,10 @@
     "type": "Component",
     "computedProperties": ["previewImageUrl"]
   },
+  "deeply-nested-else": {
+    "type": "Component",
+    "computedProperties": ["something"]
+  },
   "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" }
 }
