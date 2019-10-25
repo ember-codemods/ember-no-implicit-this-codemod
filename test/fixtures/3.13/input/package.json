@@ -40,6 +40,7 @@
     "ember-qunit": "^4.4.1",
     "ember-resolver": "^5.0.1",
     "ember-source": "~3.13.3",
+    "ember-truth-helpers": "^2.1.0",
     "ember-welcome-page": "^4.0.0",
     "eslint-plugin-ember": "^7.1.0",
     "eslint-plugin-node": "^10.0.0",
