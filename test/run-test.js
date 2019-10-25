@@ -1,14 +1,34 @@
 /* eslint-disable no-console */
 
-const { spawn } = require('child_process');
+// const versions = [process.env.EMBER_VERSION]
+const allVersions = ['3.10', '3.13'];
+
 const execa = require('execa');
 const path = require('path');
 
-// resolved from the root of the project
-const inputDir = path.resolve('./test/fixtures/input');
-const execOpts = { cwd: inputDir, stderr: 'inherit' };
+async function kill(subprocess) {
+  setTimeout(() => {
+    subprocess.cancel();
+    subprocess.kill('SIGTERM');
+  }, 1000);
 
-(async () => {
+  console.log(`Requesting SIGTERM of ${subprocess.pid}`);
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+}
+
+async function runTestForVersion(version) {
+  console.log(`
+    Running Integration Test for Ember ${version}
+  `);
+
+  // resolved from the root of the project
+  const inputDir = path.resolve(`./test/fixtures/${version}/input`);
+  const execOpts = { cwd: inputDir, stderr: 'inherit' };
+
   console.log('installing deps');
 
   await execa('rm', ['-rf', 'node_modules'], execOpts);
@@ -17,8 +37,7 @@ const execOpts = { cwd: inputDir, stderr: 'inherit' };
   console.log('starting serve');
 
   // We use spawn for this one so we can kill it later without throwing an error
-  const emberServe = spawn('yarn', ['start'], execOpts);
-  emberServe.stderr.pipe(process.stderr);
+  const emberServe = execa('yarn', ['start'], { cwd: inputDir });
 
   await new Promise(resolve => {
     emberServe.stdout.on('data', data => {
@@ -30,11 +49,11 @@ const execOpts = { cwd: inputDir, stderr: 'inherit' };
 
   console.log('running codemod');
 
-  await execa('../../../bin/cli.js', ['http://localhost:4200', 'app'], execOpts);
+  await execa('../../../../bin/cli.js', ['http://localhost:4200', 'app'], execOpts);
 
   console.log('codemod complete, ending serve');
 
-  emberServe.kill('SIGTERM');
+  await kill(emberServe);
 
   console.log('comparing results');
 
@@ -48,5 +67,21 @@ const execOpts = { cwd: inputDir, stderr: 'inherit' };
   }
 
   console.log('codemod ran successfully! 🎉');
+}
+
+(async () => {
+  let emberVersion = process.env.EMBER_VERSION;
+  if (!emberVersion) {
+    console.error(`No EMBER_VERSION set. No scenarios to run.`);
+    process.exit(1);
+  }
+
+  if (!allVersions.includes(`${emberVersion}`)) {
+    console.error(`EMBER_VERSION is not allowed. Available: ${allVersions.join(', ')}`);
+    process.exit(1);
+  }
+
+  await runTestForVersion(emberVersion);
+
   process.exit(0);
 })();
