@@ -2,7 +2,7 @@ import path from 'path';
 import execa, { CommonOptions } from 'execa';
 import { log, timeoutAfter, kill, error } from './utils';
 
-const devServerTimeout = 5000;
+const devServerTimeout = 40000;
 
 export class TestRunner {
   version: string;
@@ -21,25 +21,19 @@ export class TestRunner {
   }
 
   async installDeps(): Promise<void> {
-    log('installing deps');
-
     await execa('rm', ['-rf', 'node_modules'], this.execOpts);
     await execa('yarn', ['install'], this.execOpts);
   }
 
   async runCodemod() {
-    log('running codemod');
-
     await execa('../../../../bin/cli.js', ['http://localhost:4200', 'app'], this.execOpts);
-
-    log('codemod complete');
   }
 
   async startEmber(): Promise<void> {
-    log('starting ember serve');
-
     const emberServe = execa('yarn', ['start'], { cwd: this.inputDir });
 
+    emberServe.stdout.pipe(process.stdout);
+    emberServe.stderr.pipe(process.stderr);
     const serverWaiter = new Promise(resolve => {
       emberServe.stdout.on('data', data => {
         if (data.toString().includes('Build successful')) {
@@ -59,14 +53,10 @@ export class TestRunner {
   }
 
   async stopEmber(): Promise<void> {
-    log('killing the ember server');
-
     await timeoutAfter(devServerTimeout, kill(this.emberProcess));
   }
 
   async compare() {
-    log('comparing results');
-
     try {
       const actual = path.join('app');
       const expectedApp = path.join('..', 'output', 'app');
@@ -77,7 +67,5 @@ export class TestRunner {
 
       throw new Error('codemod did not run successfully');
     }
-
-    log('codemod ran successfully! 🎉');
   }
 }
