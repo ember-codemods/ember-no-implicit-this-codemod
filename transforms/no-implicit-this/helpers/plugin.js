@@ -33,6 +33,8 @@ function transformPlugin(env, runtimeData, options = {}) {
     Program: paramTracker,
     ElementNode: paramTracker,
     PathExpression(ast) {
+      if (ast.data) return;
+
       let token = ast.parts[0];
 
       if (token !== 'this') {
