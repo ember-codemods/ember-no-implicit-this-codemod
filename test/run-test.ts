@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
 
-// const versions = [process.env.EMBER_VERSION]
-const allVersions = ['3.10', '3.13'];
 
 import path from 'path';
 import execa from 'execa';
 import Listr from 'listr';
+import { stripIndent } from 'common-tags';
 
 import { log, error } from './helpers/utils';
 import { TestRunner } from './helpers/test-runner';
@@ -48,6 +47,8 @@ async function runTestForVersion(version: string) {
   await tasks.run();
 }
 
+const allVersions = ['3.10', '3.13'];
+
 (async () => {
   const emberVersion = process.env.EMBER_VERSION;
 
@@ -76,7 +77,10 @@ async function runTestForVersion(version: string) {
       const fixturePath = path.join(process.cwd(), 'test', 'fixtures', emberVersion);
       await execa(`git checkout -- .`, { cwd: fixturePath });
     } catch (e) {
-      error('There was a problem during cleanup. Do not commit the fixtures directory');
+      error(stripIndent`
+        There was a problem during cleanup.
+        Do not commit any changes to the fixtures directory`);
+      console.error(e);
     }
   }
 

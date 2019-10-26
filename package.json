@@ -44,11 +44,13 @@
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
+    "@types/common-tags": "^1.8.0",
     "@types/listr": "^0.14.2",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "babel-plugin-htmlbars-inline-precompile": "^3.0.0",
     "chalk": "^2.4.2",
+    "common-tags": "^1.8.0",
     "coveralls": "^3.0.6",
     "eslint": "^6.5.1",
     "eslint-config-prettier": "^6.3.0",
