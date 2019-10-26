@@ -38,14 +38,31 @@ async function runTestForVersion(version) {
 
   // We use spawn for this one so we can kill it later without throwing an error
   const emberServe = execa('yarn', ['start'], { cwd: inputDir });
+  let emberHasLoaded = false;
 
-  await new Promise(resolve => {
+  emberServe.stdout.pipe(process.stdout);
+  emberServe.stderr.pipe(process.stderr);
+  let serverWaiter = new Promise(resolve => {
     emberServe.stdout.on('data', data => {
       if (data.toString().includes('Build successful')) {
+        emberHasLoaded = true;
         resolve();
       }
     });
   });
+
+  try {
+    console.log('eh');
+    await serverWaiter;
+    console.log('eh2');
+  } catch (e) {
+    console.error('Ember server failed to start');
+    console.log(e.stdout);
+  }
+
+  if (!emberHasLoaded) {
+    throw new Error('Ember server never started :(');
+  }
 
   console.log('running codemod');
 
