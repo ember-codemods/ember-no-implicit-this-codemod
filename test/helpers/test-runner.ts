@@ -32,8 +32,11 @@ export class TestRunner {
   async startEmber(): Promise<void> {
     const emberServe = execa('yarn', ['start'], { cwd: this.inputDir });
 
-    emberServe.stdout.pipe(process.stdout);
-    emberServe.stderr.pipe(process.stderr);
+    if (process.env.DEBUG) {
+      emberServe.stdout.pipe(process.stdout);
+      emberServe.stderr.pipe(process.stderr);
+    }
+
     const serverWaiter = new Promise(resolve => {
       emberServe.stdout.on('data', data => {
         if (data.toString().includes('Build successful')) {

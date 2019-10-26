@@ -31,8 +31,9 @@ export async function kill(subprocess: execa.ExecaChildProcess) {
   });
 
   try {
-    await subprocess;
+    // await subprocess;
 
+    await subprocess.kill();
     console.log(`Requesting SIGTERM of ember serve: (PID) ${subprocess.pid}`);
   } catch (e) {
     console.log(`PID ${subprocess.pid} has stopped.`);
