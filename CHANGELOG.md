@@ -1,3 +1,11 @@
+* Fix @args swapped with this.args (#40) (5f6ae02)
+* update telemetry helpers tp (#38) (e3e4c1c)
+* Update telemetry-helpers (#37) (4f08318)
+* Test multiple ember versions (#29) (cb53ef2)
+* Use GitHub Actions for parallel running (4c395fc)
+* add 3.13 app (4c259f3)
+* move old app to 3.10 (2849e1c)
+
 * add minimal docs + collect telemetry while running the codemod (#8) (27aad4e)
 * update readme (5b86872)
 
