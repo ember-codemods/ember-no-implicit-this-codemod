@@ -30,7 +30,12 @@ export class TestRunner {
   }
 
   async startEmber(): Promise<void> {
-    const emberServe = execa('yarn', ['start'], { cwd: this.inputDir });
+    const emberServe = execa('yarn', ['ember', 'serve'], {
+      cwd: this.inputDir,
+      env: {
+        JOBS: '1',
+      },
+    });
 
     if (process.env.DEBUG) {
       emberServe.stdout.pipe(process.stdout);
