@@ -1,51 +1,11 @@
 /* eslint-disable no-console */
 
-
-import path from 'path';
-import execa from 'execa';
-import Listr from 'listr';
+// import path from 'path';
+// import execa from 'execa';
 import { stripIndent } from 'common-tags';
 
-import { log, error } from './helpers/utils';
-import { TestRunner } from './helpers/test-runner';
-
-async function runTestForVersion(version: string) {
-  log(`Running Integration Test for Ember ${version}`);
-
-  const runner = new TestRunner(version);
-
-  const tasks = new Listr([
-    {
-      title: `Running Integration Test for Ember ${version}`,
-      task: () => {
-        return new Listr([
-          {
-            title: 'Installing Dependencies',
-            task: runner.installDeps,
-          },
-          {
-            title: 'Starting the Ember Dev Server',
-            task: runner.startEmber,
-          },
-          {
-            title: 'Run Codemods',
-            task: runner.runCodemod,
-          },
-          {
-            title: 'Stopping the Ember Dev Server',
-            task: runner.stopEmber,
-          },
-          {
-            title: 'Comparing Results',
-            task: runner.compare,
-          },
-        ]).run();
-      },
-    },
-  ]);
-
-  await tasks.run();
-}
+import { error } from './helpers/utils';
+import { runTestIntegrationSequence } from './helpers/sequence';
 
 const allVersions = ['3.10', '3.13'];
 
@@ -65,7 +25,8 @@ const allVersions = ['3.10', '3.13'];
   let didSucceed = false;
 
   try {
-    await runTestForVersion(emberVersion);
+    process.env.DEBUG = 'true'; // hacks for now
+    await runTestIntegrationSequence(emberVersion);
     didSucceed = true;
   } catch (e) {
     error(e);
@@ -74,8 +35,8 @@ const allVersions = ['3.10', '3.13'];
   } finally {
     // TOOD: if there were any changes to the fixtures directories, revert them
     try {
-      const fixturePath = path.join(process.cwd(), 'test', 'fixtures', emberVersion);
-      await execa(`git checkout -- .`, { cwd: fixturePath });
+      // const fixturePath = path.join(process.cwd(), 'test', 'fixtures', emberVersion);
+      // await execa(`git checkout -- .`, { cwd: fixturePath });
     } catch (e) {
       error(stripIndent`
         There was a problem during cleanup.

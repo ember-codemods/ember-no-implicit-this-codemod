@@ -2,7 +2,7 @@ import path from 'path';
 import execa, { CommonOptions } from 'execa';
 import { log, timeoutAfter, kill, error } from './utils';
 
-const devServerTimeout = 40000;
+const devServerTimeout = 60000;
 
 export class TestRunner {
   version: string;
@@ -21,8 +21,8 @@ export class TestRunner {
   }
 
   async installDeps(): Promise<void> {
-    await execa('rm', ['-rf', 'node_modules'], this.execOpts);
-    await execa('yarn', ['install'], this.execOpts);
+    await execa('rm', ['-rf', 'node_modules'], { cwd: this.inputDir });
+    await execa('yarn', ['install'], { cwd: this.inputDir });
   }
 
   async runCodemod() {
