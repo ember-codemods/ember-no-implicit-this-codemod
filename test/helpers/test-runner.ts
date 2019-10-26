@@ -64,7 +64,7 @@ export class TestRunner {
       const actual = path.join('app');
       const expectedApp = path.join('..', 'output', 'app');
 
-      await execa('diff', ['-rq', actual, expectedApp], this.execOpts);
+      await execa('diff', ['-rq', actual, expectedApp], { cwd: this.inputDir, stdio: 'inherit' });
     } catch (e) {
       console.log(e.stdout);
 

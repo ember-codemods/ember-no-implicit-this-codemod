@@ -25,16 +25,10 @@ export async function kill(subprocess: execa.ExecaChildProcess) {
     throw new Error('Cannot kill non-running process');
   }
 
-  subprocess.cancel();
-  subprocess.kill('SIGTERM', {
-    forceKillAfterTimeout: 2000,
-  });
-
   try {
-    // await subprocess;
-
-    await subprocess.kill();
     console.log(`Requesting SIGTERM of ember serve: (PID) ${subprocess.pid}`);
+
+    process.kill(subprocess.pid);
   } catch (e) {
     console.log(`PID ${subprocess.pid} has stopped.`);
     console.log(`\tKilled: ${subprocess.killed}`);
