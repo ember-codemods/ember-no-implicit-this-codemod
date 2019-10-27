@@ -302,6 +302,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{my-component (my-helper property)}}
 {{my-component (my-helper "string")}}
 {{my-component (my-helper 1)}}
+{{get this 'key'}}
 
 
 ```
@@ -316,7 +317,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{my-component (my-helper this.property)}}
 {{my-component (my-helper "string")}}
 {{my-component (my-helper 1)}}
-
+{{get this 'key'}}
 
 ```
 ---
