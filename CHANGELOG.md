@@ -1,3 +1,6 @@
+* Fix incorrect transform of naked pre-existing this (#41) (87fa534)
+* update readme with generated transform output (7d7e035)
+
 * Fix @args swapped with this.args (#40) (5f6ae02)
 * update telemetry helpers tp (#38) (e3e4c1c)
 * Update telemetry-helpers (#37) (4f08318)
