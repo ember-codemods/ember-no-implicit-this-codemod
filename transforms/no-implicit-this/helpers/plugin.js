@@ -11,6 +11,7 @@ function transformPlugin(env, runtimeData, options = {}) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
+  let currentModifierPathExpression;
   let [components, helpers] = populateInvokeables();
 
   let nonThises = { scopedParams, components, helpers };
@@ -29,12 +30,24 @@ function transformPlugin(env, runtimeData, options = {}) {
     },
   };
 
+  let modifierTracker = {
+    enter(node) {
+      currentModifierPathExpression = node.path;
+    },
+
+    exit() {
+      currentModifierPathExpression = undefined;
+    },
+  };
+
   return {
     Program: paramTracker,
     ElementNode: paramTracker,
+    ElementModifierStatement: modifierTracker,
     PathExpression(ast) {
       if (ast.data) return;
       if (ast.original === 'this') return;
+      if (ast === currentModifierPathExpression) return;
 
       let token = ast.parts[0];
 
@@ -87,15 +100,11 @@ function doesTokenNeedThis(
     return true;
   }
 
-  let isComponent = components.find(path => path.endsWith(token));
+  let globals = [...components, ...helpers];
 
-  if (isComponent) {
-    return false;
-  }
+  let isGlobal = globals.find(path => path.endsWith(token));
 
-  let isHelper = helpers.find(path => path.endsWith(token));
-
-  if (isHelper) {
+  if (isGlobal) {
     return false;
   }
 
