@@ -1,3 +1,11 @@
+## v0.7.3 (2019-10-28)
+
+#### :house: Internal
+* [#39](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/39) Improve Integration Tests ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### Committers: 1
+- L. Preston Sego III ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
 * Fix incorrect transform of naked pre-existing this (#41) (87fa534)
 * update readme with generated transform output (7d7e035)
 
