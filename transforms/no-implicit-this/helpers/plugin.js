@@ -12,9 +12,9 @@ function transformPlugin(env, runtimeData, options = {}) {
 
   let scopedParams = [];
   let currentModifierPathExpression;
-  let [components, helpers] = populateInvokeables();
+  let invokeables = populateInvokeables();
 
-  let nonThises = { scopedParams, components, helpers };
+  let nonThises = { scopedParams, invokeables };
 
   let paramTracker = {
     enter(node) {
@@ -72,12 +72,7 @@ function transformPlugin(env, runtimeData, options = {}) {
 // - no:
 //   - is-helper: false
 //   - is-component: false
-function doesTokenNeedThis(
-  token,
-  { components, helpers, scopedParams },
-  runtimeData,
-  { dontAssumeThis }
-) {
+function doesTokenNeedThis(token, { invokeables, scopedParams }, runtimeData, { dontAssumeThis }) {
   if (KNOWN_HELPERS.includes(token)) {
     return false;
   }
@@ -100,11 +95,9 @@ function doesTokenNeedThis(
     return true;
   }
 
-  let globals = [...components, ...helpers];
+  let isInvokeable = invokeables.find(path => path.endsWith(token));
 
-  let isGlobal = globals.find(path => path.endsWith(token));
-
-  if (isGlobal) {
+  if (isInvokeable) {
     return false;
   }
 
@@ -112,8 +105,7 @@ function doesTokenNeedThis(
 }
 
 function populateInvokeables() {
-  let components = [];
-  let helpers = [];
+  let invokeables = [];
   let telemetry = getTelemetry();
 
   for (let name of Object.keys(telemetry)) {
@@ -121,15 +113,13 @@ function populateInvokeables() {
 
     switch (entry.type) {
       case 'Component':
-        components.push(name);
-        break;
       case 'Helper':
-        helpers.push(name);
+        invokeables.push(name);
         break;
     }
   }
 
-  return [components, helpers];
+  return invokeables;
 }
 
 module.exports = transformPlugin;
