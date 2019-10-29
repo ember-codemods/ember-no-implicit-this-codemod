@@ -11,7 +11,6 @@ function transformPlugin(env, runtimeData, options = {}) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
-  let currentModifierPathExpression;
   let invokeables = populateInvokeables();
 
   let nonThises = { scopedParams, invokeables };
@@ -30,24 +29,12 @@ function transformPlugin(env, runtimeData, options = {}) {
     },
   };
 
-  let modifierTracker = {
-    enter(node) {
-      currentModifierPathExpression = node.path;
-    },
-
-    exit() {
-      currentModifierPathExpression = undefined;
-    },
-  };
-
   return {
     Program: paramTracker,
     ElementNode: paramTracker,
-    ElementModifierStatement: modifierTracker,
     PathExpression(ast) {
       if (ast.data) return;
       if (ast.original === 'this') return;
-      if (ast === currentModifierPathExpression) return;
 
       let token = ast.parts[0];
 
