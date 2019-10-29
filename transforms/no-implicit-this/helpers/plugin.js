@@ -101,6 +101,7 @@ function populateInvokeables() {
     switch (entry.type) {
       case 'Component':
       case 'Helper':
+      case 'Modifier':
         invokeables.push(name);
         break;
     }
