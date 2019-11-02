@@ -15,7 +15,7 @@
   "scripts": {
     "release": "release-it",
     "test": "codemod-cli test",
-    "test:integration": "ts-node ./test/run-test.ts",
+    "test:integration": "./scripts/test-integration.sh",
     "update-docs": "codemod-cli update-docs",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint:js": "eslint .",
