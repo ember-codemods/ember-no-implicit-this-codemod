@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 yarn ts-node ./test/run-test.ts
 
