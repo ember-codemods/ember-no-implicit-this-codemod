@@ -32,7 +32,7 @@
   ],
   "dependencies": {
     "codemod-cli": "^2.1.0",
-    "ember-codemods-telemetry-helpers": "github:ember-codemods/ember-codemods-telemetry-helpers#add-modifiers-to-default-analyzer",
+    "ember-codemods-telemetry-helpers": "github:ember-codemods/ember-codemods-telemetry-helpers#7aeecc7fe5c0211fc515c1a779ba8066bd48a7c6",
     "ember-template-recast": "^3.2.8",
     "fs-extra": "^8.1.0",
     "git-repo-info": "^2.1.0",

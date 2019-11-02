@@ -2283,9 +2283,9 @@ electron-to-chromium@^1.3.295:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.296.tgz#a1d4322d742317945285d3ba88966561b67f3ac8"
   integrity sha512-s5hv+TSJSVRsxH190De66YHb50pBGTweT9XGWYu/LMR20KX6TsjFzObo36CjVAzM+PUeeKSBRtm/mISlCzeojQ==
 
-"ember-codemods-telemetry-helpers@github:ember-codemods/ember-codemods-telemetry-helpers#add-modifiers-to-default-analyzer":
+"ember-codemods-telemetry-helpers@github:ember-codemods/ember-codemods-telemetry-helpers#7aeecc7fe5c0211fc515c1a779ba8066bd48a7c6":
   version "1.0.1"
-  resolved "https://codeload.github.com/ember-codemods/ember-codemods-telemetry-helpers/tar.gz/b7df5e6687b47d2a5a8ffe9d97560c760830f6e1"
+  resolved "https://codeload.github.com/ember-codemods/ember-codemods-telemetry-helpers/tar.gz/7aeecc7fe5c0211fc515c1a779ba8066bd48a7c6"
   dependencies:
     fs-extra "^8.1.0"
     git-repo-info "^2.1.0"
