@@ -5,6 +5,8 @@
 <SomeComponent @arg=1 />
 <SomeComponent @arg=foo />
 <SomeComponent @arg={{this.foo}} @bar={{this.property}} />
+<MyAddon$MyComponent @arg={{this.foo}} @bar={{this.property}} />
+<MyAddon$Namespace::MyComponent @arg={{this.foo}} @bar={{this.property}} />
 <SomeComponent @arg={{this.foo}} @bar={{fn this.myAction}} />
 <Select
   data-test-select
