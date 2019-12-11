@@ -63,9 +63,9 @@ function doesTokenNeedThis(
   token,
   { components, helpers, scopedParams },
   runtimeData,
-  { dontAssumeThis }
+  { dontAssumeThis, customHelpers }
 ) {
-  if (KNOWN_HELPERS.includes(token)) {
+  if (KNOWN_HELPERS.includes(token) || customHelpers.includes(token)) {
     return false;
   }
 
