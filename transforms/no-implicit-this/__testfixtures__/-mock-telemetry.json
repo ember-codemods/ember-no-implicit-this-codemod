@@ -5,6 +5,10 @@
   "block-component": { "type": "Component" },
   "foo": { "type": "Component" },
   "namespace/foo": { "type": "Component" },
+  "handlebars-with-data-attributes": {
+    "type": "Component",
+    "computedProperties": ["foo"]
+  },
   "built-in-helpers": {
     "type": "Component",
     "computedProperties": ["foo", "records"],

@@ -49,6 +49,10 @@ function transformPlugin(env, runtimeData, options = {}) {
   };
 }
 
+function isDataAttribute(token) {
+  return token && token.startsWith('data-');
+}
+
 // Does the runtime data (for the c
 // urrent file)
 // contain a definition for the token?
@@ -66,6 +70,10 @@ function doesTokenNeedThis(
   { dontAssumeThis, customHelpers }
 ) {
   if (KNOWN_HELPERS.includes(token) || customHelpers.includes(token)) {
+    return false;
+  }
+
+  if (isDataAttribute(token)) {
     return false;
   }
 
