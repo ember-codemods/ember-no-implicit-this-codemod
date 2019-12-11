@@ -10,6 +10,7 @@
     "computedProperties": ["foo", "records"],
     "ownActions": ["myAction"]
   },
+  "custom-helpers": { "type": "Component" },
   "angle-brackets-with-block-params": {
     "type": "Component",
     "computedProperties": ["foo", "property", "bar"],
