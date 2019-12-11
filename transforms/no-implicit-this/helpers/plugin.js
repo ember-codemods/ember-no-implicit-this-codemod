@@ -87,6 +87,16 @@ function doesTokenNeedThis(
     return true;
   }
 
+  // This is to support the ember-holy-futuristic-template-namespacing-batman syntax
+  // as well as support for Nested Invocations in Angle Bracket Syntax
+  // Ref: https://github.com/rwjblue/ember-holy-futuristic-template-namespacing-batman
+  if (token.includes('$')) {
+    token = token.split('$')[1];
+  }
+  if (token.includes('::')) {
+    token = token.replace(/::/g, '/');
+  }
+
   let isComponent = components.find(path => path.endsWith(token));
 
   if (isComponent) {

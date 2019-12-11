@@ -1,6 +1,7 @@
 {
   "some-component": { "type": "Component" },
   "my-component": { "type": "Component" },
+  "namespace/my-component": { "type": "Component" },
   "block-component": { "type": "Component" },
   "foo": { "type": "Component" },
   "namespace/foo": { "type": "Component" },
@@ -28,6 +29,11 @@
     "computedProperties": ["foo"]
   },
   "handlebars-with-positional-params": {
+    "type": "Component",
+    "computedProperties": ["foo", "property"],
+    "ownActions": ["myAction"]
+  },
+  "handlebars-with-wall-street-syntax": {
     "type": "Component",
     "computedProperties": ["foo", "property"],
     "ownActions": ["myAction"]
