@@ -1,3 +1,8 @@
+* Merge pull request #50 from suchitadoshi1987/suchita/customHelpers (9713041)
+* Merge pull request #49 from suchitadoshi1987/suchita/supportwallstreet (57d0a65)
+* Add config option to support custom helpers (c1c4918)
+* add support for ember-holy-futuristic-template-namespacing-batman syntax as well as for Nested Invocations in Angle Bracket Syntax (cec9fc4)
+
 ## v0.7.3 (2019-10-28)
 
 #### :house: Internal
