@@ -1,3 +1,4 @@
+const debug = require('debug')('ember-no-implicit-this-codemod:plugin');
 const recast = require('ember-template-recast');
 
 // everything is copy-pasteable to astexplorer.net.
@@ -47,33 +48,66 @@ function transform(root, options = {}) {
 
   function handlePathExpression(node) {
     // skip this.foo
-    if (node.this) return;
+    if (node.this) {
+      debug(`Skipping \`%s\` because it is already prefixed with \`this.\``, node.original);
+      return;
+    }
 
     // skip @foo
-    if (node.data) return;
+    if (node.data) {
+      debug(`Skipping \`%s\` because it is already prefixed with \`@\``, node.original);
+      return;
+    }
 
     // skip {#foo as |bar|}}{{bar}}{{/foo}}
     // skip <Foo as |bar|>{{bar}}</Foo>
     let firstPart = node.parts[0];
-    if (scopedParams.includes(firstPart)) return;
+    if (scopedParams.includes(firstPart)) {
+      debug(`Skipping \`%s\` because it is a scoped variable`, node.original);
+      return;
+    }
 
     // skip `hasBlock` keyword
-    if (node.original === 'hasBlock') return;
+    if (node.original === 'hasBlock') {
+      debug(`Skipping \`%s\` because it is a keyword`, node.original);
+      return;
+    }
 
     // add `this.` prefix
+    debug(`Transforming \`%s\` to \`this.%s\``, node.original, node.original);
     Object.assign(node, b.path(`this.${node.original}`));
   }
 
   function isHelper(name) {
-    return (
-      KNOWN_HELPERS.includes(name) ||
-      customHelpers.includes(name) ||
-      Boolean(helpers.find(path => path.endsWith(name)))
-    );
+    if (KNOWN_HELPERS.includes(name)) {
+      debug(`Skipping \`%s\` because it is a known helper`, name);
+      return true;
+    }
+
+    if (customHelpers.includes(name)) {
+      debug(`Skipping \`%s\` because it is a custom configured helper`, name);
+      return true;
+    }
+
+    let helper = helpers.find(path => path.endsWith(name));
+    if (helper) {
+      let message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
+      debug(message, name, helper);
+      return true;
+    }
+
+    return false;
   }
 
   function isComponent(name) {
-    return Boolean(components.find(path => path.endsWith(name)));
+    let component = components.find(path => path.endsWith(name));
+    if (component) {
+      let message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
+      debug(message, name, component);
+      return true;
+    }
+
+    return false;
   }
 
   let inAttrNode = false;
@@ -113,7 +147,11 @@ function transform(root, options = {}) {
 
         // skip ember-holy-futuristic-template-namespacing-batman component/helper invocations
         // (see https://github.com/rwjblue/ember-holy-futuristic-template-namespacing-batman)
-        if (path.original.includes('$') || path.original.includes('::')) return;
+        if (path.original.includes('$') || path.original.includes('::')) {
+          let message = `Skipping \`%s\` because it looks like a helper/component invocation from ember-holy-futuristic-template-namespacing-batman`;
+          debug(message, path.original);
+          return;
+        }
 
         // skip helpers
         if (isHelper(path.original)) return;

@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
+const debug = require('debug')('ember-no-implicit-this-codemod:transform');
 const recast = require('ember-template-recast');
 const { getTelemetry } = require('ember-codemods-telemetry-helpers');
 const transform = require('./helpers/plugin');
@@ -45,11 +46,18 @@ module.exports = function transformer(file /*, api */) {
   let options = Object.assign({}, DEFAULT_OPTIONS, getOptions());
 
   if (!['.hbs'].includes(extension.toLowerCase())) {
+    debug('Skipping %s because it does not match the .hbs file extension', file.path);
+
     // do nothing on non-hbs files
     return;
   }
 
+  debug('Parsing %s ...', file.path);
   let root = recast.parse(file.source);
+
+  debug('Transforming %s ...', file.path);
   transform(root, options);
+
+  debug('Generating new content for %s ...', file.path);
   return recast.print(root);
 };
