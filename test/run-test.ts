@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
 
-// import path from 'path';
-// import execa from 'execa';
 import { stripIndent } from 'common-tags';
 
 import { error } from './helpers/utils';
