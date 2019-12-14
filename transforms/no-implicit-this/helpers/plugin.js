@@ -7,13 +7,13 @@ const KNOWN_HELPERS = require('./known-helpers');
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, runtimeData, options = {}) {
+function transformPlugin(env, options = {}) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
   let [components, helpers] = populateInvokeables();
 
-  let nonThises = { scopedParams, components, helpers };
+  let customHelpers = options.customHelpers || [];
 
   let paramTracker = {
     enter(node) {
@@ -29,87 +29,121 @@ function transformPlugin(env, runtimeData, options = {}) {
     },
   };
 
+  function handleParams(params) {
+    for (let param of params) {
+      if (param.type !== 'PathExpression') continue;
+      handlePathExpression(param);
+    }
+  }
+
+  function handleHash(hash) {
+    for (let pair of hash.pairs) {
+      if (pair.value.type !== 'PathExpression') continue;
+      handlePathExpression(pair.value);
+    }
+  }
+
+  function handlePathExpression(node) {
+    // skip this.foo
+    if (node.this) return;
+
+    // skip @foo
+    if (node.data) return;
+
+    // skip {#foo as |bar|}}{{bar}}{{/foo}}
+    // skip <Foo as |bar|>{{bar}}</Foo>
+    let firstPart = node.parts[0];
+    if (scopedParams.includes(firstPart)) return;
+
+    // add `this.` prefix
+    Object.assign(node, b.path(`this.${node.original}`));
+  }
+
+  function isHelper(name) {
+    return (
+      KNOWN_HELPERS.includes(name) ||
+      customHelpers.includes(name) ||
+      Boolean(helpers.find(path => path.endsWith(name)))
+    );
+  }
+
+  function isComponent(name) {
+    return Boolean(components.find(path => path.endsWith(name)));
+  }
+
+  let inAttrNode = false;
+
   return {
-    Program: paramTracker,
+    Block: paramTracker,
     ElementNode: paramTracker,
-    PathExpression(ast) {
-      if (ast.data) return;
-      if (ast.original === 'this') return;
 
-      let token = ast.parts[0];
+    AttrNode: {
+      enter() {
+        inAttrNode = true;
+      },
+      exit() {
+        inAttrNode = false;
+      },
+    },
 
-      if (token !== 'this') {
-        let isThisNeeded = doesTokenNeedThis(token, nonThises, runtimeData, options);
+    MustacheStatement(node) {
+      let { path, params, hash } = node;
 
-        if (isThisNeeded) {
-          return b.path(`this.${ast.parts.join('.')}`);
+      // {{foo BAR}}
+      handleParams(params);
+
+      // {{foo bar=BAZ}}
+      handleHash(hash);
+
+      let hasParams = params.length !== 0;
+      let hasHashPairs = hash.pairs.length !== 0;
+
+      // {{FOO}}
+      if (path.type === 'PathExpression' && !hasParams && !hasHashPairs) {
+        // {{FOO.bar}}
+        if (path.parts > 1) {
+          handlePathExpression(path);
+          return;
         }
+
+        // skip ember-holy-futuristic-template-namespacing-batman component/helper invocations
+        // (see https://github.com/rwjblue/ember-holy-futuristic-template-namespacing-batman)
+        if (path.original.includes('$') || path.original.includes('::')) return;
+
+        // skip helpers
+        if (isHelper(path.original)) return;
+
+        // skip components
+        if (!inAttrNode && isComponent(path.original)) return;
+
+        handlePathExpression(path);
       }
     },
+
+    BlockStatement(node) {
+      // {{#foo BAR}}{{/foo}}
+      handleParams(node.params);
+
+      // {{#foo bar=BAZ}}{{/foo}}
+      handleHash(node.hash);
+    },
+
+    SubExpression(node) {
+      // (foo BAR)
+      handleParams(node.params);
+
+      // (foo bar=BAZ)
+      handleHash(node.hash);
+    },
+
+    ElementModifierStatement(node) {
+      // <div {{foo BAR}} />
+      handleParams(node.params);
+
+      // <div {{foo bar=BAZ}} />
+      handleHash(node.hash);
+    },
   };
-}
-
-// Does the runtime data (for the c
-// urrent file)
-// contain a definition for the token?
-// - yes:
-//   - in-let: false
-//   - in-each: false
-//   - true
-// - no:
-//   - is-helper: false
-//   - is-component: false
-function doesTokenNeedThis(
-  token,
-  { components, helpers, scopedParams },
-  runtimeData,
-  { dontAssumeThis, customHelpers }
-) {
-  if (KNOWN_HELPERS.includes(token) || customHelpers.includes(token)) {
-    return false;
-  }
-
-  let isBlockParam = scopedParams.includes(token);
-
-  if (isBlockParam) {
-    return false;
-  }
-
-  let { computedProperties, getters, ownActions, ownProperties } = runtimeData;
-  let isComputed = (computedProperties || []).includes(token);
-  let isAction = (ownActions || []).includes(token);
-  let isProperty = (ownProperties || []).includes(token);
-  let isGetter = (getters || []).includes(token);
-
-  let needsThis = isComputed || isAction || isProperty || isGetter;
-
-  if (needsThis) {
-    return true;
-  }
-
-  // This is to support the ember-holy-futuristic-template-namespacing-batman syntax
-  // as well as support for Nested Invocations in Angle Bracket Syntax
-  // Ref: https://github.com/rwjblue/ember-holy-futuristic-template-namespacing-batman
-  if (token.includes('$')) {
-    token = token.split('$')[1];
-  }
-  if (token.includes('::')) {
-    token = token.replace(/::/g, '/');
-  }
-
-  let isComponent = components.find(path => path.endsWith(token));
-
-  if (isComponent) {
-    return false;
-  }
-
-  let isHelper = helpers.find(path => path.endsWith(token));
-
-  if (isHelper) {
-    return false;
-  }
-
-  return dontAssumeThis ? false : true;
 }
 
 function populateInvokeables() {

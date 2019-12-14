@@ -5,58 +5,6 @@
   "block-component": { "type": "Component" },
   "foo": { "type": "Component" },
   "namespace/foo": { "type": "Component" },
-  "built-in-helpers": {
-    "type": "Component",
-    "computedProperties": ["foo", "records"],
-    "ownActions": ["myAction"]
-  },
-  "custom-helpers": { "type": "Component" },
-  "angle-brackets-with-block-params": {
-    "type": "Component",
-    "computedProperties": ["foo", "property", "bar"],
-    "ownActions": ["myAction"]
-  },
-  "angle-brackets-with-hash-params": {
-    "type": "Component",
-    "computedProperties": ["foo", "property"],
-    "ownActions": ["myAction"]
-  },
-  "angle-brackets-without-params": {
-    "type": "Component",
-    "computedProperties": ["foo"]
-  },
-  "dont-assume-this": {
-    "type": "Component",
-    "computedProperties": ["foo"]
-  },
-  "handlebars-with-positional-params": {
-    "type": "Component",
-    "computedProperties": ["foo", "property"],
-    "ownActions": ["myAction"]
-  },
-  "handlebars-with-wall-street-syntax": {
-    "type": "Component",
-    "computedProperties": ["foo", "property"],
-    "ownActions": ["myAction"]
-  },
-  "handlebars-with-hash-params": {
-    "type": "Component",
-    "computedProperties": ["foo", "property"],
-    "ownActions": ["myAction"]
-  },
-  "handlebars-with-block-params": {
-    "type": "Component",
-    "computedProperties": ["foo", "property"]
-  },
-  "handlebars-without-params": {
-    "type": "Component",
-    "computedProperties": ["foo", "property"],
-    "getters": ["someGetter"]
-  },
-  "void-elements": {
-    "type": "Component",
-    "computedProperties": ["previewImageUrl"]
-  },
   "my-helper": { "type": "Helper" },
   "a-helper": { "type": "Helper" }
 }
