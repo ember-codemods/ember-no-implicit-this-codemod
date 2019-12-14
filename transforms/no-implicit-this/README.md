@@ -20,10 +20,11 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 * [angle-brackets-without-params](#angle-brackets-without-params)
 * [built-in-helpers](#built-in-helpers)
 * [comments](#comments)
-* [dont-assume-this](#dont-assume-this)
+* [custom-helpers](#custom-helpers)
 * [handlebars-with-block-params](#handlebars-with-block-params)
 * [handlebars-with-hash-params](#handlebars-with-hash-params)
 * [handlebars-with-positional-params](#handlebars-with-positional-params)
+* [handlebars-with-wall-street-syntax](#handlebars-with-wall-street-syntax)
 * [handlebars-without-params](#handlebars-without-params)
 * [void-elements](#void-elements)
 <!--FIXTURES_TOC_END-->
@@ -75,6 +76,8 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 <SomeComponent @arg=1 />
 <SomeComponent @arg=foo />
 <SomeComponent @arg={{foo}} @bar={{property}} />
+<MyAddon$MyComponent @arg={{foo}} @bar={{property}} />
+<MyAddon$Namespace::MyComponent @arg={{foo}} @bar={{property}} />
 <SomeComponent @arg={{foo}} @bar={{fn myAction}} />
 <Select
   data-test-select
@@ -94,6 +97,8 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 <SomeComponent @arg=1 />
 <SomeComponent @arg=foo />
 <SomeComponent @arg={{this.foo}} @bar={{this.property}} />
+<MyAddon$MyComponent @arg={{this.foo}} @bar={{this.property}} />
+<MyAddon$Namespace::MyComponent @arg={{this.foo}} @bar={{this.property}} />
 <SomeComponent @arg={{this.foo}} @bar={{fn this.myAction}} />
 <Select
   data-test-select
@@ -204,18 +209,20 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 
 ```
 ---
-<a id="dont-assume-this">**dont-assume-this**</a>
+<a id="custom-helpers">**custom-helpers**</a>
 
-**Input** (<small>[dont-assume-this.input.hbs](transforms/no-implicit-this/__testfixtures__/dont-assume-this.input.hbs)</small>):
+**Input** (<small>[custom-helpers.input.hbs](transforms/no-implicit-this/__testfixtures__/custom-helpers.input.hbs)</small>):
 ```hbs
-{{foo}}
-{{bar}}
+{{biz}}
+{{bang}}
+
 ```
 
-**Output** (<small>[dont-assume-this.output.hbs](transforms/no-implicit-this/__testfixtures__/dont-assume-this.output.hbs)</small>):
+**Output** (<small>[custom-helpers.output.hbs](transforms/no-implicit-this/__testfixtures__/custom-helpers.output.hbs)</small>):
 ```hbs
-{{this.foo}}
-{{bar}}
+{{biz}}
+{{bang}}
+
 ```
 ---
 <a id="handlebars-with-block-params">**handlebars-with-block-params**</a>
@@ -321,6 +328,30 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 
 ```
 ---
+<a id="handlebars-with-wall-street-syntax">**handlebars-with-wall-street-syntax**</a>
+
+**Input** (<small>[handlebars-with-wall-street-syntax.input.hbs](transforms/no-implicit-this/__testfixtures__/handlebars-with-wall-street-syntax.input.hbs)</small>):
+```hbs
+{{my-addon$my-component foo}}
+{{my-addon$namespace::my-component @foo}}
+{{my-addon$namespace::my-component property}}
+{{my-addon$my-component (my-helper property)}}
+{{my-addon$my-component (my-helper "string")}}
+{{my-addon$namespace::my-component (my-helper 1)}}
+
+```
+
+**Output** (<small>[handlebars-with-wall-street-syntax.output.hbs](transforms/no-implicit-this/__testfixtures__/handlebars-with-wall-street-syntax.output.hbs)</small>):
+```hbs
+{{my-addon$my-component this.foo}}
+{{my-addon$namespace::my-component @foo}}
+{{my-addon$namespace::my-component this.property}}
+{{my-addon$my-component (my-helper this.property)}}
+{{my-addon$my-component (my-helper "string")}}
+{{my-addon$namespace::my-component (my-helper 1)}}
+
+```
+---
 <a id="handlebars-without-params">**handlebars-without-params**</a>
 
 **Input** (<small>[handlebars-without-params.input.hbs](transforms/no-implicit-this/__testfixtures__/handlebars-without-params.input.hbs)</small>):
@@ -338,7 +369,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 ```hbs
 {{my-component}}
 {{a-helper}}
-{{this.foo}}
+{{foo}}
 {{this.property}}
 {{namespace/foo}}
 {{this.someGetter}}
