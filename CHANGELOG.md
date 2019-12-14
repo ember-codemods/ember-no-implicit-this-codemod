@@ -1,3 +1,19 @@
+## v1.0.0 (2019-12-14)
+
+#### :boom: Breaking Change
+* [#62](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/62) Rewrite `PathExpression` visitor code ([@Turbo87](https://github.com/Turbo87))
+
+#### :rocket: Enhancement
+* [#62](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/62) Rewrite `PathExpression` visitor code ([@Turbo87](https://github.com/Turbo87))
+
+#### :house: Internal
+* [#54](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/54) Remove unused explicit dependencies ([@Turbo87](https://github.com/Turbo87))
+* [#55](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/55) Add dependabot config file ([@Turbo87](https://github.com/Turbo87))
+
+#### Committers: 2
+- Tobias Bieniek ([@Turbo87](https://github.com/Turbo87))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
 * Merge pull request #50 from suchitadoshi1987/suchita/customHelpers (9713041)
 * Merge pull request #49 from suchitadoshi1987/suchita/supportwallstreet (57d0a65)
 * Add config option to support custom helpers (c1c4918)
