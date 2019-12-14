@@ -19,7 +19,7 @@ jobs:
     - name: Linting
       run: yarn lint:js
     - name: Test
-      run: yarn test
+      run: yarn test --coverage
 
   integration_tests:
     name: Integration Tests
