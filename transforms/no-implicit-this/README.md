@@ -18,6 +18,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 * [angle-brackets-with-block-params](#angle-brackets-with-block-params)
 * [angle-brackets-with-hash-params](#angle-brackets-with-hash-params)
 * [angle-brackets-without-params](#angle-brackets-without-params)
+* [batman](#batman)
 * [built-in-helpers](#built-in-helpers)
 * [comments](#comments)
 * [custom-helpers](#custom-helpers)
@@ -132,6 +133,26 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 <foo></foo>
 <Foo />
 <Foo></Foo>
+
+```
+---
+<a id="batman">**batman**</a>
+
+**Input** (<small>[batman.input.hbs](transforms/no-implicit-this/__testfixtures__/batman.input.hbs)</small>):
+```hbs
+{{addon-name$helper-name}}
+{{addon-name$component-name}}
+<AddonName$ComponentName />
+<AddonName$SomeFolderName::ComponentName />
+
+```
+
+**Output** (<small>[batman.output.hbs](transforms/no-implicit-this/__testfixtures__/batman.output.hbs)</small>):
+```hbs
+{{addon-name$helper-name}}
+{{addon-name$component-name}}
+<AddonName$ComponentName />
+<AddonName$SomeFolderName::ComponentName />
 
 ```
 ---
