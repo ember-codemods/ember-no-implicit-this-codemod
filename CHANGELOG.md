@@ -1,3 +1,15 @@
+## v1.0.1 (2019-12-14)
+
+#### :bug: Bug Fix
+* [#65](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/65) Fix broken `path.parts` condition ([@Turbo87](https://github.com/Turbo87))
+
+#### :house: Internal
+* [#66](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/66) Add `ember-holy-futuristic-template-namespacing-batman` test cases ([@Turbo87](https://github.com/Turbo87))
+* [#64](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/64) CI: Run with code coverage tracking ([@Turbo87](https://github.com/Turbo87))
+
+#### Committers: 1
+- Tobias Bieniek ([@Turbo87](https://github.com/Turbo87))
+
 ## v1.0.0 (2019-12-14)
 
 #### :boom: Breaking Change
