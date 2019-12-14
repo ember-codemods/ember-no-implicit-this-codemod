@@ -1,12 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 
-const { parse: parseHbs, print: printHbs } = require('ember-template-recast');
-const { determineThisUsage } = require('./helpers/determine-this-usage');
+const recast = require('ember-template-recast');
+const transformPlugin = require('./helpers/plugin');
 const { getOptions: getCLIOptions } = require('codemod-cli');
-const DEFAULT_OPTIONS = {
-  dontAssumeThis: false,
-};
+const DEFAULT_OPTIONS = {};
 
 /**
  * Accepts the config path for custom helpers and returns the array of helpers
@@ -35,7 +33,6 @@ function _getCustomHelpersFromConfig(configPath) {
 function getOptions() {
   let cliOptions = getCLIOptions();
   let options = {
-    dontAssumeThis: cliOptions.dontAssumeThis,
     customHelpers: _getCustomHelpersFromConfig(cliOptions.config),
   };
   return options;
@@ -50,13 +47,5 @@ module.exports = function transformer(file /*, api */) {
     return;
   }
 
-  let root = parseHbs(file.source);
-
-  let replaced = determineThisUsage(root, file, options);
-
-  if (replaced) {
-    return printHbs(replaced);
-  }
-
-  return file.source;
+  return recast.transform(file.source, env => transformPlugin(env, options)).code;
 };
