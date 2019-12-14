@@ -101,7 +101,7 @@ function transformPlugin(env, options = {}) {
       // {{FOO}}
       if (path.type === 'PathExpression' && !hasParams && !hasHashPairs) {
         // {{FOO.bar}}
-        if (path.parts > 1) {
+        if (path.parts.length > 1) {
           handlePathExpression(path);
           return;
         }
