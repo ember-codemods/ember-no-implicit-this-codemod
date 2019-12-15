@@ -61,7 +61,10 @@
     "node": "8.* || 10.* || >= 12"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/transforms/**/test.js"
+    ]
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
