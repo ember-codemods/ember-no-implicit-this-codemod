@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const recast = require('ember-template-recast');
 const { getTelemetry } = require('ember-codemods-telemetry-helpers');
-const transformPlugin = require('./helpers/plugin');
+const transform = require('./helpers/plugin');
 const { getOptions: getCLIOptions } = require('codemod-cli');
 const DEFAULT_OPTIONS = {};
 
@@ -49,5 +49,7 @@ module.exports = function transformer(file /*, api */) {
     return;
   }
 
-  return recast.transform(file.source, env => transformPlugin(env, options)).code;
+  let root = recast.parse(file.source);
+  transform(root, options);
+  return recast.print(root);
 };
