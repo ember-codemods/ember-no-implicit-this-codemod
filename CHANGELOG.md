@@ -1,3 +1,19 @@
+## v1.1.0 (2019-12-15)
+
+#### :bug: Bug Fix
+* [#80](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/80) Fix `hasBlock` handling ([@Turbo87](https://github.com/Turbo87))
+
+#### :house: Internal
+* [#82](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/82) Replace `recast.transform()` call with `recast.traverse()` ([@Turbo87](https://github.com/Turbo87))
+* [#81](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/81) known-helpers: Remove helpers from addons ([@Turbo87](https://github.com/Turbo87))
+* [#79](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/79) Remove unused `listr` dependency ([@Turbo87](https://github.com/Turbo87))
+* [#70](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/70) Move `getTelemetry()` call out of `plugin.js` file ([@Turbo87](https://github.com/Turbo87))
+* [#67](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/67) Use Jest directly ([@Turbo87](https://github.com/Turbo87))
+
+#### Committers: 2
+- Tobias Bieniek ([@Turbo87](https://github.com/Turbo87))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
 ## v1.0.1 (2019-12-14)
 
 #### :bug: Bug Fix
