@@ -1,6 +1,4 @@
-* update generated readme (838f69e)
-
-## v1.1.0 (2019-12-15)
+## v2.0.0 (2019-12-15)
 
 #### :bug: Bug Fix
 * [#80](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/80) Fix `hasBlock` handling ([@Turbo87](https://github.com/Turbo87))
