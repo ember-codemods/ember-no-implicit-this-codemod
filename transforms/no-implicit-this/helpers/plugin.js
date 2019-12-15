@@ -1,3 +1,5 @@
+const recast = require('ember-template-recast');
+
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
@@ -6,8 +8,8 @@ const KNOWN_HELPERS = require('./known-helpers');
 /**
  * plugin entrypoint
  */
-function transformPlugin(env, options = {}) {
-  let { builders: b } = env.syntax;
+function transform(root, options = {}) {
+  let b = recast.builders;
 
   let scopedParams = [];
   let telemetry = options.telemetry || {};
@@ -76,7 +78,7 @@ function transformPlugin(env, options = {}) {
 
   let inAttrNode = false;
 
-  return {
+  recast.traverse(root, {
     Block: paramTracker,
     ElementNode: paramTracker,
 
@@ -146,7 +148,7 @@ function transformPlugin(env, options = {}) {
       // <div {{foo bar=BAZ}} />
       handleHash(node.hash);
     },
-  };
+  });
 }
 
 function populateInvokeables(telemetry) {
@@ -169,4 +171,4 @@ function populateInvokeables(telemetry) {
   return [components, helpers];
 }
 
-module.exports = transformPlugin;
+module.exports = transform;
