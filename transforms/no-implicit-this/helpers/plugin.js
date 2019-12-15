@@ -11,7 +11,8 @@ function transformPlugin(env, options = {}) {
   let { builders: b } = env.syntax;
 
   let scopedParams = [];
-  let [components, helpers] = populateInvokeables();
+  let telemetry = getTelemetry();
+  let [components, helpers] = populateInvokeables(telemetry);
 
   let customHelpers = options.customHelpers || [];
 
@@ -146,10 +147,9 @@ function transformPlugin(env, options = {}) {
   };
 }
 
-function populateInvokeables() {
+function populateInvokeables(telemetry) {
   let components = [];
   let helpers = [];
-  let telemetry = getTelemetry();
 
   for (let name of Object.keys(telemetry)) {
     let entry = telemetry[name];
