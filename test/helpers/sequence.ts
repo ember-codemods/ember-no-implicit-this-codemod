@@ -1,5 +1,3 @@
-import Listr from 'listr';
-
 import { TestRunner } from './test-runner';
 import { log } from './utils';
 
