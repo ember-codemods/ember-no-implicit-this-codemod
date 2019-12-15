@@ -14,7 +14,7 @@
   "author": "",
   "scripts": {
     "release": "release-it",
-    "test": "codemod-cli test",
+    "test": "jest",
     "test:integration": "ts-node ./test/run-test.ts",
     "update-docs": "codemod-cli update-docs",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
@@ -61,7 +61,10 @@
     "node": "8.* || 10.* || >= 12"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/transforms/**/test.js"
+    ]
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
