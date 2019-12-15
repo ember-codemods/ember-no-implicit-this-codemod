@@ -1,3 +1,5 @@
+* update generated readme (838f69e)
+
 ## v1.1.0 (2019-12-15)
 
 #### :bug: Bug Fix

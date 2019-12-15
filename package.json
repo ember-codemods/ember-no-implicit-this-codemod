@@ -1,6 +1,6 @@
 {
   "name": "ember-no-implicit-this-codemod",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Codemods for transforming variable usage to be prefixed with `this`, when appropriate",
   "license": "MIT",
   "repository": {
