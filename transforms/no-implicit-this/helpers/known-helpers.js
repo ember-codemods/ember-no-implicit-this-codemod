@@ -12,7 +12,7 @@ const KNOWN_HELPERS = [
   'get',
   'hash',
   'has-block',
-  'hasBlock',
+  'has-block-params',
   'if',
   'if-unless',
   'in-element',
