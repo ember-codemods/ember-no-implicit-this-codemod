@@ -55,6 +55,9 @@ function transformPlugin(env, options = {}) {
     let firstPart = node.parts[0];
     if (scopedParams.includes(firstPart)) return;
 
+    // skip `hasBlock` keyword
+    if (node.original === 'hasBlock') return;
+
     // add `this.` prefix
     Object.assign(node, b.path(`this.${node.original}`));
   }
