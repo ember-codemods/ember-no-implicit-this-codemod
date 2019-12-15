@@ -27,6 +27,7 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 * [handlebars-with-positional-params](#handlebars-with-positional-params)
 * [handlebars-with-wall-street-syntax](#handlebars-with-wall-street-syntax)
 * [handlebars-without-params](#handlebars-without-params)
+* [has-block](#has-block)
 * [void-elements](#void-elements)
 <!--FIXTURES_TOC_END-->
 
@@ -394,6 +395,34 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{this.property}}
 {{namespace/foo}}
 {{this.someGetter}}
+
+```
+---
+<a id="has-block">**has-block**</a>
+
+**Input** (<small>[has-block.input.hbs](transforms/no-implicit-this/__testfixtures__/has-block.input.hbs)</small>):
+```hbs
+{{if hasBlock "block"}}
+{{#if hasBlock}}block{{/if}}
+{{if (has-block) "block"}}
+{{#if (has-block)}}block{{/if}}
+{{if (has-block "main") "block"}}
+{{#if (has-block "main")}}block{{/if}}
+{{if (has-block-params "main") "block"}}
+{{#if (has-block-params "main")}}block{{/if}}
+
+```
+
+**Output** (<small>[has-block.output.hbs](transforms/no-implicit-this/__testfixtures__/has-block.output.hbs)</small>):
+```hbs
+{{if hasBlock "block"}}
+{{#if hasBlock}}block{{/if}}
+{{if (has-block) "block"}}
+{{#if (has-block)}}block{{/if}}
+{{if (has-block "main") "block"}}
+{{#if (has-block "main")}}block{{/if}}
+{{if (has-block-params "main") "block"}}
+{{#if (has-block-params "main")}}block{{/if}}
 
 ```
 ---
