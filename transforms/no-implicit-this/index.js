@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const recast = require('ember-template-recast');
+const { getTelemetry } = require('ember-codemods-telemetry-helpers');
 const transformPlugin = require('./helpers/plugin');
 const { getOptions: getCLIOptions } = require('codemod-cli');
 const DEFAULT_OPTIONS = {};
@@ -34,6 +35,7 @@ function getOptions() {
   let cliOptions = getCLIOptions();
   let options = {
     customHelpers: _getCustomHelpersFromConfig(cliOptions.config),
+    telemetry: getTelemetry(),
   };
   return options;
 }
