@@ -89,7 +89,7 @@ function transform(root, options = {}) {
       return true;
     }
 
-    let helper = helpers.find(path => path.endsWith(name));
+    let helper = helpers.find(path => path.endsWith(`/${name}`));
     if (helper) {
       let message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
       debug(message, name, helper);
@@ -100,7 +100,7 @@ function transform(root, options = {}) {
   }
 
   function isComponent(name) {
-    let component = components.find(path => path.endsWith(name));
+    let component = components.find(path => path.endsWith(`/${name}`));
     if (component) {
       let message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
       debug(message, name, component);
