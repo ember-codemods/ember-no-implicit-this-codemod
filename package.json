@@ -33,8 +33,7 @@
   "dependencies": {
     "codemod-cli": "^2.1.0",
     "ember-codemods-telemetry-helpers": "^1.1.0",
-    "ember-template-recast": "^3.3.0",
-    "winston": "^3.2.1"
+    "ember-template-recast": "^3.3.0"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
