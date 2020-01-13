@@ -53,7 +53,7 @@
     "prettier": "^1.19.1",
     "release-it": "^12.4.2",
     "release-it-lerna-changelog": "^1.0.3",
-    "ts-node": "^8.5.4",
+    "ts-node": "^8.6.1",
     "typescript": "~3.7.4"
   },
   "engines": {
