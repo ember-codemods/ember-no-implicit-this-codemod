@@ -59,8 +59,9 @@ function findAppName(f) {
   if (fileName.keywords && fileName.keywords.includes('ember-addon')) {
     return findAppName(f);
   } else if (Object.keys(fileName.devDependencies).includes('ember-cli')) {
+    let emberAddon = fileName['ember-addon'];
     // There could be cases where the root package.json might have multiple Ember apps within.
-    return fileName['ember-addon'].apps ? fileName['ember-addon'].apps : [fileName.name];
+    return emberAddon && emberAddon.apps ? emberAddon.apps : [fileName.name];
   }
 }
 
