@@ -35,6 +35,7 @@ function _getCustomHelpersFromConfig(configPath) {
 function getOptions() {
   let cliOptions = getCLIOptions();
   let options = {
+    noStrict: cliOptions.noStrict,
     customHelpers: _getCustomHelpersFromConfig(cliOptions.config),
     telemetry: getTelemetry(),
   };
@@ -43,7 +44,7 @@ function getOptions() {
 
 module.exports = function transformer(file /*, api */) {
   let extension = path.extname(file.path);
-  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions());
+  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions(), { filePath: file.path });
 
   if (!['.hbs'].includes(extension.toLowerCase())) {
     debug('Skipping %s because it does not match the .hbs file extension', file.path);
