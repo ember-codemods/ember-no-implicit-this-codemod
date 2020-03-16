@@ -52,7 +52,7 @@
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "release-it": "^12.6.2",
-    "release-it-lerna-changelog": "^1.0.3",
+    "release-it-lerna-changelog": "^2.0.0",
     "ts-node": "^8.6.2",
     "typescript": "~3.7.5"
   },
