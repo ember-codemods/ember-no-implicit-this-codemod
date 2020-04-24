@@ -43,7 +43,7 @@ function detectTypeAndName(entry) {
       `**/controllers/**/${fileName}.js`,
     ],
     {
-      ignore: ['node_modules/**'],
+      ignore: ['**/node_modules/**'],
     }
   );
   if (matched.length) {
@@ -52,9 +52,10 @@ function detectTypeAndName(entry) {
       detectedHelperName = getDetectedName(matchedItem, fileName, 'helper');
       detectedControllerName = getDetectedName(matchedItem, fileName, 'controller');
     });
+    let detectedName = detectedComponentName || detectedHelperName || detectedControllerName;
+    return { lookupName: detectedName, filePath: entry };
   }
-  let detectedName = detectedComponentName || detectedHelperName || detectedControllerName;
-  return { lookupName: detectedName, filePath: entry };
+  return null;
 }
 
 /**

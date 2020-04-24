@@ -6,7 +6,6 @@ const path = require('path');
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
 const KNOWN_HELPERS = require('./known-helpers');
-const { TELEMETRY_KEY } = require('./util');
 
 function getTelemetryObjByName(name, telemetry) {
   let telemetryLookupName = Object.keys(telemetry).find(item => item.split(':').pop() === name);
@@ -19,7 +18,7 @@ function transform(root, options = {}) {
   let b = recast.builders;
 
   let scopedParams = [];
-  let telemetry = options.telemetry ? options.telemetry[TELEMETRY_KEY] : {};
+  let telemetry = options.telemetry ? options.telemetry : {};
 
   let customHelpers = options.customHelpers || [];
 

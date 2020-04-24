@@ -1,18 +1,16 @@
 {
-  "telemetry-data": {
-    "component:handlebars-with-prefix-component-properties-only": {
-      "type": "Component",
-      "localProperties": ["baz", "bang"],
-      "filePath": "transforms/no-implicit-this/__testfixtures__/handlebars-with-prefix-component-properties-only.hbs"
-    },
-    "some-component": { "type": "Component" },
-    "my-component": { "type": "Component" },
-    "namespace/my-component": { "type": "Component" },
-    "block-component": { "type": "Component" },
-    "foo": { "type": "Component" },
-    "namespace/foo": { "type": "Component" },
-    "my-helper": { "type": "Helper" },
-    "a-helper": { "type": "Helper" },
-    "foo-bar-baz": { "type": "Component" }
-  }
+  "component:handlebars-with-prefix-component-properties-only": {
+    "type": "Component",
+    "localProperties": ["baz", "bang"],
+    "filePath": "transforms/no-implicit-this/__testfixtures__/handlebars-with-prefix-component-properties-only.hbs"
+  },
+  "some-component": { "type": "Component" },
+  "my-component": { "type": "Component" },
+  "namespace/my-component": { "type": "Component" },
+  "block-component": { "type": "Component" },
+  "foo": { "type": "Component" },
+  "namespace/foo": { "type": "Component" },
+  "my-helper": { "type": "Helper" },
+  "a-helper": { "type": "Helper" },
+  "foo-bar-baz": { "type": "Component" }
 }

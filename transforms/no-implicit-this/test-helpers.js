@@ -1,8 +1,9 @@
-const { setTelemetry } = require('ember-codemods-telemetry-helpers');
+const { setTelemetryWithKey } = require('ember-codemods-telemetry-helpers');
 const mockTelemetryData = require('./__testfixtures__/-mock-telemetry.json');
+const { TELEMETRY_KEY } = require('./helpers/util');
 
 function setupTelemetry() {
-  setTelemetry(mockTelemetryData);
+  setTelemetryWithKey(TELEMETRY_KEY, mockTelemetryData);
 }
 
 module.exports = { setupTelemetry };

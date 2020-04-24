@@ -28,25 +28,25 @@ const args = process.argv.slice(3);
  * @param {*} root
  * @param {*} lookupNames
  */
-function _preparseTemplate(root) {
+function _preparseTemplate(root, filePath) {
   let lookupNames = [];
   recast.traverse(root, {
     MustacheStatement(node) {
       if (node.path.type === 'PathExpression') {
-        lookupNames.push({ lookupName: `component:${node.path.original}` });
-        lookupNames.push({ lookupName: `helper:${node.path.original}` });
+        lookupNames.push({ lookupName: `component:${node.path.original}`, filePath });
+        lookupNames.push({ lookupName: `helper:${node.path.original}`, filePath });
       }
     },
 
     BlockStatement(node) {
       if (node.path.type === 'PathExpression') {
-        lookupNames.push({ lookupName: `component:${node.path.original}` });
+        lookupNames.push({ lookupName: `component:${node.path.original}`, filePath });
       }
     },
 
     SubExpression(node) {
       if (node.path.type === 'PathExpression') {
-        lookupNames.push({ lookupName: `helper:${node.path.original}` });
+        lookupNames.push({ lookupName: `helper:${node.path.original}`, filePath });
       }
     },
   });
@@ -91,7 +91,7 @@ function findAppName(f) {
     let code = fs.readFileSync(filePath).toString();
     let root = recast.parse(code);
 
-    lookupNames = lookupNames.concat(_preparseTemplate(root, lookupNames, filePath));
+    lookupNames = lookupNames.concat(_preparseTemplate(root, filePath));
   }
 
   debug('Gathering telemetry data from %s ...', appLocation);
@@ -105,7 +105,7 @@ function findAppName(f) {
     appName
   );
 
-  let telemetry = getTelemetry();
+  let telemetry = getTelemetry(TELEMETRY_KEY);
 
   debug('Gathered telemetry on %d modules', Object.keys(telemetry).length);
 
