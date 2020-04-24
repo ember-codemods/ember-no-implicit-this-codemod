@@ -36,7 +36,7 @@ function _getCustomHelpersFromConfig(configPath) {
 function getOptions() {
   let cliOptions = getCLIOptions();
   let options = {
-    noStrict: cliOptions.noStrict,
+    prefixComponentPropertiesOnly: cliOptions.prefixComponentPropertiesOnly,
     customHelpers: _getCustomHelpersFromConfig(cliOptions.config),
     telemetry: getTelemetry(TELEMETRY_KEY),
   };

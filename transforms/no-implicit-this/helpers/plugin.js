@@ -73,7 +73,7 @@ function transform(root, options = {}) {
 
     // check for the flag for stricter prefixing. This check ensures that it only
     // prefixes `this` to the properties owned by the backing JS class of the template.
-    if (options.noStrict === 'true') {
+    if (options.prefixComponentPropertiesOnly === 'true') {
       const matchedFilePath = Object.keys(telemetry).find(
         item => telemetry[item].filePath === path.relative(process.cwd(), options.filePath)
       );
