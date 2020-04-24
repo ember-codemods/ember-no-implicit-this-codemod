@@ -1,5 +1,5 @@
 {
-  "single-telemetry": {
+  "telemetry-data": {
     "component:handlebars-with-prefix-component-properties-only": {
       "type": "Component",
       "localProperties": ["baz", "bang"],

@@ -1,5 +1,6 @@
 const path = require('path');
 const globby = require('globby');
+const TELEMETRY_KEY = 'telemetry-data';
 
 /**
  * Generates a lookup name for a backing js class.
@@ -112,4 +113,4 @@ function appResolver(lookupNames, currAppName) {
   return mapping;
 }
 
-module.exports = { appResolver, detectTypeAndName };
+module.exports = { appResolver, detectTypeAndName, TELEMETRY_KEY };

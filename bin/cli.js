@@ -7,7 +7,11 @@ const finder = require('find-package-json');
 const recast = require('ember-template-recast');
 const fs = require('fs');
 const path = require('path');
-const { appResolver, detectTypeAndName } = require('../transforms/no-implicit-this/helpers/util');
+const {
+  appResolver,
+  detectTypeAndName,
+  TELEMETRY_KEY,
+} = require('../transforms/no-implicit-this/helpers/util');
 const { gatherSingleTelemetryForUrl, getTelemetry } = require('ember-codemods-telemetry-helpers');
 const appLocation = process.argv[2];
 const args = process.argv.slice(3);
@@ -93,7 +97,13 @@ function findAppName(f) {
   debug('Gathering telemetry data from %s ...', appLocation);
 
   // This is for collecting metadata for the app just once to generate the map of lookupnames to local properties
-  await gatherSingleTelemetryForUrl(appLocation, appResolver, lookupNames, appName);
+  await gatherSingleTelemetryForUrl(
+    appLocation,
+    { telemetryKey: TELEMETRY_KEY },
+    appResolver,
+    lookupNames,
+    appName
+  );
 
   let telemetry = getTelemetry();
 
