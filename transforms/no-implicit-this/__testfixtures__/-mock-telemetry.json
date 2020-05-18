@@ -1,4 +1,9 @@
 {
+  "component:handlebars-with-prefix-component-properties-only": {
+    "type": "Component",
+    "localProperties": ["baz", "bang"],
+    "filePath": "transforms/no-implicit-this/__testfixtures__/handlebars-with-prefix-component-properties-only.hbs"
+  },
   "some-component": { "type": "Component" },
   "my-component": { "type": "Component" },
   "namespace/my-component": { "type": "Component" },

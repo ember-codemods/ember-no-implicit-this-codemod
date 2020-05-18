@@ -1,11 +1,16 @@
 const debug = require('debug')('ember-no-implicit-this-codemod:plugin');
 const recast = require('ember-template-recast');
+const path = require('path');
 
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
 // telemtry can be populated with -mock-telemetry.json
 const KNOWN_HELPERS = require('./known-helpers');
 
+function getTelemetryObjByName(name, telemetry) {
+  let telemetryLookupName = Object.keys(telemetry).find(item => item.split(':').pop() === name);
+  return telemetry[telemetryLookupName] || {};
+}
 /**
  * plugin entrypoint
  */
@@ -13,8 +18,7 @@ function transform(root, options = {}) {
   let b = recast.builders;
 
   let scopedParams = [];
-  let telemetry = options.telemetry || {};
-  let [components, helpers] = populateInvokeables(telemetry);
+  let telemetry = options.telemetry ? options.telemetry : {};
 
   let customHelpers = options.customHelpers || [];
 
@@ -67,6 +71,24 @@ function transform(root, options = {}) {
       return;
     }
 
+    // check for the flag for stricter prefixing. This check ensures that it only
+    // prefixes `this` to the properties owned by the backing JS class of the template.
+    if (options.prefixComponentPropertiesOnly === 'true') {
+      const matchedFilePath = Object.keys(telemetry).find(
+        item => telemetry[item].filePath === path.relative(process.cwd(), options.filePath)
+      );
+
+      if (matchedFilePath) {
+        let lookupObject = telemetry[matchedFilePath];
+        const ownProperties = lookupObject ? lookupObject.localProperties : [];
+
+        if (!ownProperties.includes(firstPart)) {
+          debug(`Skipping \`%s\` because it is not a local property`, node.original);
+          return;
+        }
+      }
+    }
+
     // skip `hasBlock` keyword
     if (node.original === 'hasBlock') {
       debug(`Skipping \`%s\` because it is a keyword`, node.original);
@@ -89,10 +111,10 @@ function transform(root, options = {}) {
       return true;
     }
 
-    let helper = helpers.find(path => path.endsWith(`/${name}`));
-    if (helper) {
-      let message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
-      debug(message, name, helper);
+    const telemetryObj = getTelemetryObjByName(name, telemetry);
+    if (telemetryObj.type === 'Helper') {
+      let message = `Skipping \`%s\` because it appears to be a helper from the lookup object`;
+      debug(message, name);
       return true;
     }
 
@@ -100,10 +122,10 @@ function transform(root, options = {}) {
   }
 
   function isComponent(name) {
-    let component = components.find(path => path.endsWith(`/${name}`));
-    if (component) {
-      let message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
-      debug(message, name, component);
+    const telemetryObj = getTelemetryObjByName(name, telemetry);
+    if (telemetryObj.type === 'Component') {
+      let message = `Skipping \`%s\` because it appears to be a component from the lookup object`;
+      debug(message, name);
       return true;
     }
 
@@ -187,26 +209,6 @@ function transform(root, options = {}) {
       handleHash(node.hash);
     },
   });
-}
-
-function populateInvokeables(telemetry) {
-  let components = [];
-  let helpers = [];
-
-  for (let name of Object.keys(telemetry)) {
-    let entry = telemetry[name];
-
-    switch (entry.type) {
-      case 'Component':
-        components.push(name);
-        break;
-      case 'Helper':
-        helpers.push(name);
-        break;
-    }
-  }
-
-  return [components, helpers];
 }
 
 module.exports = transform;

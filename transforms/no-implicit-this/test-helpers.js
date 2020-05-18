@@ -1,18 +1,9 @@
-const path = require('path');
-const { setTelemetry } = require('ember-codemods-telemetry-helpers');
+const { setTelemetryWithKey } = require('ember-codemods-telemetry-helpers');
 const mockTelemetryData = require('./__testfixtures__/-mock-telemetry.json');
+const { TELEMETRY_KEY } = require('./helpers/util');
 
 function setupTelemetry() {
-  let mockTelemetry = {};
-
-  Object.keys(mockTelemetryData).forEach(key => {
-    let value = mockTelemetryData[key] || {};
-    let mockPath = path.resolve(__dirname, `./__testfixtures__/${key}`);
-
-    mockTelemetry[mockPath] = value;
-  });
-
-  setTelemetry(mockTelemetry);
+  setTelemetryWithKey(TELEMETRY_KEY, mockTelemetryData);
 }
 
 module.exports = { setupTelemetry };

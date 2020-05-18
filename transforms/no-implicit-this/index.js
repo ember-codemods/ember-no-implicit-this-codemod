@@ -5,6 +5,7 @@ const debug = require('debug')('ember-no-implicit-this-codemod:transform');
 const recast = require('ember-template-recast');
 const { getTelemetry } = require('ember-codemods-telemetry-helpers');
 const transform = require('./helpers/plugin');
+const { TELEMETRY_KEY } = require('./helpers/util');
 const { getOptions: getCLIOptions } = require('codemod-cli');
 const DEFAULT_OPTIONS = {};
 
@@ -35,15 +36,16 @@ function _getCustomHelpersFromConfig(configPath) {
 function getOptions() {
   let cliOptions = getCLIOptions();
   let options = {
+    prefixComponentPropertiesOnly: cliOptions.prefixComponentPropertiesOnly,
     customHelpers: _getCustomHelpersFromConfig(cliOptions.config),
-    telemetry: getTelemetry(),
+    telemetry: getTelemetry(TELEMETRY_KEY),
   };
   return options;
 }
 
 module.exports = function transformer(file /*, api */) {
   let extension = path.extname(file.path);
-  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions());
+  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions(), { filePath: file.path });
 
   if (!['.hbs'].includes(extension.toLowerCase())) {
     debug('Skipping %s because it does not match the .hbs file extension', file.path);
