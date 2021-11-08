@@ -34,7 +34,7 @@
     "codemod-cli": "^2.1.0",
     "debug": "^4.1.1",
     "ember-codemods-telemetry-helpers": "^2.1.0",
-    "ember-template-recast": "^3.3.2"
+    "ember-template-recast": "^6.0.0"
   },
   "devDependencies": {
     "@types/chalk": "^2.2.0",
