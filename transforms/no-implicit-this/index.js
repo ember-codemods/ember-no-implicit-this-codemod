@@ -5,7 +5,8 @@ const debug = require('debug')('ember-no-implicit-this-codemod:transform');
 const recast = require('ember-template-recast');
 const { getTelemetry } = require('ember-codemods-telemetry-helpers');
 const transform = require('./helpers/plugin');
-const { getOptions: getCLIOptions } = require('codemod-cli');
+const { getOptions: getCLIOptions, jscodeshift } = require('codemod-cli');
+const { isEmberTemplate } = require('./helpers/tagged-templates');
 const DEFAULT_OPTIONS = {};
 
 /**
@@ -41,23 +42,48 @@ function getOptions() {
   return options;
 }
 
-module.exports = function transformer(file /*, api */) {
-  let extension = path.extname(file.path);
-  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions());
+/**
+ * Given the location and source text of a template, as well as codemod options,
+ * returns the rewritten template contents with `this` references inserted where
+ * necessary.
+ */
+function rewriteTemplate(path, source, options) {
+  debug('Parsing %s ...', path);
+  let root = recast.parse(source);
 
-  if (!['.hbs'].includes(extension.toLowerCase())) {
-    debug('Skipping %s because it does not match the .hbs file extension', file.path);
-
-    // do nothing on non-hbs files
-    return;
-  }
-
-  debug('Parsing %s ...', file.path);
-  let root = recast.parse(file.source);
-
-  debug('Transforming %s ...', file.path);
+  debug('Transforming %s ...', path);
   transform(root, options);
 
-  debug('Generating new content for %s ...', file.path);
+  debug('Generating new content for %s ...', path);
   return recast.print(root);
+}
+
+/**
+ * Given a JS or TS file that potentially has embedded templates within it,
+ * returns updated source with those templates rewritten to include `this`
+ * references where needed.
+ */
+function rewriteEmbeddedTemplates(file, options, api) {
+  return jscodeshift
+    .getParser(api)(file.source)
+    .find('TaggedTemplateExpression', { tag: { type: 'Identifier' } })
+    .forEach(path => {
+      if (isEmberTemplate(path)) {
+        let { value } = path.node.quasi.quasis[0];
+        value.raw = rewriteTemplate(file.path, value.raw, options);
+      }
+    })
+    .toSource();
+}
+
+module.exports = function transformer(file, api) {
+  let extension = path.extname(file.path).toLowerCase();
+  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions());
+  if (extension === '.hbs') {
+    return rewriteTemplate(file.path, file.source, options);
+  } else if (extension === '.js' || extension === '.ts') {
+    return rewriteEmbeddedTemplates(file, options, api);
+  } else {
+    debug('Skipping %s because it does not match a known extension with templates', file.path);
+  }
 };
