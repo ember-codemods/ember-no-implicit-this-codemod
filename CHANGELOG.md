@@ -1,3 +1,18 @@
+## v2.1.0 (2022-01-11)
+
+#### :rocket: Enhancement
+* [#83](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/83) Add `debug` logging ([@Turbo87](https://github.com/Turbo87))
+* [#85](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/85) Remove unused logging code ([@Turbo87](https://github.com/Turbo87))
+
+#### :bug: Bug Fix
+* [#86](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/86) Fix substring component matches ([@Turbo87](https://github.com/Turbo87))
+
+#### Committers: 4
+- Dan Freeman ([@dfreeman](https://github.com/dfreeman))
+- Jeldrik Hanschke ([@jelhan](https://github.com/jelhan))
+- Tobias Bieniek ([@Turbo87](https://github.com/Turbo87))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
 ## v2.0.0 (2019-12-15)
 
 #### :bug: Bug Fix
