@@ -7,7 +7,7 @@ import { runTestIntegrationSequence } from './helpers/sequence';
 
 const allVersions = ['3.10', '3.13'];
 
-(async () => {
+(async (): Promise<void> => {
   const emberVersion = process.env.EMBER_VERSION;
 
   if (!emberVersion) {
@@ -31,7 +31,7 @@ const allVersions = ['3.10', '3.13'];
 
     didSucceed = false;
   } finally {
-    // TOOD: if there were any changes to the fixtures directories, revert them
+    // TODO: if there were any changes to the fixtures directories, revert them
     try {
       // const fixturePath = path.join(process.cwd(), 'test', 'fixtures', emberVersion);
       // await execa(`git checkout -- .`, { cwd: fixturePath });
@@ -44,4 +44,7 @@ const allVersions = ['3.10', '3.13'];
   }
 
   process.exit(didSucceed ? 0 : 1);
-})();
+})().catch(e => {
+  console.error(e);
+  process.exit(1);
+});

@@ -19,6 +19,8 @@
     "ember-no-implicit-this-codemod": "./bin/cli.js"
   },
   "scripts": {
+    "build": "tsc",
+    "clean": "tsc --build --clean",
     "codemod": "jscodeshift -t ./transforms/no-implicit-this/index.js --extensions js,ts,hbs --run-in-band",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "debug:codemod": "node --inspect-brk node_modules/jscodeshift/bin/jscodeshift.js -t ./transforms/no-implicit-this/index.js --run-in-band --extensions js,ts,hbs ",
@@ -26,6 +28,9 @@
     "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
     "lint:js": "eslint .",
     "test": "jest",
+    "lint:ts": "tsc --noEmit",
+    "postpublish": "yarn clean",
+    "prepublishOnly": "yarn build",
     "test:integration": "ts-node ./test/run-test.ts",
     "update-docs": "codemod-cli update-docs"
   },
@@ -42,11 +47,13 @@
     "ember-template-recast": "^3.3.2"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.4",
+    "@tsconfig/strictest": "^2.0.1",
     "@types/chalk": "^2.2.0",
     "@types/common-tags": "^1.8.0",
     "@types/node": "^20.11.5",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
     "babel-plugin-htmlbars-inline-precompile": "^3.0.1",
     "chalk": "^4.1.1",
     "common-tags": "^1.8.0",
@@ -58,8 +65,8 @@
     "jest": "^26.6.3",
     "prettier": "^1.19.1",
     "release-plan": "^0.6.0",
-    "ts-node": "^8.10.2",
-    "typescript": "~3.9.7"
+    "ts-node": "^10.9.1",
+    "typescript": "~5.0.4"
   },
   "engines": {
     "node": "16.* || 18.* || >= 20"

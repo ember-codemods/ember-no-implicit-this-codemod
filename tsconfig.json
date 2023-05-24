@@ -1,17 +1,13 @@
 {
+  "extends": ["@tsconfig/node16/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
     "sourceMap": true,
+    // FIXME: "skipLibCheck": false,
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*", "types/*"]
+      "*": ["types/*"]
     }
   },
-  "include": ["test/**/*"]
+  "include": ["transforms/**/*", "test/**/*"]
 }
