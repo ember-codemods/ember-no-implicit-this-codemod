@@ -1,9 +1,9 @@
-const path = require('path');
-const { setTelemetry } = require('ember-codemods-telemetry-helpers');
-const mockTelemetryData = require('./__testfixtures__/-mock-telemetry.json');
+import { setTelemetry } from 'ember-codemods-telemetry-helpers';
+import path from 'node:path';
+import mockTelemetryData, { type Telemetry } from './__testfixtures__/-mock-telemetry.json';
 
-function setupTelemetry() {
-  let mockTelemetry = {};
+export function setupTelemetry() {
+  let mockTelemetry: Telemetry = {};
 
   Object.keys(mockTelemetryData).forEach(key => {
     let value = mockTelemetryData[key] || {};
@@ -14,5 +14,3 @@ function setupTelemetry() {
 
   setTelemetry(mockTelemetry);
 }
-
-module.exports = { setupTelemetry };

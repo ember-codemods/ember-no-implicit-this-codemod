@@ -1,6 +1,7 @@
-import path from 'path';
 import execa, { CommonOptions } from 'execa';
-import { log, timeoutAfter, kill, error } from './utils';
+import path from 'node:path';
+import { kill, timeoutAfter } from './utils';
+import { isRecord } from '../../helpers/types';
 
 const devServerTimeout = 60000;
 
@@ -37,13 +38,13 @@ export class TestRunner {
       },
     });
 
-    if (process.env.DEBUG) {
-      emberServe.stdout.pipe(process.stdout);
-      emberServe.stderr.pipe(process.stderr);
+    if (process.env['DEBUG']) {
+      emberServe.stdout?.pipe(process.stdout);
+      emberServe.stderr?.pipe(process.stderr);
     }
 
-    const serverWaiter = new Promise(resolve => {
-      emberServe.stdout.on('data', data => {
+    const serverWaiter = new Promise<void>(resolve => {
+      emberServe.stdout?.on('data', data => {
         if (data.toString().includes('Build successful')) {
           resolve();
         }
@@ -61,7 +62,10 @@ export class TestRunner {
   }
 
   async stopEmber(): Promise<void> {
-    await timeoutAfter(devServerTimeout, kill(this.emberProcess));
+    const { emberProcess } = this;
+    if (emberProcess) {
+      await timeoutAfter(devServerTimeout, kill(emberProcess));
+    }
   }
 
   async compare() {
@@ -71,7 +75,7 @@ export class TestRunner {
 
       await execa('diff', ['-rq', actual, expectedApp], { cwd: this.inputDir, stdio: 'inherit' });
     } catch (e) {
-      console.log(e.stdout);
+      console.log(isRecord(e) ? e['stdout']: 'codemod did not run successfully');
 
       throw new Error('codemod did not run successfully');
     }

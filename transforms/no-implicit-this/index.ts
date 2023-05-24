@@ -1,61 +1,27 @@
-const path = require('path');
-const fs = require('fs');
+import Debug from 'debug';
+import { parse, print } from 'ember-template-recast';
+import { API, FileInfo, Transform } from 'jscodeshift';
+import path from 'node:path';
+import { Options, getOptions } from './helpers/options';
+import transform from './helpers/plugin';
+import { isEmberTemplate } from './helpers/tagged-templates';
 
-const debug = require('debug')('ember-no-implicit-this-codemod:transform');
-const recast = require('ember-template-recast');
-const { getTelemetry } = require('ember-codemods-telemetry-helpers');
-const transform = require('./helpers/plugin');
-const { getOptions: getCLIOptions, jscodeshift } = require('codemod-cli');
-const { isEmberTemplate } = require('./helpers/tagged-templates');
-const DEFAULT_OPTIONS = {};
-
-/**
- * Accepts the config path for custom helpers and returns the array of helpers
- * if the file path is resolved.
- * Context: This will allow the users to specify their custom list of helpers
- * along with the known helpers, this would give them more flexibility for handling
- * special usecases.
- * @param {string} configPath
- */
-function _getCustomHelpersFromConfig(configPath) {
-  let customHelpers = [];
-  if (configPath) {
-    let filePath = path.join(process.cwd(), configPath);
-    let config = JSON.parse(fs.readFileSync(filePath));
-    if (config.helpers) {
-      customHelpers = config.helpers;
-    }
-  }
-  return customHelpers;
-}
-
-/**
- * Returns custom options object to support the custom helpers config path passed
- * by the user.
- */
-function getOptions() {
-  let cliOptions = getCLIOptions();
-  let options = {
-    customHelpers: _getCustomHelpersFromConfig(cliOptions.config),
-    telemetry: getTelemetry(),
-  };
-  return options;
-}
+const debug = Debug('ember-no-implicit-this-codemod:transform');
 
 /**
  * Given the location and source text of a template, as well as codemod options,
  * returns the rewritten template contents with `this` references inserted where
  * necessary.
  */
-function rewriteTemplate(path, source, options) {
+function rewriteTemplate(path: string, source: string, options: Options): string {
   debug('Parsing %s ...', path);
-  let root = recast.parse(source);
+  const root = parse(source);
 
   debug('Transforming %s ...', path);
   transform(root, options);
 
   debug('Generating new content for %s ...', path);
-  return recast.print(root);
+  return print(root);
 }
 
 /**
@@ -63,27 +29,45 @@ function rewriteTemplate(path, source, options) {
  * returns updated source with those templates rewritten to include `this`
  * references where needed.
  */
-function rewriteEmbeddedTemplates(file, options, api) {
-  return jscodeshift
-    .getParser(api)(file.source)
-    .find('TaggedTemplateExpression', { tag: { type: 'Identifier' } })
-    .forEach(path => {
-      if (isEmberTemplate(path)) {
-        let { value } = path.node.quasi.quasis[0];
-        value.raw = rewriteTemplate(file.path, value.raw, options);
-      }
-    })
-    .toSource();
+function rewriteEmbeddedTemplates(file: FileInfo, options: Options, { jscodeshift }: API): string {
+  return (
+    jscodeshift(file.source)
+      // @ts-expect-error FIXME: UGH
+      .find('TaggedTemplateExpression', { tag: { type: 'Identifier' } })
+      .forEach(path => {
+        if (isEmberTemplate(path)) {
+          // @ts-expect-error FIXME: UGH
+          let { value } = path.node.quasi.quasis[0];
+          value.raw = rewriteTemplate(file.path, value.raw, options);
+        }
+      })
+      .toSource()
+  );
 }
 
-module.exports = function transformer(file, api) {
-  let extension = path.extname(file.path).toLowerCase();
-  let options = Object.assign({}, DEFAULT_OPTIONS, getOptions());
+// FIXME: Ensure this is what is happening
+/**
+ * | Result       | How-to                      | Meaning                                            |
+ * | :------      | :------                     | :-------                                           |
+ * | `errors`     | `throw`                     | we attempted to transform but encountered an error |
+ * | `unmodified` | return `string` (unchanged) | we attempted to transform but it was unnecessary   |
+ * | `skipped`    | return `undefined`          | we did not attempt to transform                    |
+ * | `ok`         | return `string` (changed)   | we successfully transformed                        |
+ */
+const transformer: Transform = function transformer(file, api) {
+  const extension = path.extname(file.path).toLowerCase();
+  const options = getOptions();
   if (extension === '.hbs') {
     return rewriteTemplate(file.path, file.source, options);
   } else if (extension === '.js' || extension === '.ts') {
     return rewriteEmbeddedTemplates(file, options, api);
   } else {
     debug('Skipping %s because it does not match a known extension with templates', file.path);
+    return;
   }
 };
+
+export default transformer;
+
+// Set the parser, needed for supporting decorators
+export { default as parser } from './helpers/parse';

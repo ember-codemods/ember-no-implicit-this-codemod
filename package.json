@@ -12,13 +12,19 @@
   },
   "homepage": "https://github.com/ember-codemods/ember-no-implicit-this-codemod#readme",
   "author": "",
+  "files": [
+    "/bin",
+    "/helpers/**/*.js",
+    "/transforms/no-implicit-this/index.js",
+    "/transforms/no-implicit-this/helpers/**/*.js"
+  ],
   "scripts": {
     "release": "release-it",
     "prepublishOnly": "yarn build",
-    "postpublish": "yarn clean",
     "build": "tsc",
     "clean": "tsc --build --clean",
     "test": "jest",
+    "pretest:integration": "yarn build",
     "test:integration": "ts-node ./test/run-test.ts",
     "update-docs": "codemod-cli update-docs",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
@@ -36,16 +42,21 @@
     "codemod-cli"
   ],
   "dependencies": {
-    "codemod-cli": "^2.1.0",
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "codemod-cli": "^3.2.0",
     "debug": "^4.1.1",
     "ember-codemods-telemetry-helpers": "^2.1.0",
-    "ember-template-recast": "^3.3.2"
+    "ember-template-recast": "^6.1.4",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.4",
     "@tsconfig/strictest": "^2.0.1",
     "@types/chalk": "^2.2.0",
     "@types/common-tags": "^1.8.0",
+    "@types/debug": "^4.1.8",
+    "@types/jscodeshift": "^0.11.6",
     "@types/node": "^20.2.3",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.59.7",
@@ -57,10 +68,11 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.4.0",
     "execa": "^3.4.0",
-    "jest": "^26.6.3",
+    "jest": "^29.1.0",
     "prettier": "^1.19.1",
     "release-it": "^14.6.2",
     "release-it-lerna-changelog": "^3.1.0",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "~5.0.4"
   },
@@ -69,8 +81,9 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "preset": "ts-jest",
     "testMatch": [
-      "<rootDir>/transforms/**/test.js"
+      "<rootDir>/transforms/**/test.{js,ts}"
     ]
   },
   "publishConfig": {
