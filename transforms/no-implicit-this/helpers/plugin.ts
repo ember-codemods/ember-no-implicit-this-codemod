@@ -1,52 +1,52 @@
-const debug = require('debug')('ember-no-implicit-this-codemod:plugin');
-const recast = require('ember-template-recast');
+import Debug from 'debug';
+import { builders as b, AST, traverse } from 'ember-template-recast';
+import KNOWN_HELPERS from './known-helpers';
+import { Options } from './options';
+import { Telemetry } from './telemetry';
+
+const debug = Debug('ember-no-implicit-this-codemod:plugin');
 
 // everything is copy-pasteable to astexplorer.net.
 // sorta. telemetry needs to be defined.
-// telemtry can be populated with -mock-telemetry.json
-const KNOWN_HELPERS = require('./known-helpers');
+// telemetry can be populated with -mock-telemetry.json
 
 /**
  * plugin entrypoint
  */
-function transform(root, options = {}) {
-  let b = recast.builders;
+export default function transform(root: AST.Node, { telemetry, customHelpers }: Options) {
 
-  let scopedParams = [];
-  let telemetry = options.telemetry || {};
-  let [components, helpers] = populateInvokeables(telemetry);
+  const scopedParams: string[] = [];
+  const [components, helpers] = populateInvokeables(telemetry);
 
-  let customHelpers = options.customHelpers || [];
-
-  let paramTracker = {
-    enter(node) {
-      node.blockParams.forEach(param => {
+  const paramTracker = {
+    enter(node: { blockParams: any[] }) {
+      node.blockParams.forEach((param: string) => {
         scopedParams.push(param);
       });
     },
 
-    exit(node) {
+    exit(node: { blockParams: any[] }) {
       node.blockParams.forEach(() => {
         scopedParams.pop();
       });
     },
   };
 
-  function handleParams(params) {
-    for (let param of params) {
+  function handleParams(params: AST.Expression[]) {
+    for (const param of params) {
       if (param.type !== 'PathExpression') continue;
       handlePathExpression(param);
     }
   }
 
-  function handleHash(hash) {
-    for (let pair of hash.pairs) {
+  function handleHash(hash: AST.Hash) {
+    for (const pair of hash.pairs) {
       if (pair.value.type !== 'PathExpression') continue;
       handlePathExpression(pair.value);
     }
   }
 
-  function handlePathExpression(node) {
+  function handlePathExpression(node: AST.PathExpression) {
     // skip this.foo
     if (node.this) {
       debug(`Skipping \`%s\` because it is already prefixed with \`this.\``, node.original);
@@ -61,8 +61,8 @@ function transform(root, options = {}) {
 
     // skip {#foo as |bar|}}{{bar}}{{/foo}}
     // skip <Foo as |bar|>{{bar}}</Foo>
-    let firstPart = node.parts[0];
-    if (scopedParams.includes(firstPart)) {
+    const firstPart = node.parts[0];
+    if (firstPart && scopedParams.includes(firstPart)) {
       debug(`Skipping \`%s\` because it is a scoped variable`, node.original);
       return;
     }
@@ -78,7 +78,7 @@ function transform(root, options = {}) {
     Object.assign(node, b.path(`this.${node.original}`));
   }
 
-  function isHelper(name) {
+  function isHelper(name: string) {
     if (KNOWN_HELPERS.includes(name)) {
       debug(`Skipping \`%s\` because it is a known helper`, name);
       return true;
@@ -89,9 +89,9 @@ function transform(root, options = {}) {
       return true;
     }
 
-    let helper = helpers.find(path => path.endsWith(`/${name}`));
+    const helper = helpers.find(path => path.endsWith(`/${name}`));
     if (helper) {
-      let message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
+      const message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
       debug(message, name, helper);
       return true;
     }
@@ -99,10 +99,10 @@ function transform(root, options = {}) {
     return false;
   }
 
-  function isComponent(name) {
-    let component = components.find(path => path.endsWith(`/${name}`));
+  function isComponent(name: string) {
+    const component = components.find(path => path.endsWith(`/${name}`));
     if (component) {
-      let message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
+      const message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
       debug(message, name, component);
       return true;
     }
@@ -112,7 +112,7 @@ function transform(root, options = {}) {
 
   let inAttrNode = false;
 
-  recast.traverse(root, {
+  traverse(root, {
     Block: paramTracker,
     ElementNode: paramTracker,
 
@@ -126,7 +126,7 @@ function transform(root, options = {}) {
     },
 
     MustacheStatement(node) {
-      let { path, params, hash } = node;
+      const { path, params, hash } = node;
 
       // {{foo BAR}}
       handleParams(params);
@@ -134,8 +134,8 @@ function transform(root, options = {}) {
       // {{foo bar=BAZ}}
       handleHash(hash);
 
-      let hasParams = params.length !== 0;
-      let hasHashPairs = hash.pairs.length !== 0;
+      const hasParams = params.length !== 0;
+      const hasHashPairs = hash.pairs.length !== 0;
 
       // {{FOO}}
       if (path.type === 'PathExpression' && !hasParams && !hasHashPairs) {
@@ -148,7 +148,7 @@ function transform(root, options = {}) {
         // skip ember-holy-futuristic-template-namespacing-batman component/helper invocations
         // (see https://github.com/rwjblue/ember-holy-futuristic-template-namespacing-batman)
         if (path.original.includes('$') || path.original.includes('::')) {
-          let message = `Skipping \`%s\` because it looks like a helper/component invocation from ember-holy-futuristic-template-namespacing-batman`;
+          const message = `Skipping \`%s\` because it looks like a helper/component invocation from ember-holy-futuristic-template-namespacing-batman`;
           debug(message, path.original);
           return;
         }
@@ -189,14 +189,12 @@ function transform(root, options = {}) {
   });
 }
 
-function populateInvokeables(telemetry) {
-  let components = [];
-  let helpers = [];
+function populateInvokeables(telemetry: Telemetry): [components: string[], helpers: string[]] {
+  const components = [];
+  const helpers = [];
 
-  for (let name of Object.keys(telemetry)) {
-    let entry = telemetry[name];
-
-    switch (entry.type) {
+  for (const [name, datum] of Object.entries(telemetry)) {
+    switch (datum.type) {
       case 'Component':
         components.push(name);
         break;
@@ -208,5 +206,3 @@ function populateInvokeables(telemetry) {
 
   return [components, helpers];
 }
-
-module.exports = transform;

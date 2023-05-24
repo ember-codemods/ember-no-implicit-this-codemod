@@ -3,3 +3,10 @@ node_modules
 tmp
 *.log
 test/**/yarn.lock
+test/**/*.js
+test/**/*.js.map
+transforms/**/*.js
+transforms/**/*.js.map
+helpers/**/*.js
+helpers/**/*.js.map
+!**/__testfixtures__/**/*

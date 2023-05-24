@@ -8,7 +8,7 @@ import { runTestIntegrationSequence } from './helpers/sequence';
 const allVersions = ['3.10', '3.13'];
 
 (async (): Promise<void> => {
-  const emberVersion = process.env.EMBER_VERSION;
+  const emberVersion = process.env['EMBER_VERSION'];
 
   if (!emberVersion) {
     console.error(`No EMBER_VERSION set. No scenarios to run.`);
@@ -23,7 +23,7 @@ const allVersions = ['3.10', '3.13'];
   let didSucceed = false;
 
   try {
-    process.env.DEBUG = 'true'; // hacks for now
+    process.env['DEBUG'] = 'true'; // hacks for now
     await runTestIntegrationSequence(emberVersion);
     didSucceed = true;
   } catch (e) {

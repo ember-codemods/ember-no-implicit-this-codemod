@@ -1,7 +1,7 @@
 'use strict';
 
-const { runTransformTest } = require('codemod-cli');
-const { setupTelemetry } = require('./test-helpers');
+import { runTransformTest } from 'codemod-cli';
+import { setupTelemetry } from './test-helpers';
 
 setupTelemetry();
 

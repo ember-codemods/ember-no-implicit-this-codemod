@@ -18,6 +18,12 @@
   "bin": {
     "ember-no-implicit-this-codemod": "./bin/cli.js"
   },
+  "files": [
+    "/bin",
+    "/helpers/**/*.js",
+    "/transforms/no-implicit-this/index.js",
+    "/transforms/no-implicit-this/helpers/**/*.js"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "tsc --build --clean",
@@ -27,30 +33,36 @@
     "debug:codemod:not-working": "node --inspect-brk ./bin/cli",
     "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
     "lint:js": "eslint .",
-    "test": "jest",
     "lint:ts": "tsc --noEmit",
-    "postpublish": "yarn clean",
     "prepublishOnly": "yarn build",
+    "release": "release-it",
+    "test": "jest",
+    "pretest:integration": "yarn build",
     "test:integration": "ts-node ./test/run-test.ts",
     "update-docs": "codemod-cli update-docs"
   },
   "jest": {
+    "preset": "ts-jest",
     "testEnvironment": "node",
     "testMatch": [
-      "<rootDir>/transforms/**/test.js"
+      "<rootDir>/transforms/**/test.{js,ts}"
     ]
   },
   "dependencies": {
-    "codemod-cli": "^2.1.0",
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
+    "codemod-cli": "^3.2.0",
     "debug": "^4.1.1",
     "ember-codemods-telemetry-helpers": "^3.0.0",
-    "ember-template-recast": "^3.3.2"
+    "ember-template-recast": "^6.1.4"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.4",
     "@tsconfig/strictest": "^2.0.1",
     "@types/chalk": "^2.2.0",
     "@types/common-tags": "^1.8.0",
+    "@types/debug": "^4.1.8",
+    "@types/jscodeshift": "^0.11.6",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.59.7",
@@ -62,9 +74,10 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.4.0",
     "execa": "^3.4.0",
-    "jest": "^26.6.3",
+    "jest": "^29.1.0",
     "prettier": "^1.19.1",
     "release-plan": "^0.6.0",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "~5.0.4"
   },
