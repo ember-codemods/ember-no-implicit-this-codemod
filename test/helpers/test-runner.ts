@@ -26,8 +26,37 @@ export class TestRunner {
     await execa('yarn', ['install'], { cwd: this.inputDir });
   }
 
-  async runCodemod() {
-    await execa('../../../../bin/cli.js', ['http://localhost:4200', 'app'], this.execOpts);
+  async runCodemodRuntime() {
+    await execa(
+      '../../../../bin/cli.js',
+      ['http://localhost:4200', 'app', '--telemetry=runtime'],
+      this.execOpts
+    );
+  }
+
+  async runCodemodEmbroider() {
+    await execa('../../../../bin/cli.js', ['app', '--telemetry=embroider'], this.execOpts);
+  }
+
+  async runEmbroiderStage2Build(): Promise<void> {
+    const process = await execa('yarn', ['ember', 'build'], {
+      cwd: this.inputDir,
+      env: {
+        STAGE2_ONLY: 'true',
+      },
+    });
+
+    if (process.exitCode !== 0) {
+      const output = [
+        `Build failed: STAGE2_ONLY=true yarn ember build exited with ${process.exitCode}\n`,
+        `=== STDOUT ===\n`,
+        process.stdout || '(EMPTY)',
+        `=== STDERR ===\n`,
+        process.stderr || '(EMPTY)',
+      ];
+
+      throw new Error(output.join('\n'));
+    }
   }
 
   async startEmber(): Promise<void> {

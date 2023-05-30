@@ -26,6 +26,8 @@
     "test": "jest",
     "pretest:integration": "yarn build",
     "test:integration": "ts-node ./test/run-test.ts",
+    "test:integration:embroider": "yarn test:integration --embroider",
+    "test:integration:runtime": "yarn test:integration --runtime",
     "update-docs": "codemod-cli update-docs",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint:js": "eslint .",
@@ -44,6 +46,7 @@
   "dependencies": {
     "@babel/core": "^7.21.8",
     "@babel/preset-env": "^7.21.5",
+    "@embroider/core": "^3.0.0",
     "codemod-cli": "^3.2.0",
     "debug": "^4.1.1",
     "ember-codemods-telemetry-helpers": "^2.1.0",

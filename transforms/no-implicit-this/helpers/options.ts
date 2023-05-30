@@ -2,7 +2,7 @@ import { getOptions as getCLIOptions } from 'codemod-cli';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ZodError, ZodType, z } from 'zod';
-import Resolver, { RuntimeResolver } from './resolver';
+import Resolver, { EmbroiderResolver, RuntimeResolver } from './resolver';
 
 export interface Options {
   customHelpers: string[];
@@ -34,7 +34,7 @@ export function getOptions(): Options {
   return {
     customHelpers: getCustomHelpersFromConfig(cliOptions.config),
     resolver:
-      cliOptions.telemetry === 'runtime' ? RuntimeResolver.build() : (null as unknown as Resolver),
+      cliOptions.telemetry === 'runtime' ? RuntimeResolver.build() : EmbroiderResolver.build(),
   };
 }
 

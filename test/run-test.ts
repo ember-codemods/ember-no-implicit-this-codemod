@@ -20,11 +20,13 @@ const allVersions = ['3.10', '3.13'];
     process.exit(1);
   }
 
+  const mode = process.argv.includes('--runtime') ? 'runtime' : 'embroider';
+
   let didSucceed = false;
 
   try {
     process.env['DEBUG'] = 'true'; // hacks for now
-    await runTestIntegrationSequence(emberVersion);
+    await runTestIntegrationSequence(emberVersion, mode);
     didSucceed = true;
   } catch (e) {
     error(e);

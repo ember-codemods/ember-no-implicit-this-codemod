@@ -7,15 +7,27 @@ const {
   analyzeEmberObject,
   getTelemetry,
 } = require('ember-codemods-telemetry-helpers');
-const appLocation = process.argv[2];
-const args = process.argv.slice(3);
 
 (async () => {
-  debug('Gathering telemetry data from %s ...', appLocation);
-  await gatherTelemetryForUrl(appLocation, analyzeEmberObject);
+  let args = process.argv;
 
-  let telemetry = getTelemetry();
-  debug('Gathered telemetry on %d modules', Object.keys(telemetry).length);
+  // FIXME
+  if (args.includes('--telemetry=runtime')) {
+    const appLocation = args[2];
+
+    debug('Gathering telemetry data from %s ...', appLocation);
+    await gatherTelemetryForUrl(appLocation, analyzeEmberObject);
+
+    let telemetry = getTelemetry();
+    debug('Gathered telemetry on %d modules', Object.keys(telemetry).length);
+
+    args = args.slice(3);
+  } else {
+    args = args.slice(2);
+  }
 
   require('codemod-cli').runTransform(__dirname, 'no-implicit-this', args, 'hbs');
-})();
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
