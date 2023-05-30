@@ -2,15 +2,19 @@ import { getOptions as getCLIOptions } from 'codemod-cli';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ZodError, ZodType, z } from 'zod';
-import { Telemetry, getTelemetry } from './telemetry';
+import Resolver, { RuntimeResolver } from './resolver';
 
 export interface Options {
-  customHelpers: string[],
-  telemetry: Telemetry
+  customHelpers: string[];
+  resolver: Resolver;
 }
 
 const CLIOptions = z.object({
   config: z.string().optional(),
+  // FIXME: Defaulting to 'runtime' isn't quite correct
+  telemetry: z.union([z.literal('runtime'), z.literal('embroider')]).default('runtime'),
+  // FIXME: Optionally allow angle-bracket conversion for components
+  // FIXME: Optionally add parens for helpers
 });
 
 type CLIOptions = z.infer<typeof CLIOptions>;
@@ -29,7 +33,8 @@ export function getOptions(): Options {
   const cliOptions = parse(getCLIOptions(), CLIOptions);
   return {
     customHelpers: getCustomHelpersFromConfig(cliOptions.config),
-    telemetry: getTelemetry(),
+    resolver:
+      cliOptions.telemetry === 'runtime' ? RuntimeResolver.build() : (null as unknown as Resolver),
   };
 }
 

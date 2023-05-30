@@ -37,7 +37,7 @@ export function getTelemetry(): Telemetry {
     return result.data;
   } else {
     const { errors } = result.error;
-    const messages = errors.map(error => {
+    const messages = errors.map((error) => {
       return `[${error.path.join('.')}]: ${error.message}`;
     });
     throw new TelemetryError(`Could not parse telemetry: \n\t${messages.join('\n\t')}`);

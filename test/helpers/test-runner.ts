@@ -43,8 +43,8 @@ export class TestRunner {
       emberServe.stderr?.pipe(process.stderr);
     }
 
-    const serverWaiter = new Promise<void>(resolve => {
-      emberServe.stdout?.on('data', data => {
+    const serverWaiter = new Promise<void>((resolve) => {
+      emberServe.stdout?.on('data', (data) => {
         if (data.toString().includes('Build successful')) {
           resolve();
         }
@@ -75,7 +75,7 @@ export class TestRunner {
 
       await execa('diff', ['-rq', actual, expectedApp], { cwd: this.inputDir, stdio: 'inherit' });
     } catch (e) {
-      console.log(isRecord(e) ? e['stdout']: 'codemod did not run successfully');
+      console.log(isRecord(e) ? e['stdout'] : 'codemod did not run successfully');
 
       throw new Error('codemod did not run successfully');
     }

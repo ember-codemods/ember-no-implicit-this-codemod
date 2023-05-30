@@ -1,8 +1,7 @@
 import Debug from 'debug';
-import { builders as b, AST, traverse } from 'ember-template-recast';
+import { AST, builders as b, traverse } from 'ember-template-recast';
 import KNOWN_HELPERS from './known-helpers';
 import { Options } from './options';
-import { Telemetry } from './telemetry';
 
 const debug = Debug('ember-no-implicit-this-codemod:plugin');
 
@@ -13,10 +12,8 @@ const debug = Debug('ember-no-implicit-this-codemod:plugin');
 /**
  * plugin entrypoint
  */
-export default function transform(root: AST.Node, { telemetry, customHelpers }: Options) {
-
+export default function transform(root: AST.Node, { customHelpers, resolver }: Options) {
   const scopedParams: string[] = [];
-  const [components, helpers] = populateInvokeables(telemetry);
 
   const paramTracker = {
     enter(node: { blockParams: any[] }) {
@@ -78,6 +75,9 @@ export default function transform(root: AST.Node, { telemetry, customHelpers }: 
     Object.assign(node, b.path(`this.${node.original}`));
   }
 
+  // app/components/foo.js
+  // <div class={{foo}} />
+
   function isHelper(name: string) {
     if (KNOWN_HELPERS.includes(name)) {
       debug(`Skipping \`%s\` because it is a known helper`, name);
@@ -89,10 +89,9 @@ export default function transform(root: AST.Node, { telemetry, customHelpers }: 
       return true;
     }
 
-    const helper = helpers.find(path => path.endsWith(`/${name}`));
-    if (helper) {
+    if (resolver.has('helper', name)) {
       const message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
-      debug(message, name, helper);
+      debug(message, name);
       return true;
     }
 
@@ -100,10 +99,9 @@ export default function transform(root: AST.Node, { telemetry, customHelpers }: 
   }
 
   function isComponent(name: string) {
-    const component = components.find(path => path.endsWith(`/${name}`));
-    if (component) {
+    if (resolver.has('component', name)) {
       const message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
-      debug(message, name, component);
+      debug(message, name);
       return true;
     }
 
@@ -187,22 +185,4 @@ export default function transform(root: AST.Node, { telemetry, customHelpers }: 
       handleHash(node.hash);
     },
   });
-}
-
-function populateInvokeables(telemetry: Telemetry): [components: string[], helpers: string[]] {
-  const components = [];
-  const helpers = [];
-
-  for (const [name, datum] of Object.entries(telemetry)) {
-    switch (datum.type) {
-      case 'Component':
-        components.push(name);
-        break;
-      case 'Helper':
-        helpers.push(name);
-        break;
-    }
-  }
-
-  return [components, helpers];
 }

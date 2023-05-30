@@ -10,10 +10,10 @@ const TEMPLATE_TAG_IMPORTS = [
 // Identifies whether a TaggedTemplateExpression corresponds to an Ember template
 // using one of a known set of `hbs` tags.
 export function isEmberTemplate(path: NodePath<ASTNode, ASTNode>) {
-  let tag = path.get('tag');
+  const tag = path.get('tag');
   // @ts-expect-error FIXME: UGH
-  let hasInterpolation = path.node.quasi.quasis.length !== 1;
-  let isKnownTag = TEMPLATE_TAG_IMPORTS.some(({ source, name }) =>
+  const hasInterpolation = path.node.quasi.quasis.length !== 1;
+  const isKnownTag = TEMPLATE_TAG_IMPORTS.some(({ source, name }) =>
     isImportReference(tag, source, name)
   );
 
@@ -22,19 +22,15 @@ export function isEmberTemplate(path: NodePath<ASTNode, ASTNode>) {
 
 // Determines whether the given identifier is a reference to an export
 // from a particular module.
-function isImportReference(
-  path: NodePath,
-  importSource: string,
-  importName: string
-) {
-  let scope = path.scope.lookup(path.node.name);
-  let bindings = scope ? scope.getBindings() : {};
-  let bindingIdentifiers = bindings[path.node.name] || [];
+function isImportReference(path: NodePath, importSource: string, importName: string) {
+  const scope = path.scope.lookup(path.node.name);
+  const bindings = scope ? scope.getBindings() : {};
+  const bindingIdentifiers = bindings[path.node.name] || [];
 
-  for (let binding of bindingIdentifiers) {
-    let specifier = binding.parent.node;
-    let importDeclaration = binding.parent.parent.node;
-    let bindingImportedName =
+  for (const binding of bindingIdentifiers) {
+    const specifier = binding.parent.node;
+    const importDeclaration = binding.parent.parent.node;
+    const bindingImportedName =
       specifier.type === 'ImportDefaultSpecifier'
         ? 'default'
         : specifier.type === 'ImportSpecifier'

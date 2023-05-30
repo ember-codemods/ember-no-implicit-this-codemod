@@ -33,10 +33,10 @@ export async function kill(subprocess: execa.ExecaChildProcess): Promise<void> {
   } catch (e) {
     console.log(`PID ${subprocess.pid} has stopped.`);
     console.log(`\tKilled: ${subprocess.killed}`);
-    console.log(`\tCancelled: ${isRecord(e) ? e['isCanceled']: 'unknown'}`);
+    console.log(`\tCancelled: ${isRecord(e) ? e['isCanceled'] : 'unknown'}`);
   }
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => resolve(), 3000);
   });
 }

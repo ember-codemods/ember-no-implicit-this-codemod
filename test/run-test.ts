@@ -44,7 +44,7 @@ const allVersions = ['3.10', '3.13'];
   }
 
   process.exit(didSucceed ? 0 : 1);
-})().catch(e => {
+})().catch((e) => {
   console.error(e);
   process.exit(1);
 });

@@ -34,10 +34,10 @@ function rewriteEmbeddedTemplates(file: FileInfo, options: Options, { jscodeshif
     jscodeshift(file.source)
       // @ts-expect-error FIXME: UGH
       .find('TaggedTemplateExpression', { tag: { type: 'Identifier' } })
-      .forEach(path => {
+      .forEach((path) => {
         if (isEmberTemplate(path)) {
           // @ts-expect-error FIXME: UGH
-          let { value } = path.node.quasi.quasis[0];
+          const { value } = path.node.quasi.quasis[0];
           value.raw = rewriteTemplate(file.path, value.raw, options);
         }
       })
