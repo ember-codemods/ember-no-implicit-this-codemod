@@ -16,6 +16,8 @@
 2. Look at second arg to `compatBuild`
 3. ...?
 
+FIXME: Figure out how to pass no-babel option to jscodeshift via codemod-cli
+
 
 # TODO
 

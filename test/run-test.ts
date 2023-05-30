@@ -5,7 +5,7 @@ import { stripIndent } from 'common-tags';
 import { error } from './helpers/utils';
 import { runTestIntegrationSequence } from './helpers/sequence';
 
-const allVersions = ['3.10', '3.13'];
+const allVersions = ['3.10', '3.13', '3.28'];
 
 (async (): Promise<void> => {
   const emberVersion = process.env['EMBER_VERSION'];
