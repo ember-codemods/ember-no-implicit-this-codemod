@@ -1,6 +1,5 @@
 import Debug from 'debug';
 import { AST, builders as b, traverse } from 'ember-template-recast';
-import KNOWN_HELPERS from './known-helpers';
 import { Options } from './options';
 
 const debug = Debug('ember-no-implicit-this-codemod:plugin');
@@ -75,15 +74,7 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
     Object.assign(node, b.path(`this.${node.original}`));
   }
 
-  // app/components/foo.js
-  // <div class={{foo}} />
-
   function isHelper(name: string) {
-    if (KNOWN_HELPERS.includes(name)) {
-      debug(`Skipping \`%s\` because it is a known helper`, name);
-      return true;
-    }
-
     if (customHelpers.includes(name)) {
       debug(`Skipping \`%s\` because it is a custom configured helper`, name);
       return true;

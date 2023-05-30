@@ -3,9 +3,13 @@ import { Telemetry, getTelemetry } from './telemetry';
 import { Resolver as _EmbroiderResolver } from '@embroider/core';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { isKeyword } from './keywords';
 
 export default abstract class Resolver {
   has(type: 'component' | 'helper' | 'ambiguous', name: string): boolean {
+    if (isKeyword(type, name)) {
+      return true;
+    }
     switch (type) {
       case 'component':
         return this.hasComponent(name);
@@ -16,10 +20,10 @@ export default abstract class Resolver {
     }
   }
 
-  abstract hasComponent(name: string): boolean;
-  abstract hasHelper(name: string): boolean;
+  protected abstract hasComponent(name: string): boolean;
+  protected abstract hasHelper(name: string): boolean;
 
-  hasAmbiguous(name: string): boolean {
+  protected hasAmbiguous(name: string): boolean {
     return this.hasComponent(name) || this.hasHelper(name);
   }
 }
