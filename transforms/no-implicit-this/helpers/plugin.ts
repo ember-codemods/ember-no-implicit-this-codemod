@@ -15,13 +15,13 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
   const scopedParams: string[] = [];
 
   const paramTracker = {
-    enter(node: { blockParams: any[] }) {
+    enter(node: { blockParams: string[] }) {
       node.blockParams.forEach((param: string) => {
         scopedParams.push(param);
       });
     },
 
-    exit(node: { blockParams: any[] }) {
+    exit(node: { blockParams: string[] }) {
       node.blockParams.forEach(() => {
         scopedParams.pop();
       });
