@@ -1,9 +1,11 @@
 'use strict';
 
 import { runTransformTest } from 'codemod-cli';
-import { setupTelemetry } from './test-helpers';
+import { setupResolver } from './test-helpers';
 
-setupTelemetry();
+process.env['TESTING'] = 'true';
+
+setupResolver();
 
 runTransformTest({
   type: 'jscodeshift',

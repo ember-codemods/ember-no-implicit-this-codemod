@@ -1,16 +1,18 @@
-import { setTelemetry } from 'ember-codemods-telemetry-helpers';
-import path from 'node:path';
-import mockTelemetryData, { type Telemetry } from './__testfixtures__/-mock-telemetry.json';
+import { MockResolver } from './helpers/resolver';
 
-export function setupTelemetry() {
-  const mockTelemetry: Telemetry = {};
+const MOCK_COMPONENTS = [
+  'block-component',
+  'foo-bar-baz',
+  'foo',
+  'my-component',
+  'namespace/foo',
+  'namespace/my-component',
+  'some-component',
+];
 
-  Object.keys(mockTelemetryData).forEach((key) => {
-    const value = mockTelemetryData[key] || {};
-    const mockPath = path.resolve(__dirname, `./__testfixtures__/${key}`);
+const MOCK_HELPERS = ['a-helper', 'my-helper'];
 
-    mockTelemetry[mockPath] = value;
-  });
-
-  setTelemetry(mockTelemetry);
+export function setupResolver() {
+  MockResolver.setComponents(MOCK_COMPONENTS);
+  MockResolver.setHelpers(MOCK_HELPERS);
 }

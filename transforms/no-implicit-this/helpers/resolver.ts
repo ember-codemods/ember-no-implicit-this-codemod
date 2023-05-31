@@ -108,3 +108,31 @@ export class EmbroiderResolver extends Resolver {
     }
   }
 }
+
+export class MockResolver extends Resolver {
+  private static components: string[] = [];
+  static setComponents(components: string[]) {
+    this.components = components;
+  }
+
+  private static helpers: string[] = [];
+  static setHelpers(helpers: string[]) {
+    this.helpers = helpers;
+  }
+
+  static build(): MockResolver {
+    return new MockResolver(this.components, this.helpers);
+  }
+
+  constructor(private components: string[], private helpers: string[]) {
+    super();
+  }
+
+  hasComponent(name: string): boolean {
+    return !!this.components.includes(name);
+  }
+
+  hasHelper(name: string): boolean {
+    return !!this.helpers.includes(name);
+  }
+}

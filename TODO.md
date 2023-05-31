@@ -18,6 +18,8 @@
 
 FIXME: Mock resolver in tests + unit test the two resolvers.
 
+FIXME: Refactor cli.js
+
 FIXME: Figure out how to pass no-babel option to jscodeshift via codemod-cli
 
 FIXME: Extract ember codemod buildtime resolver
