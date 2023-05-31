@@ -16,7 +16,13 @@
 2. Look at second arg to `compatBuild`
 3. ...?
 
+FIXME: Mock resolver in tests + unit test the two resolvers.
+
 FIXME: Figure out how to pass no-babel option to jscodeshift via codemod-cli
+
+FIXME: Extract ember codemod buildtime resolver
+
+FIXME: Optional angle-bracketification?
 
 
 # TODO
