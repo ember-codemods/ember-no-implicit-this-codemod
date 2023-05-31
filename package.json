@@ -57,6 +57,7 @@
   "devDependencies": {
     "@embroider/compat": "^3.0.0",
     "@embroider/webpack": "^3.0.0",
+    "@jest/globals": "^29.5.0",
     "@tsconfig/node16": "^1.0.4",
     "@tsconfig/strictest": "^2.0.1",
     "@types/chalk": "^2.2.0",
