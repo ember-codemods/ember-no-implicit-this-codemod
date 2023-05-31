@@ -9,6 +9,7 @@ import {
   NodeResolution,
   RuntimeResolver,
 } from './helpers/resolver';
+import Runner, { Parser, DetectResult } from './helpers/runner';
 import { setupResolver } from './test-helpers';
 
 process.env['TESTING'] = 'true';
@@ -106,5 +107,73 @@ describe('Resolver', () => {
       expect(resolver.has('ambiguous', 'nope')).toBe(false);
       expect(resolver.has('ambiguous', 'virtual')).toBe(true);
     });
+  });
+});
+
+describe('Parser', () => {
+  test('args parsing', () => {
+    const parse = (...args: string[]) => Parser.exitProcess(false).parseSync(args);
+
+    expect(parse().config).toEqual(undefined);
+    expect(parse('--config=config.json').config).toEqual('config.json');
+    expect(parse('--config', 'config.json').config).toEqual('config.json');
+
+    expect(parse().telemetry).toEqual('auto');
+    expect(parse('--telemetry=auto').telemetry).toEqual('auto');
+    expect(parse('--telemetry', 'auto').telemetry).toEqual('auto');
+    expect(parse('--telemetry=embroider').telemetry).toEqual('embroider');
+    expect(parse('--telemetry', 'embroider').telemetry).toEqual('embroider');
+    expect(parse('--telemetry=runtime').telemetry).toEqual('runtime');
+    expect(parse('--telemetry', 'runtime').telemetry).toEqual('runtime');
+    expect(() => parse('--telemetry', 'zomg')).toThrow('zomg');
+
+    expect(parse().url).toEqual('http://localhost:4200');
+    expect(parse('--url=http://zomg.localhost:8888').url).toEqual('http://zomg.localhost:8888');
+    expect(parse('--url', 'http://zomg.localhost:8888').url).toEqual('http://zomg.localhost:8888');
+  });
+});
+
+describe('Runner', () => {
+  test('telemetry detection', async () => {
+    let runner: Runner;
+
+    const expectRuntime = async (result: DetectResult) =>
+      expect(runner.detectTelemetryType(result)).resolves.toEqual('runtime');
+
+    const expectEmbroider = async (result: DetectResult) =>
+      expect(runner.detectTelemetryType(result)).resolves.toEqual('embroider');
+
+    const expectError = async (result: DetectResult, message: string) =>
+      expect(runner.detectTelemetryType(result)).rejects.toThrow(message);
+
+    runner = Runner.withOptions({ telemetry: 'auto' });
+    await expectEmbroider({ isServerRunning: false, hasStage2Output: true });
+    await expectEmbroider({ isServerRunning: true, hasStage2Output: true });
+    await expectRuntime({ isServerRunning: true, hasStage2Output: false });
+    await expectError({ isServerRunning: false, hasStage2Output: false }, 'Please RTFM FIXME');
+
+    runner = Runner.withOptions({ telemetry: 'embroider' });
+    await expectEmbroider({ isServerRunning: false, hasStage2Output: true });
+    await expectEmbroider({ isServerRunning: true, hasStage2Output: true });
+    await expectError(
+      { isServerRunning: true, hasStage2Output: false },
+      'Please run the thing first FIXME'
+    );
+    await expectError(
+      { isServerRunning: false, hasStage2Output: false },
+      'Please run the thing first FIXME'
+    );
+
+    runner = Runner.withOptions({ telemetry: 'runtime' });
+    await expectError(
+      { isServerRunning: false, hasStage2Output: true },
+      'Please run the server or pass correct URL FIXME'
+    );
+    await expectRuntime({ isServerRunning: true, hasStage2Output: true });
+    await expectRuntime({ isServerRunning: true, hasStage2Output: false });
+    await expectError(
+      { isServerRunning: false, hasStage2Output: false },
+      'Please run the server or pass correct URL FIXME'
+    );
   });
 });

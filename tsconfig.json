@@ -10,7 +10,10 @@
     "baseUrl": ".",
     "paths": {
       "*": ["types/*"]
-    }
+    },
+    "noEmitOnError": false,
+    "allowJs": false,
+    "checkJs": false
   },
   "include": ["transforms/**/*", "test/**/*", "helpers/**/*"],
   "exclude": ["**/__testfixtures__/**/*", "test/fixtures/**/*"]

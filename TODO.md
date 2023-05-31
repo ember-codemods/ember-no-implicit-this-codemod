@@ -17,6 +17,9 @@
 3. ...?
 
 FIXME: Refactor cli.js
+FIXME: optional deps?
+FIXME: rename resolver -> telemetry
+FIXME: move custom helpers into resolver?
 
 FIXME: Clean up logging shenanigans (e.g. console.log/info, debug)
 
