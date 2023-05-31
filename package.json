@@ -23,6 +23,7 @@
     "prepublishOnly": "yarn build",
     "build": "tsc",
     "clean": "tsc --build --clean",
+    "pretest": "yarn build",
     "test": "jest",
     "pretest:integration": "yarn build",
     "test:integration": "ts-node ./test/run-test.ts",

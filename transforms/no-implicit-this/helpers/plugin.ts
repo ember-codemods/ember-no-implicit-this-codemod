@@ -28,53 +28,64 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
     },
   };
 
+  function isAmbiguous(
+    node: AST.PathExpression
+  ): node is AST.PathExpression & { head: AST.VarHead } {
+    const { head } = node;
+
+    // skip this.foo
+    if (head.type === 'ThisHead') {
+      debug(`Skipping \`%s\` because it is already prefixed with \`this.\``, node.original);
+      return false;
+    }
+
+    // skip @foo
+    if (head.type === 'AtHead') {
+      debug(`Skipping \`%s\` because it is already prefixed with \`@\``, node.original);
+      return false;
+    }
+
+    // FIXME: Why special-case this rather than handle it in keywords.ts?
+    // skip `hasBlock` keyword
+    if (node.original === 'hasBlock') {
+      debug(`Skipping \`%s\` because it is a keyword`, node.original);
+      return false;
+    }
+
+    // skip {#foo as |bar|}}{{bar}}{{/foo}}
+    // skip <Foo as |bar|>{{bar}}</Foo>
+    if (scopedParams.includes(head.name)) {
+      debug(`Skipping \`%s\` because it is a scoped variable`, node.original);
+      return false;
+    }
+
+    return true;
+  }
+
   function handleParams(params: AST.Expression[]) {
     for (const param of params) {
-      if (param.type !== 'PathExpression') continue;
-      handlePathExpression(param);
+      if (param.type === 'PathExpression' && isAmbiguous(param)) {
+        handleThisFallback(param);
+      }
     }
   }
 
   function handleHash(hash: AST.Hash) {
     for (const pair of hash.pairs) {
-      if (pair.value.type !== 'PathExpression') continue;
-      handlePathExpression(pair.value);
+      if (pair.value.type === 'PathExpression' && isAmbiguous(pair.value)) {
+        handleThisFallback(pair.value);
+      }
     }
   }
 
-  function handlePathExpression(node: AST.PathExpression) {
-    // skip this.foo
-    if (node.this) {
-      debug(`Skipping \`%s\` because it is already prefixed with \`this.\``, node.original);
-      return;
-    }
-
-    // skip @foo
-    if (node.data) {
-      debug(`Skipping \`%s\` because it is already prefixed with \`@\``, node.original);
-      return;
-    }
-
-    // skip {#foo as |bar|}}{{bar}}{{/foo}}
-    // skip <Foo as |bar|>{{bar}}</Foo>
-    const firstPart = node.parts[0];
-    if (firstPart && scopedParams.includes(firstPart)) {
-      debug(`Skipping \`%s\` because it is a scoped variable`, node.original);
-      return;
-    }
-
-    // skip `hasBlock` keyword
-    if (node.original === 'hasBlock') {
-      debug(`Skipping \`%s\` because it is a keyword`, node.original);
-      return;
-    }
-
+  function handleThisFallback(node: AST.PathExpression) {
     // add `this.` prefix
     debug(`Transforming \`%s\` to \`this.%s\``, node.original, node.original);
     Object.assign(node, b.path(`this.${node.original}`));
   }
 
-  function isHelper(name: string) {
+  function hasHelper(name: string) {
+    // FIXME: Move to resolver
     if (customHelpers.includes(name)) {
       debug(`Skipping \`%s\` because it is a custom configured helper`, name);
       return true;
@@ -89,9 +100,15 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
     return false;
   }
 
-  function isComponent(name: string) {
-    if (resolver.has('component', name)) {
-      const message = `Skipping \`%s\` because it appears to be a component from the telemetry data: %s`;
+  function hasAmbiguous(name: string) {
+    // FIXME: Move to resolver
+    if (customHelpers.includes(name)) {
+      debug(`Skipping \`%s\` because it is a custom configured helper`, name);
+      return true;
+    }
+
+    if (resolver.has('ambiguous', name)) {
+      const message = `Skipping \`%s\` because it appears to be a component or helper from the telemetry data: %s`;
       debug(message, name);
       return true;
     }
@@ -129,8 +146,8 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
       // {{FOO}}
       if (path.type === 'PathExpression' && !hasParams && !hasHashPairs) {
         // {{FOO.bar}}
-        if (path.parts.length > 1) {
-          handlePathExpression(path);
+        if (path.tail.length > 0 && isAmbiguous(path)) {
+          handleThisFallback(path);
           return;
         }
 
@@ -142,13 +159,15 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
           return;
         }
 
-        // skip helpers
-        if (isHelper(path.original)) return;
+        if (isAmbiguous(path)) {
+          if (inAttrNode && hasHelper(path.original)) {
+            return;
+          } else if (!inAttrNode && hasAmbiguous(path.original)) {
+            return;
+          }
 
-        // skip components
-        if (!inAttrNode && isComponent(path.original)) return;
-
-        handlePathExpression(path);
+          handleThisFallback(path);
+        }
       }
     },
 
