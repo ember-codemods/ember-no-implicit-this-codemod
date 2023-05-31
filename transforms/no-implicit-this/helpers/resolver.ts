@@ -70,6 +70,12 @@ const EMBROIDER_COMPONENTS = '#embroider_compat/components';
 const EMBROIDER_HELPERS = '#embroider_compat/helpers';
 const EMBROIDER_AMBIGUOUS = '#embroider_compat/ambiguous';
 
+export type NodeResolution = { type: 'virtual' } | { type: 'real' } | { type: 'not_found' };
+
+export interface HasNodeResolve {
+  nodeResolve(specifier: string, fromFile: string): NodeResolution;
+}
+
 export class EmbroiderResolver extends Resolver {
   static build(): EmbroiderResolver {
     // FIXME: Run build via execa ???
@@ -80,7 +86,7 @@ export class EmbroiderResolver extends Resolver {
     return new EmbroiderResolver(resolver, resolve(stage2Output, 'app.js'));
   }
 
-  constructor(private _resolver: _EmbroiderResolver, private entryPoint: string) {
+  constructor(private _resolver: HasNodeResolve, private entryPoint: string) {
     super();
   }
 

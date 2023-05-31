@@ -16,9 +16,9 @@
 2. Look at second arg to `compatBuild`
 3. ...?
 
-FIXME: Mock resolver in tests + unit test the two resolvers.
-
 FIXME: Refactor cli.js
+
+FIXME: Clean up logging shenanigans (e.g. console.log/info, debug)
 
 FIXME: Figure out how to pass no-babel option to jscodeshift via codemod-cli
 
