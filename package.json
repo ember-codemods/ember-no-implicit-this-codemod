@@ -26,7 +26,7 @@
     "pretest": "yarn build",
     "test": "jest",
     "pretest:integration": "yarn build",
-    "test:integration": "ts-node ./test/run-test.ts",
+    "test:integration": "node ./test/run-test.js",
     "test:integration:embroider": "yarn test:integration --embroider",
     "test:integration:runtime": "yarn test:integration --runtime",
     "update-docs": "codemod-cli update-docs",
@@ -80,7 +80,6 @@
     "prettier": "^2.8.8",
     "release-it": "^14.6.2",
     "release-it-lerna-changelog": "^3.1.0",
-    "ts-node": "^10.9.1",
     "typescript": "~5.0.4",
     "webpack": "^5.84.1"
   },
