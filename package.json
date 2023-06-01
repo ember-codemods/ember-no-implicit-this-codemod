@@ -80,7 +80,6 @@
     "prettier": "^2.8.8",
     "release-it": "^14.6.2",
     "release-it-lerna-changelog": "^3.1.0",
-    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "~5.0.4",
     "webpack": "^5.84.1"
@@ -90,9 +89,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "preset": "ts-jest",
     "testMatch": [
-      "<rootDir>/transforms/**/test.{js,ts}"
+      "<rootDir>/transforms/**/test.js"
     ]
   },
   "publishConfig": {
