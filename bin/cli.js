@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const Runner = require('../transforms/no-implicit-this/helpers/runner').default;
+const { Runner } = require('../transforms/no-implicit-this/helpers/options');
 
 const args = process.argv.slice(2);
 

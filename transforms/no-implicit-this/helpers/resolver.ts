@@ -6,8 +6,14 @@ import { resolve } from 'node:path';
 import { isKeyword } from './keywords';
 
 export default abstract class Resolver {
+  constructor(protected customHelpers: string[]) {}
+
   has(type: 'component' | 'helper' | 'ambiguous', name: string): boolean {
     if (isKeyword(type, name)) {
+      return true;
+    }
+    // FIXME: Probably should split into `knownHelpers` and `knownComponents`???
+    if (this.customHelpers.includes(name)) {
       return true;
     }
     switch (type) {
@@ -29,14 +35,14 @@ export default abstract class Resolver {
 }
 
 export class RuntimeResolver extends Resolver {
-  static build(): RuntimeResolver {
+  static build(customHelpers: string[] = []): RuntimeResolver {
     const telemetry = getTelemetry();
     const [components, helpers] = populateInvokeables(telemetry);
-    return new RuntimeResolver(components, helpers);
+    return new RuntimeResolver(customHelpers, components, helpers);
   }
 
-  constructor(private components: string[], private helpers: string[]) {
-    super();
+  constructor(customHelpers: string[], private components: string[], private helpers: string[]) {
+    super(customHelpers);
   }
 
   hasComponent(name: string): boolean {
@@ -77,17 +83,21 @@ export interface HasNodeResolve {
 }
 
 export class EmbroiderResolver extends Resolver {
-  static build(): EmbroiderResolver {
+  static build(customHelpers: string[] = []): EmbroiderResolver {
     // FIXME: Run build via execa ???
     const stage2Output = readFileSync('dist/.stage2-output', 'utf8');
     const resolver = new _EmbroiderResolver(
       JSON.parse(readFileSync(resolve(stage2Output, '.embroider/resolver.json'), 'utf8'))
     );
-    return new EmbroiderResolver(resolver, resolve(stage2Output, 'app.js'));
+    return new EmbroiderResolver(customHelpers, resolver, resolve(stage2Output, 'app.js'));
   }
 
-  constructor(private _resolver: HasNodeResolve, private entryPoint: string) {
-    super();
+  constructor(
+    customHelpers: string[],
+    private _resolver: HasNodeResolve,
+    private entryPoint: string
+  ) {
+    super(customHelpers);
   }
 
   override hasComponent(name: string): boolean {
@@ -126,12 +136,12 @@ export class MockResolver extends Resolver {
     this.helpers = helpers;
   }
 
-  static build(): MockResolver {
-    return new MockResolver(this.components, this.helpers);
+  static build(customHelpers: string[] = []): MockResolver {
+    return new MockResolver(customHelpers, this.components, this.helpers);
   }
 
-  constructor(private components: string[], private helpers: string[]) {
-    super();
+  constructor(customHelpers: string[], private components: string[], private helpers: string[]) {
+    super(customHelpers);
   }
 
   hasComponent(name: string): boolean {

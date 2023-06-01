@@ -16,10 +16,7 @@
 2. Look at second arg to `compatBuild`
 3. ...?
 
-FIXME: Refactor cli.js
-FIXME: optional deps?
-FIXME: rename resolver -> telemetry
-FIXME: move custom helpers into resolver?
+FIXME: rename resolver -> telemetry ???
 
 FIXME: Clean up logging shenanigans (e.g. console.log/info, debug)
 

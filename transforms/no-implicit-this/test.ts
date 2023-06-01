@@ -3,13 +3,13 @@
 import { describe, expect, test } from '@jest/globals';
 import { runTransformTest } from 'codemod-cli';
 import { setTelemetry } from 'ember-codemods-telemetry-helpers';
+import { DetectResult, Parser, Runner } from './helpers/options';
 import {
   EmbroiderResolver,
   HasNodeResolve,
   NodeResolution,
   RuntimeResolver,
 } from './helpers/resolver';
-import Runner, { Parser, DetectResult } from './helpers/runner';
 import { setupResolver } from './test-helpers';
 
 process.env['TESTING'] = 'true';
@@ -89,7 +89,7 @@ describe('Resolver', () => {
         }
       }
 
-      const resolver = new EmbroiderResolver(new mockNodeResolver(), entryPoint);
+      const resolver = new EmbroiderResolver([], new mockNodeResolver(), entryPoint);
 
       expect(resolver.has('component', 'gherkyn')).toBe(true);
       expect(resolver.has('component', 'welcome-page')).toBe(true);
@@ -137,14 +137,17 @@ describe('Runner', () => {
   test('telemetry detection', async () => {
     let runner: Runner;
 
-    const expectRuntime = async (result: DetectResult) =>
-      expect(runner.detectTelemetryType(result)).resolves.toEqual('runtime');
+    const detect = async (result: Omit<DetectResult, 'hasTelemetryOutput'>) =>
+      runner.detectTelemetryType({ ...result, hasTelemetryOutput: false });
 
-    const expectEmbroider = async (result: DetectResult) =>
-      expect(runner.detectTelemetryType(result)).resolves.toEqual('embroider');
+    const expectRuntime = async (result: Omit<DetectResult, 'hasTelemetryOutput'>) =>
+      expect(detect(result)).resolves.toEqual('runtime');
 
-    const expectError = async (result: DetectResult, message: string) =>
-      expect(runner.detectTelemetryType(result)).rejects.toThrow(message);
+    const expectEmbroider = async (result: Omit<DetectResult, 'hasTelemetryOutput'>) =>
+      expect(detect(result)).resolves.toEqual('embroider');
+
+    const expectError = async (result: Omit<DetectResult, 'hasTelemetryOutput'>, message: string) =>
+      expect(detect(result)).rejects.toThrow(message);
 
     runner = Runner.withOptions({ telemetry: 'auto' });
     await expectEmbroider({ isServerRunning: false, hasStage2Output: true });

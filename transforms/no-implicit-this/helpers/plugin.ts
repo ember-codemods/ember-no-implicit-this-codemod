@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import { AST, builders as b, traverse } from 'ember-template-recast';
-import { Options } from './options';
+import Resolver from './resolver';
 
 const debug = Debug('ember-no-implicit-this-codemod:plugin');
 
@@ -11,7 +11,7 @@ const debug = Debug('ember-no-implicit-this-codemod:plugin');
 /**
  * plugin entrypoint
  */
-export default function transform(root: AST.Node, { customHelpers, resolver }: Options) {
+export default function transform(root: AST.Node, resolver: Resolver) {
   const scopedParams: string[] = [];
 
   const paramTracker = {
@@ -85,12 +85,6 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
   }
 
   function hasHelper(name: string) {
-    // FIXME: Move to resolver
-    if (customHelpers.includes(name)) {
-      debug(`Skipping \`%s\` because it is a custom configured helper`, name);
-      return true;
-    }
-
     if (resolver.has('helper', name)) {
       const message = `Skipping \`%s\` because it appears to be a helper from the telemetry data: %s`;
       debug(message, name);
@@ -101,12 +95,6 @@ export default function transform(root: AST.Node, { customHelpers, resolver }: O
   }
 
   function hasAmbiguous(name: string) {
-    // FIXME: Move to resolver
-    if (customHelpers.includes(name)) {
-      debug(`Skipping \`%s\` because it is a custom configured helper`, name);
-      return true;
-    }
-
     if (resolver.has('ambiguous', name)) {
       const message = `Skipping \`%s\` because it appears to be a component or helper from the telemetry data: %s`;
       debug(message, name);

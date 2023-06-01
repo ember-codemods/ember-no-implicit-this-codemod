@@ -2,8 +2,9 @@ import Debug from 'debug';
 import { parse, print } from 'ember-template-recast';
 import { API, FileInfo, Transform } from 'jscodeshift';
 import path from 'node:path';
-import { Options, getOptions } from './helpers/options';
+import { Runner } from './helpers/options';
 import transform from './helpers/plugin';
+import Resolver from './helpers/resolver';
 import { isEmberTemplate } from './helpers/tagged-templates';
 
 const debug = Debug('ember-no-implicit-this-codemod:transform');
@@ -13,12 +14,12 @@ const debug = Debug('ember-no-implicit-this-codemod:transform');
  * returns the rewritten template contents with `this` references inserted where
  * necessary.
  */
-function rewriteTemplate(path: string, source: string, options: Options): string {
+function rewriteTemplate(path: string, source: string, resolver: Resolver): string {
   debug('Parsing %s ...', path);
   const root = parse(source);
 
   debug('Transforming %s ...', path);
-  transform(root, options);
+  transform(root, resolver);
 
   debug('Generating new content for %s ...', path);
   return print(root);
@@ -29,7 +30,11 @@ function rewriteTemplate(path: string, source: string, options: Options): string
  * returns updated source with those templates rewritten to include `this`
  * references where needed.
  */
-function rewriteEmbeddedTemplates(file: FileInfo, options: Options, { jscodeshift }: API): string {
+function rewriteEmbeddedTemplates(
+  file: FileInfo,
+  resolver: Resolver,
+  { jscodeshift }: API
+): string {
   return (
     jscodeshift(file.source)
       // @ts-expect-error FIXME: UGH
@@ -38,7 +43,7 @@ function rewriteEmbeddedTemplates(file: FileInfo, options: Options, { jscodeshif
         if (isEmberTemplate(path)) {
           // @ts-expect-error FIXME: UGH
           const { value } = path.node.quasi.quasis[0];
-          value.raw = rewriteTemplate(file.path, value.raw, options);
+          value.raw = rewriteTemplate(file.path, value.raw, resolver);
         }
       })
       .toSource()
@@ -56,11 +61,12 @@ function rewriteEmbeddedTemplates(file: FileInfo, options: Options, { jscodeshif
  */
 const transformer: Transform = function transformer(file, api) {
   const extension = path.extname(file.path).toLowerCase();
-  const options = getOptions();
+  const runner = Runner.fromCodemodOptions();
+  const resolver = runner.buildResolver();
   if (extension === '.hbs') {
-    return rewriteTemplate(file.path, file.source, options);
+    return rewriteTemplate(file.path, file.source, resolver);
   } else if (extension === '.js' || extension === '.ts') {
-    return rewriteEmbeddedTemplates(file, options, api);
+    return rewriteEmbeddedTemplates(file, resolver, api);
   } else {
     debug('Skipping %s because it does not match a known extension with templates', file.path);
     return;

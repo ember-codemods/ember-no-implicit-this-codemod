@@ -3,6 +3,8 @@ export function isRecord<R extends Record<string, unknown>>(value: unknown): val
   return value !== null && typeof value === 'object';
 }
 
-export function assert(message: string, cond: unknown): asserts cond {
+export function assert(message: string): never;
+export function assert(message: string, cond: unknown): asserts cond;
+export function assert(message: string, cond?: unknown): asserts cond {
   if (!cond) throw new Error(message);
 }
