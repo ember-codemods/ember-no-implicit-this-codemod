@@ -2,15 +2,10 @@ import { getTelemetry as getRawTelemetry } from 'ember-codemods-telemetry-helper
 import { z } from 'zod';
 
 const RuntimeData = z.object({
-  type: z.string().optional(),
-  computedProperties: z.array(z.string()).default([]),
-  offProperties: z.record(z.array(z.string())).default({}),
-  overriddenActions: z.array(z.string()).default([]),
-  overriddenProperties: z.array(z.string()).default([]),
-  unobservedProperties: z.record(z.array(z.string())).default({}),
+  type: z.union([z.literal('Component'), z.literal('Helper')]),
 });
 
-type RuntimeData = z.infer<typeof RuntimeData>;
+export type RuntimeData = z.infer<typeof RuntimeData>;
 
 export const Telemetry = z.record(RuntimeData);
 

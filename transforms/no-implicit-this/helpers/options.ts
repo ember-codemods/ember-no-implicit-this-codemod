@@ -1,10 +1,6 @@
 import { getOptions as getCodemodOptions, runTransform } from 'codemod-cli';
 import Debug from 'debug';
-import {
-  analyzeEmberObject,
-  gatherTelemetryForUrl,
-  getTelemetry,
-} from 'ember-codemods-telemetry-helpers';
+import { gatherTelemetryForUrl, getTelemetry } from 'ember-codemods-telemetry-helpers';
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -12,6 +8,7 @@ import yargs from 'yargs';
 import { ZodError, ZodType, z } from 'zod';
 import { assert } from '../../../helpers/types';
 import Resolver, { EmbroiderResolver, MockResolver, RuntimeResolver } from './resolver';
+import { RuntimeData } from './telemetry';
 
 const debug = Debug('ember-no-implicit-this-codemod');
 
@@ -128,7 +125,17 @@ export class Runner {
 
     if (telemetryType === 'runtime') {
       debug('Gathering telemetry data from %s ...', this.options.url);
-      await gatherTelemetryForUrl(this.options.url, analyzeEmberObject);
+      await gatherTelemetryForUrl(
+        this.options.url,
+        (_module: unknown, modulePath: string): RuntimeData | void => {
+          // FIXME: Don't hardcode app name
+          if (modulePath.startsWith('pyckle/helpers/')) {
+            return { type: 'Helper' };
+          } else if (modulePath.startsWith('pyckle/components/')) {
+            return { type: 'Component' };
+          }
+        }
+      );
 
       const telemetry = getTelemetry() as Record<string, unknown>; // FIXME
       debug('Gathered telemetry on %d modules', Object.keys(telemetry).length);
