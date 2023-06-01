@@ -1,7 +1,5 @@
 {
-  // TODO: Can use an array once ts-node is updated with https://github.com/TypeStrong/ts-node/pull/1958
-  // "extends": ["@tsconfig/node16/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
-  "extends": "./tsconfig.node16-strictest.json",
+  "extends": ["@tsconfig/node16/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
   "compilerOptions": {
     "sourceMap": true,
     "resolveJsonModule": true,
