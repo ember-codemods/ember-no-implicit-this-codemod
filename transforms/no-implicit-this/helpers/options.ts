@@ -127,14 +127,14 @@ export class Runner {
       debug('Gathering telemetry data from %s ...', this.options.url);
       await gatherTelemetryForUrl(
         this.options.url,
-        (_module: unknown, modulePath: string): RuntimeData | void => {
-          // FIXME: Don't hardcode app name
-          if (modulePath.startsWith('pyckle/helpers/')) {
+        (_module: unknown, modulePath: string, appModulePrefix: string): RuntimeData | void => {
+          if (modulePath.startsWith(`${appModulePrefix}/helpers/`)) {
             return { type: 'Helper' };
-          } else if (modulePath.startsWith('pyckle/components/')) {
+          } else if (modulePath.startsWith(`${appModulePrefix}/components/`)) {
             return { type: 'Component' };
           }
-        }
+        },
+        'pyckle' // FIXME: Don't hardcode
       );
 
       const telemetry = getTelemetry() as Record<string, unknown>; // FIXME
