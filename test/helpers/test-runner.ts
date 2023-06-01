@@ -27,15 +27,11 @@ export class TestRunner {
   }
 
   async runCodemodRuntime() {
-    await execa(
-      '../../../../bin/cli.js',
-      ['http://localhost:4200', 'app', '--telemetry=runtime'],
-      this.execOpts
-    );
+    await execa('../../../../bin/cli.js', ['--root=app', '--telemetry=runtime'], this.execOpts);
   }
 
   async runCodemodEmbroider() {
-    await execa('../../../../bin/cli.js', ['app', '--telemetry=embroider'], this.execOpts);
+    await execa('../../../../bin/cli.js', ['--root=app', '--telemetry=embroider'], this.execOpts);
   }
 
   async runEmbroiderStage2Build(): Promise<void> {

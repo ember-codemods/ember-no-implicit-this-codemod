@@ -13,12 +13,18 @@ import { assert, isRecord } from '../../../helpers/types';
 const debug = Debug('ember-no-implicit-this-codemod');
 
 export interface Options {
+  root: string;
   config: string | undefined;
   telemetry: 'auto' | 'embroider' | 'runtime';
   url: string;
 }
 
 export const Parser = yargs
+  .option('root', {
+    describe: 'app root FIXME',
+    default: 'app',
+    normalize: true,
+  })
   .option('config', {
     describe: 'Path to config file FIXME',
     normalize: true,
@@ -64,6 +70,7 @@ export default class Runner {
 
   static withOptions(options: Partial<Options> = {}): Runner {
     return new Runner({
+      root: 'app',
       config: undefined,
       telemetry: 'auto',
       url: 'http://localhost:4200',
@@ -113,7 +120,7 @@ export default class Runner {
     }
   }
 
-  async run(): Promise<void> {
+  async run(root: string, args: string[]): Promise<void> {
     const telemetryType = await this.detectTelemetryType();
 
     if (telemetryType === 'runtime') {
@@ -124,7 +131,7 @@ export default class Runner {
       debug('Gathered telemetry on %d modules', Object.keys(telemetry).length);
     }
 
-    runTransform(__dirname, 'no-implicit-this', process.argv, 'hbs');
+    runTransform(root, 'no-implicit-this', [this.options.root, ...args], 'hbs');
   }
 
   private async detect(): Promise<DetectResult> {
