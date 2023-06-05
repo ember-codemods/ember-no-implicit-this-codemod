@@ -1,4 +1,18 @@
-const KNOWN_HELPERS = [
+import Debug from 'debug';
+
+const debug = Debug('ember-no-implicit-this-codemod:keywords');
+
+// FIXME: Check keywords based on type. E.g. some can only be used in component vs helper position.
+export function isKeyword(_type: 'component' | 'helper' | 'ambiguous', name: string): boolean {
+  if (KNOWN_KEYWORDS.includes(name)) {
+    debug(`Skipping \`%s\` because it is a known helper`, name);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const KNOWN_KEYWORDS = [
   // Ember.js
   'action',
   'array',
@@ -39,5 +53,3 @@ const KNOWN_HELPERS = [
   'render-inverse', // glimmer blocks
   '-get-dynamic-var', // glimmer internal helper
 ];
-
-module.exports = KNOWN_HELPERS;

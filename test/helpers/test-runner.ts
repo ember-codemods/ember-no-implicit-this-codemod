@@ -1,6 +1,7 @@
-import path from 'path';
 import execa, { CommonOptions } from 'execa';
-import { log, timeoutAfter, kill, error } from './utils';
+import path from 'node:path';
+import { kill, timeoutAfter } from './utils';
+import { isRecord } from '../../helpers/types';
 
 const devServerTimeout = 60000;
 
@@ -25,8 +26,33 @@ export class TestRunner {
     await execa('yarn', ['install'], { cwd: this.inputDir });
   }
 
-  async runCodemod() {
-    await execa('../../../../bin/cli.js', ['http://localhost:4200', 'app'], this.execOpts);
+  async runCodemodRuntime() {
+    await execa('../../../../bin/cli.js', ['--root=app', '--telemetry=runtime'], this.execOpts);
+  }
+
+  async runCodemodEmbroider() {
+    await execa('../../../../bin/cli.js', ['--root=app', '--telemetry=embroider'], this.execOpts);
+  }
+
+  async runEmbroiderStage2Build(): Promise<void> {
+    const process = await execa('yarn', ['ember', 'build'], {
+      cwd: this.inputDir,
+      env: {
+        STAGE2_ONLY: 'true',
+      },
+    });
+
+    if (process.exitCode !== 0) {
+      const output = [
+        `Build failed: STAGE2_ONLY=true yarn ember build exited with ${process.exitCode}\n`,
+        `=== STDOUT ===\n`,
+        process.stdout || '(EMPTY)',
+        `=== STDERR ===\n`,
+        process.stderr || '(EMPTY)',
+      ];
+
+      throw new Error(output.join('\n'));
+    }
   }
 
   async startEmber(): Promise<void> {
@@ -37,13 +63,13 @@ export class TestRunner {
       },
     });
 
-    if (process.env.DEBUG) {
-      emberServe.stdout.pipe(process.stdout);
-      emberServe.stderr.pipe(process.stderr);
+    if (process.env['DEBUG']) {
+      emberServe.stdout?.pipe(process.stdout);
+      emberServe.stderr?.pipe(process.stderr);
     }
 
-    const serverWaiter = new Promise(resolve => {
-      emberServe.stdout.on('data', data => {
+    const serverWaiter = new Promise<void>((resolve) => {
+      emberServe.stdout?.on('data', (data) => {
         if (data.toString().includes('Build successful')) {
           resolve();
         }
@@ -61,7 +87,10 @@ export class TestRunner {
   }
 
   async stopEmber(): Promise<void> {
-    await timeoutAfter(devServerTimeout, kill(this.emberProcess));
+    const { emberProcess } = this;
+    if (emberProcess) {
+      await timeoutAfter(devServerTimeout, kill(emberProcess));
+    }
   }
 
   async compare() {
@@ -71,7 +100,7 @@ export class TestRunner {
 
       await execa('diff', ['-rq', actual, expectedApp], { cwd: this.inputDir, stdio: 'inherit' });
     } catch (e) {
-      console.log(e.stdout);
+      console.log(isRecord(e) ? e['stdout'] : 'codemod did not run successfully');
 
       throw new Error('codemod did not run successfully');
     }

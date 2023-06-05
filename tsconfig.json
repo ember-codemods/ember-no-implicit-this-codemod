@@ -1,17 +1,18 @@
 {
+  "extends": ["@tsconfig/node16/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist",
+    "resolveJsonModule": true,
+    "allowArbitraryExtensions": true,
+    // FIXME: "skipLibCheck": false,
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*", "types/*"]
-    }
+      "*": ["types/*"]
+    },
+    "noEmitOnError": false,
+    "allowJs": false,
+    "checkJs": false
   },
-  "include": ["test/**/*"]
+  "include": ["transforms/**/*", "test/**/*", "helpers/**/*"],
+  "exclude": ["**/__testfixtures__/**/*", "test/fixtures/**/*"]
 }
