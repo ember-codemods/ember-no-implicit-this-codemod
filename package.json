@@ -56,6 +56,9 @@
     "ts-node": "^8.10.2",
     "typescript": "~3.9.7"
   },
+  "resolutions": {
+    "puppeteer": "13.5.1"
+  },
   "engines": {
     "node": "8.* || 10.* || >= 12"
   },
