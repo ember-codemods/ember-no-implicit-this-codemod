@@ -2,34 +2,39 @@
   "name": "ember-no-implicit-this-codemod",
   "version": "2.1.0",
   "description": "Codemods for transforming variable usage to be prefixed with `this`, when appropriate",
-  "license": "MIT",
+  "keywords": [
+    "codemod-cli"
+  ],
+  "homepage": "https://github.com/ember-codemods/ember-no-implicit-this-codemod#readme",
+  "bugs": {
+    "url": "https://github.com/ember-codemods/ember-no-implicit-this-codemod"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ember-codemods/ember-no-implicit-this-codemod"
   },
-  "bugs": {
-    "url": "https://github.com/ember-codemods/ember-no-implicit-this-codemod"
-  },
-  "homepage": "https://github.com/ember-codemods/ember-no-implicit-this-codemod#readme",
+  "license": "MIT",
   "author": "",
-  "scripts": {
-    "release": "release-it",
-    "test": "jest",
-    "test:integration": "ts-node ./test/run-test.ts",
-    "update-docs": "codemod-cli update-docs",
-    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
-    "lint:js": "eslint .",
-    "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
-    "debug:codemod:not-working": "node --inspect-brk ./bin/cli",
-    "codemod": "jscodeshift -t ./transforms/no-implicit-this/index.js --extensions js,ts,hbs --run-in-band",
-    "debug:codemod": "node --inspect-brk node_modules/jscodeshift/bin/jscodeshift.js -t ./transforms/no-implicit-this/index.js --run-in-band --extensions js,ts,hbs "
-  },
   "bin": {
     "ember-no-implicit-this-codemod": "./bin/cli.js"
   },
-  "keywords": [
-    "codemod-cli"
-  ],
+  "scripts": {
+    "codemod": "jscodeshift -t ./transforms/no-implicit-this/index.js --extensions js,ts,hbs --run-in-band",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
+    "debug:codemod": "node --inspect-brk node_modules/jscodeshift/bin/jscodeshift.js -t ./transforms/no-implicit-this/index.js --run-in-band --extensions js,ts,hbs ",
+    "debug:codemod:not-working": "node --inspect-brk ./bin/cli",
+    "debug:telemetry": "node --inspect-brk ./bin/telemetry.js",
+    "lint:js": "eslint .",
+    "test": "jest",
+    "test:integration": "ts-node ./test/run-test.ts",
+    "update-docs": "codemod-cli update-docs"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/transforms/**/test.js"
+    ]
+  },
   "dependencies": {
     "codemod-cli": "^2.1.0",
     "debug": "^4.1.1",
@@ -52,37 +57,11 @@
     "execa": "^3.4.0",
     "jest": "^26.6.3",
     "prettier": "^1.19.1",
-    "release-it": "^14.6.2",
-    "release-it-lerna-changelog": "^3.1.0",
+    "release-plan": "^0.6.0",
     "ts-node": "^8.10.2",
     "typescript": "~3.9.7"
   },
   "engines": {
     "node": "16.* || 18.* || >= 20"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testMatch": [
-      "<rootDir>/transforms/**/test.js"
-    ]
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "release-it": {
-    "hooks": {
-      "before:release": "yarn update-docs"
-    },
-    "plugins": {
-      "release-it-lerna-changelog": {
-        "infile": "CHANGELOG.md"
-      }
-    },
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true
-    }
   }
 }

@@ -1,3 +1,5 @@
+# Changelog
+
 ## v2.1.0 (2022-01-11)
 
 #### :rocket: Enhancement
