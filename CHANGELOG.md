@@ -1,4 +1,26 @@
 # Changelog
+## Release (2024-01-19)
+
+ember-no-implicit-this-codemod 3.0.0 (major)
+
+#### :boom: Breaking Change
+* `ember-no-implicit-this-codemod`
+  * [#405](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/405) drop support for Node < 16 ([@mansona](https://github.com/mansona))
+
+#### :rocket: Enhancement
+* `ember-no-implicit-this-codemod`
+  * [#400](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/400) Update ember-codemods-telemetry-helpers for Mac M support ([@Mikek2252](https://github.com/Mikek2252))
+
+#### :house: Internal
+* `ember-no-implicit-this-codemod`
+  * [#418](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/418) Typescript ([@mansona](https://github.com/mansona))
+  * [#416](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/416) setup release-plan ([@mansona](https://github.com/mansona))
+  * [#401](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/401) swap to pnpm ([@mansona](https://github.com/mansona))
+  * [#409](https://github.com/ember-codemods/ember-no-implicit-this-codemod/pull/409) add grouping to dependabot config ([@mansona](https://github.com/mansona))
+
+#### Committers: 2
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Michael Kerr ([@Mikek2252](https://github.com/Mikek2252))
 
 ## v2.1.0 (2022-01-11)
 
