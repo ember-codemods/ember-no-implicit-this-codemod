@@ -1,4 +1,4 @@
-import { ASTNode } from 'ast-types';
+import type { ASTNode } from 'ast-types';
 import { NodePath } from 'ast-types/lib/node-path';
 
 const TEMPLATE_TAG_IMPORTS = [

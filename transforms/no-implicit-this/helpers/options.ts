@@ -1,7 +1,7 @@
 import { getOptions as getCLIOptions } from 'codemod-cli';
 import fs from 'node:fs';
 import path from 'node:path';
-import { ZodError, ZodType, z } from 'zod';
+import { type ZodError, type ZodType, z } from 'zod';
 import { Telemetry, getTelemetry } from './telemetry';
 
 export interface Options {

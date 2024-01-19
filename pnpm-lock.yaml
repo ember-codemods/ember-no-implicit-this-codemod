@@ -5,12 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@babel/core':
-    specifier: ^7.21.8
-    version: 7.23.7
-  '@babel/preset-env':
-    specifier: ^7.21.5
-    version: 7.23.8(@babel/core@7.23.7)
+  '@babel/parser':
+    specifier: ^7.23.6
+    version: 7.23.6
   codemod-cli:
     specifier: ^3.2.0
     version: 3.2.0(@babel/preset-env@7.23.8)
@@ -23,6 +20,9 @@ dependencies:
   ember-template-recast:
     specifier: ^6.1.4
     version: 6.1.4
+  zod:
+    specifier: ^3.22.4
+    version: 3.22.4
 
 devDependencies:
   '@tsconfig/node16':
@@ -31,6 +31,9 @@ devDependencies:
   '@tsconfig/strictest':
     specifier: ^2.0.1
     version: 2.0.2
+  '@types/babel__core':
+    specifier: ^7.20.5
+    version: 7.20.5
   '@types/chalk':
     specifier: ^2.2.0
     version: 2.2.0
@@ -52,6 +55,9 @@ devDependencies:
   '@typescript-eslint/parser':
     specifier: ^5.59.7
     version: 5.62.0(eslint@6.8.0)(typescript@5.0.4)
+  ast-types:
+    specifier: ^0.14.2
+    version: 0.14.2
   babel-plugin-htmlbars-inline-precompile:
     specifier: ^3.0.1
     version: 3.2.0
@@ -7221,3 +7227,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: false
