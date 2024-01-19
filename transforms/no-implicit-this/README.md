@@ -28,6 +28,9 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 * [handlebars-with-wall-street-syntax](#handlebars-with-wall-street-syntax)
 * [handlebars-without-params](#handlebars-without-params)
 * [has-block](#has-block)
+* [paths](#paths)
+* [tagged-templates-js](#tagged-templates-js)
+* [tagged-templates-ts](#tagged-templates-ts)
 * [void-elements](#void-elements)
 <!--FIXTURES_TOC_END-->
 
@@ -423,6 +426,112 @@ ember-no-implicit-this-codemod no-implicit-this path/of/files/ or/some**/*glob.j
 {{#if (has-block "main")}}block{{/if}}
 {{if (has-block-params "main") "block"}}
 {{#if (has-block-params "main")}}block{{/if}}
+
+```
+---
+<a id="paths">**paths**</a>
+
+**Input** (<small>[paths.input.hbs](transforms/no-implicit-this/__testfixtures__/paths.input.hbs)</small>):
+```hbs
+{{foo-bar-baz}}
+{{baz}}
+
+```
+
+**Output** (<small>[paths.output.hbs](transforms/no-implicit-this/__testfixtures__/paths.output.hbs)</small>):
+```hbs
+{{foo-bar-baz}}
+{{this.baz}}
+
+```
+---
+<a id="tagged-templates-js">**tagged-templates-js**</a>
+
+**Input** (<small>[tagged-templates-js.input.js](transforms/no-implicit-this/__testfixtures__/tagged-templates-js.input.js)</small>):
+```js
+import { hbs as echHBS } from 'ember-cli-htmlbars';
+import hipHBS from 'htmlbars-inline-precompile';
+import echipHBS from 'ember-cli-htmlbars-inline-precompile';
+import { hbs } from 'unknown-tag-source';
+
+echHBS`
+  Hello,
+    {{target}}!
+  \n
+`;
+
+hipHBS`Hello, {{target}}!`;
+
+echipHBS`Hello, {{target}}!`;
+
+hbs`Hello, {{target}}!`;
+
+```
+
+**Output** (<small>[tagged-templates-js.output.js](transforms/no-implicit-this/__testfixtures__/tagged-templates-js.output.js)</small>):
+```js
+import { hbs as echHBS } from 'ember-cli-htmlbars';
+import hipHBS from 'htmlbars-inline-precompile';
+import echipHBS from 'ember-cli-htmlbars-inline-precompile';
+import { hbs } from 'unknown-tag-source';
+
+echHBS`
+  Hello,
+    {{this.target}}!
+  \n
+`;
+
+hipHBS`Hello, {{this.target}}!`;
+
+echipHBS`Hello, {{this.target}}!`;
+
+hbs`Hello, {{target}}!`;
+
+```
+---
+<a id="tagged-templates-ts">**tagged-templates-ts**</a>
+
+**Input** (<small>[tagged-templates-ts.input.ts](transforms/no-implicit-this/__testfixtures__/tagged-templates-ts.input.ts)</small>):
+```ts
+import { hbs as echHBS } from 'ember-cli-htmlbars';
+import hipHBS from 'htmlbars-inline-precompile';
+import echipHBS from 'ember-cli-htmlbars-inline-precompile';
+
+declare const hbs: unknown;
+
+echHBS`
+  Hello,
+    {{target}}!
+  \n
+`;
+
+hipHBS`Hello, {{target}}!`;
+
+echipHBS`Hello, {{target}}!`;
+
+hbs`Hello, {{target}}!`;
+
+```
+
+**Output** (<small>[tagged-templates-ts.output.ts](transforms/no-implicit-this/__testfixtures__/tagged-templates-ts.output.ts)</small>):
+```ts
+import { hbs as echHBS } from 'ember-cli-htmlbars';
+import hipHBS from 'htmlbars-inline-precompile';
+import echipHBS from 'ember-cli-htmlbars-inline-precompile';
+
+declare const hbs: unknown;
+
+echHBS`
+  Hello,
+    {{this.target}}!
+  \n
+`;
+
+hipHBS`Hello, {{this.target}}!`;
+
+echipHBS`Hello, {{this.target}}!`;
+
+hbs`Hello, {{target}}!`;
 
 ```
 ---
