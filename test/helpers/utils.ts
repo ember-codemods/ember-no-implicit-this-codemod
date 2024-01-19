@@ -1,11 +1,12 @@
 import chalk from 'chalk';
 import execa from 'execa';
+import { isRecord } from '../../helpers/types';
 
-export function log(msg: string): void {
+export function log(msg: unknown): void {
   console.log(chalk.yellowBright(msg));
 }
 
-export function error(msg: string): void {
+export function error(msg: unknown): void {
   console.error(chalk.redBright(msg));
 }
 
@@ -20,8 +21,8 @@ export function timeoutAfter<T>(ms: number, promise: Promise<T>) {
   return Promise.race([promise, timeout]);
 }
 
-export async function kill(subprocess: execa.ExecaChildProcess) {
-  if (!subprocess) {
+export async function kill(subprocess: execa.ExecaChildProcess): Promise<void> {
+  if (!subprocess || !subprocess.pid) {
     throw new Error('Cannot kill non-running process');
   }
 
@@ -32,7 +33,7 @@ export async function kill(subprocess: execa.ExecaChildProcess) {
   } catch (e) {
     console.log(`PID ${subprocess.pid} has stopped.`);
     console.log(`\tKilled: ${subprocess.killed}`);
-    console.log(`\tCancelled: ${e.isCanceled}`);
+    console.log(`\tCancelled: ${isRecord(e) ? e['isCanceled']: 'unknown'}`);
   }
 
   return new Promise(resolve => {

@@ -7,8 +7,8 @@ import { runTestIntegrationSequence } from './helpers/sequence';
 
 const allVersions = ['3.10', '3.13'];
 
-(async () => {
-  const emberVersion = process.env.EMBER_VERSION;
+(async (): Promise<void> => {
+  const emberVersion = process.env['EMBER_VERSION'];
 
   if (!emberVersion) {
     console.error(`No EMBER_VERSION set. No scenarios to run.`);
@@ -23,7 +23,7 @@ const allVersions = ['3.10', '3.13'];
   let didSucceed = false;
 
   try {
-    process.env.DEBUG = 'true'; // hacks for now
+    process.env['DEBUG'] = 'true'; // hacks for now
     await runTestIntegrationSequence(emberVersion);
     didSucceed = true;
   } catch (e) {
@@ -31,7 +31,7 @@ const allVersions = ['3.10', '3.13'];
 
     didSucceed = false;
   } finally {
-    // TOOD: if there were any changes to the fixtures directories, revert them
+    // TODO: if there were any changes to the fixtures directories, revert them
     try {
       // const fixturePath = path.join(process.cwd(), 'test', 'fixtures', emberVersion);
       // await execa(`git checkout -- .`, { cwd: fixturePath });
@@ -44,4 +44,7 @@ const allVersions = ['3.10', '3.13'];
   }
 
   process.exit(didSucceed ? 0 : 1);
-})();
+})().catch(e => {
+  console.error(e);
+  process.exit(1);
+});

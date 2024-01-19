@@ -23,4 +23,5 @@ export async function runTestIntegrationSequence(version: string) {
 
   log(`Comparing Results`);
   await runner.compare();
+  log(`Success`);
 }

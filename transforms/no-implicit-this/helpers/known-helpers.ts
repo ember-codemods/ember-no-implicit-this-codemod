@@ -40,4 +40,4 @@ const KNOWN_HELPERS = [
   '-get-dynamic-var', // glimmer internal helper
 ];
 
-module.exports = KNOWN_HELPERS;
+export default KNOWN_HELPERS;
