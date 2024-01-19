@@ -13,15 +13,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
     - uses: actions/setup-node@v1
       with:
         node-version: '16.x'
     - name: Install
-      run: yarn install
+      run: pnpm install
     - name: Linting
-      run: yarn lint:js
+      run: pnpm lint:js
     - name: Test
-      run: yarn test --coverage
+      run: pnpm run test --coverage
 
   integration_tests:
     name: Integration Tests
@@ -33,12 +36,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
     - uses: actions/setup-node@v1
       with:
         node-version: '16.x'
     - name: Install
-      run: yarn install
+      run: pnpm install
     - name: Test
       env:
         EMBER_VERSION: ${{ matrix.ember_version }}
-      run: yarn test:integration
+      run: pnpm run test:integration
