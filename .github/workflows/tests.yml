@@ -44,6 +44,7 @@ jobs:
         node-version: '16.x'
     - name: Install
       run: pnpm install
+    - run: pnpm build
     - name: Test
       env:
         EMBER_VERSION: ${{ matrix.ember_version }}
