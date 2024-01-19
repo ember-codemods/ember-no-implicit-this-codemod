@@ -1,7 +1,9 @@
 name: Tests
 on:
   pull_request:
-    branches: [master]
+    branches: 
+      - main
+      - master
 
 jobs:
   tests:
@@ -13,7 +15,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: '16.x'
     - name: Install
       run: yarn install
     - name: Linting
@@ -33,7 +35,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: '16.x'
     - name: Install
       run: yarn install
     - name: Test
